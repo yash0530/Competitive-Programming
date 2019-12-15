@@ -1,0 +1,7 @@
+CRT
+n = pq
+where (p != q) and (p, q > 1) and (p, q are co-prime)
+then by chinese remainder theorem
+any number 1 <= x <= n can be represented as
+x = i * p + j * q for some i, j
+
