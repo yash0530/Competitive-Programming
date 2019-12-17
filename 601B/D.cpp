@@ -9,7 +9,7 @@ using namespace std;
 #define uint unsigned long long
 #define deb(x) cout << #x << " => " << x << "\n"
 #define deba(x) cout << #x << "\n"; for (auto a : x) cout << a << " "; cout << "\n";
-#define debm(x) cout << #x << "\n"; for (auto a : x) {for(auto b : a) cout << b << " "; cout << "\n";}
+#define debm(x) cout << #x << "\n"; for (auto a : x){for(auto b : a) cout << b << " "; cout << "\n";}
 #define getMat(x, n, m, val) vector<vector<int>> x(n, vector<int> (m, val))
 #define fastio ios_base :: sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 #define pout cout << fixed << setprecision(10)
@@ -22,21 +22,6 @@ int fastpow(int a, int b, int m) {
 }
 
 int32_t main() { fastio;
-    int t; cin >> t;
-    while (t--) {
-        int r, b, k;
-        cin >> r >> b >> k;
-        if (r < b) swap(r, b);
-        int g = __gcd(r, b);
-        if (g != 1) {
-            r /= g;
-            b /= g; 
-        }
-        if (ceil((double) (r - 1) / b) >= k) {
-            cout << "REBEL" << endl;
-        } else {
-            cout << "OBEY" << endl;
-        }
-    }
+    
     return 0;
 }

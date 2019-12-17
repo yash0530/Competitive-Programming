@@ -22,6 +22,19 @@ int fastpow(int a, int b, int m) {
 }
 
 int32_t main() { fastio;
-    
+    int n; cin >> n;
+    for (int i = 0; i < n; i++) {
+        int c, sum;
+        cin >> c >> sum;
+        if (c >= sum) {
+            cout << sum << endl;
+        } else {
+            int diff = sum - c;
+            int qu = diff / c, rem = diff % c;
+            int res = (c - rem) * (1 + qu) * (1 + qu);
+            res += rem * (2 + qu) * (2 + qu);
+            cout << res << endl;
+        }
+    }
     return 0;
 }
