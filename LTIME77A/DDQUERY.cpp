@@ -31,7 +31,7 @@ int32_t main() { fastio;
             edges[a].push_back(b);
             edges[b].push_back(a);
         }
-        map<pair<int, int>, vector<int>> dist_mat;
+        map<pair<int, int>, set<int>> dist_mat;
         for (int i = 1; i <= n; i++) {
             queue<pair<int, int>> Q;
             vector<bool> marked(n + 1);
@@ -40,7 +40,7 @@ int32_t main() { fastio;
             while (!Q.empty()) {
                 int curr = Q.front().first;
                 int dist = Q.front().second;
-                dist_mat[{ i, dist }].push_back(curr);
+                dist_mat[{ i, dist }].insert(curr);
                 Q.pop();
                 for (auto x : edges[curr]) {
                     if (!marked[x]) {
@@ -55,8 +55,6 @@ int32_t main() { fastio;
             cin >> a >> da >> b >> db;
             auto x = dist_mat[{ a, da }];
             auto y = dist_mat[{ b, db }];
-            sort(x.begin(), x.end());
-            sort(y.begin(), y.end());
             vector<int> res;
             set_intersection(x.begin(), x.end(), y.begin(), y.end(), back_inserter(res));
             if (res.size() == 0) {
