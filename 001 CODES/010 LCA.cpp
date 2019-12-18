@@ -45,7 +45,7 @@ class Graph {
             __depthFirstSearch(root, root);
         }
 
-        int _lowestCommonAncestor(int u, int v) {
+        int _LCA(int u, int v) {
             if (_isAncestor(u, v)) {
                 return u;
             }

@@ -1,6 +1,4 @@
-#include <cstdio>
-#include <vector>
-#include <math.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 // SegmentTree => 0 Indexed
@@ -252,14 +250,14 @@ class Graph {
         }
 };
 
-int main() {
-    int t; scanf("%d ", &t);
+int32_t main() {
+    int t; cin >> t;
     while (t--) {
-        int n; scanf("%d", &n);
+        int n; cin >> n;
         int a, b, w;
         Graph G(n);
         for (int i = 0; i < n - 1; i++) {
-            scanf("%d %d %d", &a, &b, &w);
+            cin >> a >> b >> w;
             G._addEdge(--a, --b, w);
         }
         
@@ -267,17 +265,16 @@ int main() {
         G._HLD(0, -1, 0);
         G._setupSegTree();
 
-        char s[100]; scanf("%s", s);
+        string s; cin >> s;
         while (s[0] != 'D') {
             if (s[0] == 'Q') {
-                scanf("%d %d", &a, &b);
-                int x = G._queryHLD(--a, --b);
-                printf("%d\n", x);
+                cin >> a >> b;
+                cout << G._queryHLD(--a, --b) << endl;
             } else {
-                scanf("%d %d", &a, &b);
+                cin >> a >> b;
                 G._updateHLD(--a, b);
             }
-            scanf("%s", s);
+            cin >> s;
         }
     }
     return 0;

@@ -202,6 +202,7 @@ int main() {
 			chainHead[i] = -1;
 			for(int j=0; j<LN; j++) pa[j][i] = -1;
 		}
+		
 		for(int i=1; i<n; i++) {
 			int u, v, c;
 			scanf("%d %d %d", &u, &v, &c);
