@@ -57,8 +57,6 @@ class SegmentTree {
         }
 
     public:
-        SegmentTree() {}
-
         void _build(vector<int> arr) {
             arrSize = arr.size();
             treeSize = 4 * arrSize;

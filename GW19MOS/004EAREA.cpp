@@ -22,11 +22,21 @@ int fastpow(int a, int b, int m) {
 }
 
 int32_t main() { fastio;
-    int t; cin >> t;
-    while (t--) {
-        double n, q;
-        cin >> n >> q;
-        pout << n + q -  n / (q + 1) << endl;
+    int n; cin >> n;
+    vector<pair<double, double>> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i].first >> arr[i].second;
     }
+    vector<pair<double, double>> res(n);
+    for (int i = 0; i < n; i++) {
+        res[i].first = (arr[i].first + arr[(i + 1) % n].first) / 2;
+        res[i].second = (arr[i].second + arr[(i + 1) % n].second) / 2;
+    }
+    double area = 0;
+    for (int i = 0; i < n; i++) {
+        area += (res[i].first * res[(i + 1) % n].second - res[i].second * res[(i + 1) % n].first);
+    }
+    area /= 2;
+    pout << area << endl;
     return 0;
 }

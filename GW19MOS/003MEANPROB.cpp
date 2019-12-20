@@ -24,9 +24,31 @@ int fastpow(int a, int b, int m) {
 int32_t main() { fastio;
     int t; cin >> t;
     while (t--) {
-        double n, q;
-        cin >> n >> q;
-        pout << n + q -  n / (q + 1) << endl;
+        int n; cin >> n;
+        vector<int> arr(n);
+        for (int i = 0; i < n; i++) {
+            cin >> arr[i];
+        }
+
+        int sum = accumulate(arr.begin(), arr.end(), 0);
+        for (int i = n; i < 10 * n; i++) {
+            arr.push_back(sum / n);
+            sum -= arr[i - n];
+            sum += arr[i];
+        }
+
+        int N = arr.size();
+
+        int q; cin >> q;
+        int x;
+        while (q--) {
+            cin >> x;
+            if (x <= N) {
+                cout << arr[x - 1] << endl;
+            } else {
+                cout << arr.back() << endl;
+            }
+        }
     }
     return 0;
 }

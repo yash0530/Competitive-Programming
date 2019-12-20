@@ -52,7 +52,7 @@ vector<int> LIS(vector<int>& v) {
             int x = CeilIndex(tail, -1, length - 1, v[i]);
             tail[x] = v[i];
             tail_index[x] = i;
-            res[i] = tail_index[x - 1];
+            if (x) res[i] = tail_index[x - 1];
         }
     }
     // return length; 
@@ -81,6 +81,13 @@ int32_t main() { fastio;
         }
         auto lis = LIS(arr);
         int sz = lis.size();
+
+        int ix = 0;
+        while ((ix < sz) and (arr[lis[ix]] <= 0)) {
+            ix++;
+        }
+        sz = sz - ix;
+
         if (k == 1 and sz == 1) {
             if (arr[lis.back()] > 0) {
                 cout << "YES\n" << n << endl;

@@ -22,6 +22,29 @@ int fastpow(int a, int b, int m) {
 }
 
 int32_t main() { fastio;
-    
+    int fa, fb;
+    string s;
+    int t; cin >> t;
+    while (t--) {
+        cin >> s;
+        cin >> fa >> fb;
+        int n = s.length();
+        int la, lb;
+        for (int i = 0; i < n; i++) {
+            if (s[i] == 'A') la = i;
+            if (s[i] == 'B') lb = i;
+        }
+        bool flag = true;
+        while (la < n and lb >= 0) {
+            if (la == lb) {
+                flag = false;
+                break;
+            }
+            la += fa;
+            lb -= fb;
+        }
+        if (flag) cout << "safe" << endl;
+        else cout << "unsafe" << endl;
+    }
     return 0;
 }

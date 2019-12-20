@@ -1,6 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// ------------------------- SEED -------------------- //
+// srand(chrono :: steady_clock :: now().time_since_epoch().count());
+
+int getRand() {
+    int a = rand();
+    int b = rand();
+    return a * (RAND_MAX + 1) + b;
+}
+
+struct Edge {
+    int u, v, weight;
+    bool operator<(Edge const& other) {
+        return weight < other.weight;
+    }
+
+    bool operator>(Edge const& other) {
+        return weight > other.weight;
+    }
+};
+
+// ------------------ ModInv -------------------- //
+
 int extended_euclidean(int a, int b, int & x, int & y) {
     if (a == 0) {
         x = 0;
@@ -22,6 +44,8 @@ int modInv(int a, int m) {
     return x;
 }
 
+// ------------------------------- factors ---------------- //
+
 vector<int> getFactors(int n) {
     vector<int> factors = { 1 };
     for (int i = 2; i * i <= n; i++) {
@@ -34,6 +58,8 @@ vector<int> getFactors(int n) {
     }
     return factors;
 }
+
+// --------------------------- prime factors --------------- //
 
 vector<int> primeFactors(int n) {
     vector<int> factorization;
@@ -110,7 +136,7 @@ vector<int> LIS(vector<int>& v) {
             int x = CeilIndex(tail, -1, length - 1, v[i]);
             tail[x] = v[i];
             tail_index[x] = i;
-            res[i] = tail_index[x - 1];
+            if (x) res[i] = tail_index[x - 1];
         }
     }
     
