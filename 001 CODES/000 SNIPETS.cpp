@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#define INF (int) 9e18
+#define int long long
+
 // ------------------------- SEED -------------------- //
 // srand(chrono :: steady_clock :: now().time_since_epoch().count());
 
@@ -11,7 +14,7 @@ int getRand() {
 }
 
 struct Edge {
-    int u, v, weight;
+    int v, weight;
     bool operator<(Edge const& other) {
         return weight < other.weight;
     }
@@ -150,4 +153,62 @@ vector<int> LIS(vector<int>& v) {
     lis.push_back(x);
     reverse(lis.begin(), lis.end());
     return lis;
+}
+
+// ----------------------- Floyd Warshall ------------------- //
+
+// for (int k = 1; k <= n; k++) {
+//     for (int i = 1; i <= n; i++) {
+//         for (int j = 1; j <= n; j++) {
+//             dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+//         }
+//     }
+// }
+
+// ------------------------ Dijkstra ----------------------- //
+vector<int> dijkstra(int x, int n, vector<vector<Edge>> adj) {
+
+    vector<int> distance(n + 1);
+    vector<bool> processed(n + 1);
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
+
+    for (int i = 1; i <= n; i++) {
+        distance[i] = INF;
+    }
+
+    distance[x] = 0;
+    q.push({ 0, x });
+
+    while (!q.empty()) {
+        int a = q.top().second; q.pop();
+        if (processed[a]) continue;
+        processed[a] = true;
+        for (auto u : adj[a]) {
+            int b = u.v, w = u.weight;
+            if (distance[a] + w < distance[b]) {
+                distance[b] = distance[a] + w;
+                q.push({ distance[b], b });
+            }
+        }
+    }
+
+    return distance;
+}
+
+// ----------------- Bellmon Ford ------------------------ //
+
+
+int32_t main() {
+    int n = 5;
+    vector<vector<Edge>> adj(n + 1);
+    for (int i = 0; i < 6; i++) {
+        int x, y, w;
+        cin >> x >> y >> w;
+        adj[x].push_back({ y, w });
+        adj[y].push_back({ x, w });
+    }
+    auto d = dijkstra(1, n, adj);
+    for (auto x : d) {
+        cout << x << endl;
+    }
 }

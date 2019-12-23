@@ -16,7 +16,7 @@ class Graph {
     private:
         vector<vector<int>> adj;
         int vertices;
-        bool *marked;
+        vector<bool> marked;
         bool hasCycle;
         
         void __depthFirstSearchCycle(int source, int parentSource) {
@@ -31,9 +31,7 @@ class Graph {
         }
 
         void __depthFirstSearchCycle() {
-            marked = new bool[vertices];
-            memset(marked, false, sizeof marked);
-            
+            marked.assign(vertices, false);
             for (int u = 1; u < vertices; u++) {
                 if (!marked[u]) {
                     __depthFirstSearchCycle(u, -1);
@@ -62,49 +60,32 @@ class Graph {
             adj[u].push_back(v);
             adj[v].push_back(u);
         }
-        
-        void _printGraph() {
-            for (int i = 1; i < vertices; i++) {
-                for (auto v : adj[i])
-                    cout << i << " <-> " << v << endl;
-                cout << endl;
-            }
-        }
-        
+    
         vector<int> _depthFirstSearch(int source) {
             vector<int> dfs;
-            marked = new bool[vertices];
-            memset(marked, false, sizeof marked);
-            
+            marked.assign(vertices, false);            
             __depthFirstSearch(source, dfs);
-
             return dfs;
         }
 
         vector<int> _breadthFirstSearch(int source) {
             vector<int> bfs;
-            marked = new bool[vertices];
-            memset(marked, false, sizeof marked);
-
+            marked.assign(vertices, false);
             queue<int> q;
             q.push(source);
             marked[source] = true;
-
             while (!q.empty()) {
                 int s = q.front(); q.pop();
                 bfs.push_back(s);
-
                 for (auto v : adj[s]) {
                     if (!marked[v]) {
                         marked[v] = true;
                         q.push(v);
                     }
                 }
-            }
-
-            return bfs;
+            } return bfs;
         }
-        
+
         bool _hasCycle() {
             __depthFirstSearchCycle();
             return hasCycle;

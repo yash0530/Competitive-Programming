@@ -16,8 +16,8 @@ class Graph {
     private:
         int vertices;
         vector<int> *adj;
-        int *color;
-        bool *marked;
+        vector<int> color;
+        vector<bool> marked;
         bool isBipartite;
  
     public:
@@ -64,12 +64,9 @@ class Graph {
         }
 
         bool _isBipartite() {
-            marked = new bool[vertices];
-            color = new int[vertices];
+            marked.assign(vertices, false);
+            color.assign(vertices, -1);
             isBipartite = true;
-            memset(color, -1, sizeof color);
-            memset(marked, false, sizeof marked);
-
             for (int i = 1; i < vertices; i++) {
                 if (!marked[i])
                     _breadthFirstSearch(i, 0);
