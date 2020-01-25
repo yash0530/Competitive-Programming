@@ -1,7 +1,4 @@
-a = 100
-print(1)
-print(a, a)
-for i in range(a):
-    for j in range(a):
-        print(i + 1, end=" ")
-    print()
+a = 300
+print(a)
+for i in range(1, a + 1):
+    print(i)
