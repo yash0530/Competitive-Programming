@@ -4,6 +4,13 @@ using namespace std;
 #define INF (int) 9e18
 #define int long long
 
+// ------------------ ORDERED_SET --------------------- //
+
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+#define ordered_set tree<int, null_type,less<int>, rb_tree_tag,tree_order_statistics_node_update>
+
 // ------------------------- SEED -------------------- //
 // srand(chrono :: steady_clock :: now().time_since_epoch().count());
 
