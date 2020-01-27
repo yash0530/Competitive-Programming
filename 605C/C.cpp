@@ -15,27 +15,27 @@ using namespace std;
 #define pout cout << fixed << setprecision(10)
 
 int32_t main() { fastio;
-    int t; cin >> t;
-    while (t--) {
-        int n; cin >> n;
-        int x;
-        vector<int> pos(n + 1);
-        for (int i = 0; i < n; i++) {
-            cin >> x;
-            pos[x] = i;
-        }
-        int pos_max = pos[1], pos_min = pos[1];
-        string s = "1";
-        for (int i = 2; i <= n; i++) {
-            pos_max = max(pos_max, pos[i]);
-            pos_min = min(pos_min, pos[i]);
-            if (pos_max - pos_min + 1 == i) {
-                s.push_back('1');
-            } else {
-                s.push_back('0');
-            }
-        }
-        cout << s << endl;
+    int n, k;
+    cin >> n >> k;
+    string s; cin >> s;
+    vector<int> freq(128);
+    for (int i = 0; i < k; i++) {
+        char x; cin >> x;
+        freq[x] = true;
     }
+    vector<int> S;
+    int start = 0;
+    for (int i = 0; i < n; i++) {
+        if (!freq[s[i]]) {
+            S.push_back(i - start);
+            start = i + 1;
+        }
+    }
+    S.push_back(n - start);
+    int res = 0;
+    for (auto r : S) {
+        res += (r + 1) * r / 2;
+    }
+    cout << res << endl;
     return 0;
 }

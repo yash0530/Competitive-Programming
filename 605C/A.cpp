@@ -17,25 +17,23 @@ using namespace std;
 int32_t main() { fastio;
     int t; cin >> t;
     while (t--) {
-        int n; cin >> n;
-        int x;
-        vector<int> pos(n + 1);
-        for (int i = 0; i < n; i++) {
-            cin >> x;
-            pos[x] = i;
+        vector<int> a(3);
+        cin >> a[0] >> a[1] >> a[2];
+        sort(a.begin(), a.end());
+        if (a[0] != a[1]) {
+            a[0]++;
+        } else if (a[1] != a[2]) {
+            a[0]++;
+            a[1]++;
         }
-        int pos_max = pos[1], pos_min = pos[1];
-        string s = "1";
-        for (int i = 2; i <= n; i++) {
-            pos_max = max(pos_max, pos[i]);
-            pos_min = min(pos_min, pos[i]);
-            if (pos_max - pos_min + 1 == i) {
-                s.push_back('1');
-            } else {
-                s.push_back('0');
-            }
+
+        if (a[1] != a[2]) {
+            a[2]--;
+        } else if (a[1] != a[0]) {
+            a[2]--;
+            a[1]--;
         }
-        cout << s << endl;
+        cout << abs(a[0] - a[1]) + abs(a[1] - a[2]) + abs(a[0] - a[2]) << endl;
     }
     return 0;
 }
