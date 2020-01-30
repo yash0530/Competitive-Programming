@@ -4,7 +4,7 @@
 using namespace std;
 
 // SegmentTree => 0 Indexed
-// Graph => o Indexed
+// Graph => 0 Indexed
 
 class SegmentTree {
     private:
