@@ -1,5 +1,5 @@
-g++ -std="c++14" -Wshadow -Wall -fsanitize=address -fsanitize=undefined _.cpp && ./a.out < ../test.txt
-cp ../TEMPLATE.cpp _.cpp
+g++ -std="c++14" -Wshadow -Wall -fsanitize=address -fsanitize=undefined _.cpp && ./a.out < "/home/yash/Documents/CP/06 Helper Codes/test.txt"
+cp "/home/yash/Documents/CP/06 Helper Codes/TEMPLATE.cpp" _.cpp
 
 // #include <boost/multiprecision/cpp_int.hpp>
 // using namespace boost::multiprecision;
