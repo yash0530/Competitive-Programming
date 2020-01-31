@@ -15,6 +15,20 @@ using namespace std;
 #define pout cout << fixed << setprecision(10)
 
 int32_t main() { fastio;
-    
+    int n; cin >> n;
+    while (n--) {
+        string s; cin >> s;
+        int len = s.length();
+        if (s.substr(len - 2, 2).compare("po") == 0) {
+            cout << "FILIPINO" << endl;
+        } else {
+            string x = s.substr(len - 4, 4);
+            if (x.compare("desu") == 0 or x.compare("masu") == 0) {
+                cout << "JAPANESE" << endl;
+            } else {
+                cout << "KOREAN" << endl;
+            }
+        }
+    }
     return 0;
 }

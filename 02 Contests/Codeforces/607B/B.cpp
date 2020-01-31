@@ -15,6 +15,28 @@ using namespace std;
 #define pout cout << fixed << setprecision(10)
 
 int32_t main() { fastio;
-    
+    int n; cin >> n;
+    while (n--) {
+        string a, b;
+        cin >> a >> b;
+        string z(a.begin(), a.end());
+        sort(z.begin(), z.end());
+        for (int i = 0; i < a.length(); i++) {
+            if (a[i] != z[i]) {
+                for (int j = a.length() - 1; j > i; j--) {
+                    if (a[j] == z[i]) {
+                        swap(a[i], a[j]);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        if (a.compare(b) < 0) {
+            cout << a << endl;
+        } else {
+            cout << "---" << endl;
+        }
+    }
     return 0;
 }
