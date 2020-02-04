@@ -15,6 +15,12 @@ using namespace std;
 #define pout cout << fixed << setprecision(10)
 
 int32_t main() { fastio;
-    
+    int t; cin >> t;
+    while (t--) {
+        int x, y;
+        cin >> x >> y;
+        string s = to_string(y);
+        int ans 
+    }
     return 0;
 }
