@@ -14,27 +14,22 @@ using namespace std;
 #define fastio ios_base :: sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 #define pout cout << fixed << setprecision(10)
 
-int32_t main() { fastio;
+int32_t main() { 
     int t; cin >> t;
     while (t--) {
-        int x; cin >> x;
-        string s; cin >> s;
-        int res = s.length();
-        int i = 0;
-        while (s.length() < x) {
-            int y = s.length() - i - 1;
-            if ((s[i] - '0' - 1) >= 1) {
-                s +=  s.substr(i + 1, y);
-            }
-            if ((s[i] - '0' - 1) == 2) {
-                s +=  s.substr(i + 1, y);
-            }
-            i++;
-        }
-        for (int i = 0; i < x; i++) {
-            res = (res % HELL + ((res - i - 1 + HELL) % HELL * (int) (s[i] - '0' - 1)) % HELL) % HELL;
-        }
-        cout << res << endl;
+        int n; cin >> n;
+        int res = 2 * (pow(10, n));
+        int a, b, d;
+        cin >> a;
+        cout << res + a << endl;
+        fflush(stdout);
+        cin >> b;
+        cout << (int) pow(10, n) - b << endl;
+        fflush(stdout);
+        cin >> d;
+        cout << (int) pow(10, n) - d << endl;
+        fflush(stdout);
+        cin >> d;
     }
     return 0;
 }

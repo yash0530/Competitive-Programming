@@ -15,26 +15,23 @@ using namespace std;
 #define pout cout << fixed << setprecision(10)
 
 int32_t main() { fastio;
-    int t; cin >> t;
-    while (t--) {
-        int x; cin >> x;
-        string s; cin >> s;
-        int res = s.length();
-        int i = 0;
-        while (s.length() < x) {
-            int y = s.length() - i - 1;
-            if ((s[i] - '0' - 1) >= 1) {
-                s +=  s.substr(i + 1, y);
-            }
-            if ((s[i] - '0' - 1) == 2) {
-                s +=  s.substr(i + 1, y);
-            }
-            i++;
+    int n, q;
+    cin >> n >> q;
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+    int l, r;
+    while (q--) {
+        cin >> l >> r;
+        l--; r--;
+        if (arr[l] < arr[l + 1] and arr[r - 1] > arr[r]) {
+            cout << "YES" << endl;
+        } else if (arr[l] > arr[l + 1] and arr[r - 1] < arr[r]) {
+            cout << "YES" << endl;
+        } else {
+            cout << "NO" << endl;
         }
-        for (int i = 0; i < x; i++) {
-            res = (res % HELL + ((res - i - 1 + HELL) % HELL * (int) (s[i] - '0' - 1)) % HELL) % HELL;
-        }
-        cout << res << endl;
     }
     return 0;
 }

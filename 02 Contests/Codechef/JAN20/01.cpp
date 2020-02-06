@@ -17,24 +17,15 @@ using namespace std;
 int32_t main() { fastio;
     int t; cin >> t;
     while (t--) {
-        int x; cin >> x;
-        string s; cin >> s;
-        int res = s.length();
-        int i = 0;
-        while (s.length() < x) {
-            int y = s.length() - i - 1;
-            if ((s[i] - '0' - 1) >= 1) {
-                s +=  s.substr(i + 1, y);
-            }
-            if ((s[i] - '0' - 1) == 2) {
-                s +=  s.substr(i + 1, y);
-            }
-            i++;
+        int s, w1, w2, w3;
+        cin >> s >> w1 >> w2 >> w3;
+        if (w1 + w2 + w3 <= s) {
+            cout << 1 << endl;
+        } else if (w1 + w2 > s and w2 + w3 > s) {
+            cout << 3 << endl;
+        } else {
+            cout << 2 << endl;
         }
-        for (int i = 0; i < x; i++) {
-            res = (res % HELL + ((res - i - 1 + HELL) % HELL * (int) (s[i] - '0' - 1)) % HELL) % HELL;
-        }
-        cout << res << endl;
     }
     return 0;
 }
