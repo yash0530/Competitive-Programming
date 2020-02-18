@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "*.sql": "sql",
-        "iostream": "cpp",
-        "unordered_map": "cpp"
-    },
-    "python.pythonPath": "/usr/bin/python3"
-}
