@@ -21,6 +21,21 @@ int fastpow(int a, int b, int m) {
     } return res;
 }
 
+int factmod(int n, int k) {
+    int res = 1;
+    int t = k;
+    while (k--) {
+        res = (res * (n - k)) % HELL;
+    }
+    int den = 1;
+    while (t--) {
+        den = (den * (t + 1)) % HELL;
+    }
+    den = fastpow(den, HELL - 2, HELL);
+    res = (res * den) % HELL;
+    return res;
+}
+
 int now() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()
     .time_since_epoch()).count();
@@ -29,8 +44,10 @@ int now() {
 int32_t main() { fastio;
     time_t start = now();
 
-    
-
-    cerr << "TIME => " << now() - start << endl;
+    int n, a, b;
+    cin >> n >> a >> b;
+    int res = (fastpow(2, n, HELL) - 1) % HELL;
+    res = (res - factmod(n, a) - factmod(n, b) + 2 * HELL) % HELL;
+    cout << res << endl;
     return 0;
 }

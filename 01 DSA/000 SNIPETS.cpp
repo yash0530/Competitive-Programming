@@ -31,29 +31,6 @@ struct Edge {
     }
 };
 
-// ------------------ ModInv -------------------- //
-
-int extended_euclidean(int a, int b, int & x, int & y) {
-    if (a == 0) {
-        x = 0;
-        y = 1;
-        return b;
-    }
-    int x1, y1;
-    int d = extended_euclidean(b % a, a, x1, y1);
-    x = y1 - (b / a) * x1;
-    y = x1;
-    return d;
-}
-
-int modInv(int a, int m) {
-    int x, y;
-    if (extended_euclidean(a, m, x, y) != 1)
-        return -1;
-    x = (x % m + m) % m;
-    return x;
-}
-
 // ------------------------------- factors ---------------- //
 
 vector<int> getFactors(int n) {
@@ -72,7 +49,7 @@ vector<int> getFactors(int n) {
 // --------------------------- prime factors --------------- //
 
 vector<int> primeFactors(int n) {
-    vector<int> factorization;
+    vector<int> factorization = { 1 };
     while (n % 2 == 0) {
         factorization.push_back(2);
         n /= 2;

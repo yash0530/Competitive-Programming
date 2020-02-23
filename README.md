@@ -26,14 +26,14 @@ int fastpow(int a, int b, int m) {
 }
 
 int now() {
-    return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()
+    return chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now()
     .time_since_epoch()).count();
 }
 
 int32_t main() { fastio;
     time_t start = now();
 
-    
+
 
     cerr << "TIME => " << now() - start << endl;
     return 0;

@@ -29,7 +29,16 @@ int now() {
 int32_t main() { fastio;
     time_t start = now();
 
-    
+    int n, k;
+    cin >> n >> k;
+    int base = k;
+    int times = 0;
+    while (n) {
+        n -= n % base;
+        base *= k;
+        times++;
+    }
+    cout << times << endl;
 
     cerr << "TIME => " << now() - start << endl;
     return 0;

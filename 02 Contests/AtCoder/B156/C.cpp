@@ -29,7 +29,22 @@ int now() {
 int32_t main() { fastio;
     time_t start = now();
 
-    
+    int n;
+    cin >> n;
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    int res = INF;
+    for (int x = 1; x <= 100; x++) {
+        int curr = 0;
+        for (int i = 0; i < n; i++) {
+            curr += (arr[i] - x) * (arr[i] - x);
+        }
+        res = min(res, curr);
+    }
+    cout << res << endl;
 
     cerr << "TIME => " << now() - start << endl;
     return 0;
