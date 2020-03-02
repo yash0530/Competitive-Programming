@@ -15,6 +15,9 @@ todo.txt
 *.obj
 *.out
 
+# problem setting
+00 setting/
+
 # Precompiled Headers
 *.gch
 *.pch
