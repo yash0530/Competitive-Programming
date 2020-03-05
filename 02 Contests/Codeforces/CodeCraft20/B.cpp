@@ -29,35 +29,28 @@ int now() {
 int32_t main() { fastio;
     time_t start = now();
 
-    int r, c;
-    cin >> r >> c;
-    bool inverted = false;
-    if (r > c) {
-        swap(r, c);
-        inverted = true;
-    }
-    if (r == 1 and c == 1) {
-        cout << 0 << endl;
-    } else {
-        getMat(res, r, c, 0);
-        for (int i = 1, row = 0; i <= r; i++, row++) {
-            for (int j = r + 1, col = 0; j <= c + r; j++, col++) {
-                res[row][col] = i * j;
+    int t; cin >> t;
+    while (t--) {
+        int n; cin >> n;
+        string s; cin >> s;
+        string best = s;
+        int best_val = 1;
+        for (int i = 2; i < n + 1; i++) {
+            string curr = s.substr(i - 1, n - i + 1);
+            if ((n - i + 1) % 2) {
+                string temp = s.substr(0, i - 1);
+                reverse(temp.begin(), temp.end());
+                curr += temp;
+            } else {
+                curr += s.substr(0, i - 1);
+            }
+            if (best.compare(curr) > 0) {
+                best = curr;
+                best_val = i;
             }
         }
-        if (inverted) {
-            for (int i = 0; i < c; i++) {
-                for (int j = 0; j < r; j++) {
-                    cout << res[j][i] << " ";
-                } cout << endl;
-            }
-        } else {
-            for (int i = 0; i < r; i++) {
-                for (int j = 0; j < c; j++) {
-                    cout << res[i][j] << " ";
-                } cout << endl;
-            }
-        }
+        cout << best << endl;
+        cout << best_val << endl;
     }
 
     cerr << "TIME => " << now() - start << endl;
