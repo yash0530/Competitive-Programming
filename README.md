@@ -6,7 +6,7 @@
 using namespace std;
 
 #define endl "\n"
-#define INF 9e18
+#define INF (int) 9e18
 #define HELL (int) (1e9 + 7)
 #define int long long
 #define double long double

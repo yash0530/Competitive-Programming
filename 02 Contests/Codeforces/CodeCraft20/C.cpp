@@ -26,45 +26,25 @@ int now() {
     .time_since_epoch()).count();
 }
 
-int32_t main() { 
+int32_t main() { fastio;
     time_t start = now();
- 
+
     int n, m, p;
     cin >> n >> m >> p;
-    vector<int> a(n), b(m);
+    int a = 0, b = 0, x;
     for (int i = 0; i < n; i++) {
-        scanf("%lld", &a[i]);
+        cin >> x;
+        if (x % p != 0) {
+            a = i;
+        }
     }
     for (int i = 0; i < m; i++) {
-        scanf("%lld", &b[i]);
-    }
-
-    if (n == 1) {
-        for (int i = 0; i < m; i++) {
-            if (a[0] * b[i] != p) {
-                cout << i << endl;
-                break;
-            }
+        cin >> x;
+        if (x % p != 0) {
+            b = i;
         }
     }
-    else if (m == 1) {
-        for (int i = 0; i < n; i++) {
-            if (b[0] * a[i] != p) {
-                cout << i << endl;
-                break;
-            }
-        }
-    }
-    else {
-        if (a[0] * b[0] != p) {
-            cout << 0 << endl;
-        } else {
-            if (a[0] * b[1] + a[1] * b[0] != p)
-                cout << 1 << endl;
-            else cout << 3 << endl;
-        }
-    }
-
+    cout << a + b << endl;
     cerr << "TIME => " << now() - start << endl;
     return 0;
 }

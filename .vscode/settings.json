@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.sql": "sql",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "random": "cpp"
     }
 }
