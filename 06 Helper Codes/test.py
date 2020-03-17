@@ -1,5 +1,5 @@
-print("1000000 1000000 17")
-for i in range(1000000):
-    print(i, end = " ")
-for i in range(1000000):
-    print(i, end = " ")
+print("40000 40000 1")
+for i in range(20000):
+    print("1 0", end = " ")
+for i in range(20000):
+    print("1 0", end = " ")

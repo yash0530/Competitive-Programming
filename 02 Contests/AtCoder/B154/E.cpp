@@ -2,7 +2,7 @@
 using namespace std;
 
 #define endl "\n"
-#define INF 9e18
+#define INF (int) 9e18
 #define HELL (int) (1e9 + 7)
 #define int long long
 #define double long double
@@ -22,33 +22,40 @@ int fastpow(int a, int b, int m) {
 }
 
 int now() {
-    return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()
+    return chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now()
     .time_since_epoch()).count();
 }
 
-vector<int> fact(5e5 + 5);
+string n; int len;
 
-int nck(int n, int k) {
-    return ((fastpow(fact[n - k], HELL - 2, HELL)) * 
-            ((fact[n] * fastpow(fact[k], HELL - 2, HELL)) % HELL)) % HELL;
+int count(int k, int edge, int index) {
+    if (index == len) {
+        return k == 0;
+    }
+    if (k) {
+        if (edge) {
+            if (n[index] == '0') {
+                return count(k, edge, index + 1);
+            }
+            int res = count(k - 1, 0, index + 1) * (n[index] - '0' - 1);
+            res += count(k - 1, edge, index + 1);
+            res += count(k, 0, index + 1);
+            return res;
+        } else {
+            return count(k - 1, edge, index + 1) * 9 + count(k, edge, index + 1);
+        }
+    } else {
+        return count(k, edge, index + 1);
+    }
 }
 
 int32_t main() { fastio;
     time_t start = now();
-    
-    int n, k;
+
+    int k;
     cin >> n >> k;
-
-    fact[0] = 1;
-    for (int i = 1; i < fact.size(); i++) {
-        fact[i] = (i * fact[i - 1]) % HELL;
-    }
-
-    int res = nck(2 * n - 1, n - 1);
-    for (int i = k + 1; i < n; i++) {
-        res = (res - (nck(n, i) * nck(n - 1, n - i - 1)) % HELL + HELL) % HELL;
-    }
-    cout << res << endl;
+    len = n.size();
+    cout << count(k, 1, 0) << endl;
 
     cerr << "TIME => " << now() - start << endl;
     return 0;

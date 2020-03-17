@@ -2,7 +2,7 @@
 using namespace std;
 
 #define endl "\n"
-#define INF 9e18
+#define INF (int) 9e18
 #define HELL (int) (1e9 + 7)
 #define int long long
 #define double long double
@@ -22,33 +22,49 @@ int fastpow(int a, int b, int m) {
 }
 
 int now() {
-    return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()
+    return chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now()
     .time_since_epoch()).count();
 }
 
-vector<int> fact(5e5 + 5);
+int n, h, l, r;
+vector<int> arr;
 
-int nck(int n, int k) {
-    return ((fastpow(fact[n - k], HELL - 2, HELL)) * 
-            ((fact[n] * fastpow(fact[k], HELL - 2, HELL)) % HELL)) % HELL;
+getMat(dp, 2005, 2005, -1);
+
+int res(int index, int start) {
+    if (index == n) {
+        return 0;
+    }
+    if (dp[index][start] != -1) {
+        return dp[index][start];
+    }
+    int a = (start + arr[index]) % h;
+    int x;
+    if (l <= a and a <= r) {
+        x = res(index + 1, a) + 1;
+    } else {
+        x = res(index + 1, a);
+    }
+    int b = (start + arr[index] - 1) % h;
+    int y;
+    if (l <= b and b <= r) {
+        y = res(index + 1, b) + 1;
+    } else {
+        y = res(index + 1, b);
+    }
+    dp[index][start] = max(x, y);
+    return max(x, y);
 }
 
 int32_t main() { fastio;
     time_t start = now();
-    
-    int n, k;
-    cin >> n >> k;
 
-    fact[0] = 1;
-    for (int i = 1; i < fact.size(); i++) {
-        fact[i] = (i * fact[i - 1]) % HELL;
+    cin >> n >> h >> l >> r;
+    arr.resize(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
     }
-
-    int res = nck(2 * n - 1, n - 1);
-    for (int i = k + 1; i < n; i++) {
-        res = (res - (nck(n, i) * nck(n - 1, n - i - 1)) % HELL + HELL) % HELL;
-    }
-    cout << res << endl;
+    cout << res(0, 0) << endl;
 
     cerr << "TIME => " << now() - start << endl;
     return 0;

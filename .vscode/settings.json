@@ -2,6 +2,7 @@
     "files.associations": {
         "*.sql": "sql",
         "iostream": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "chrono": "cpp"
     }
 }

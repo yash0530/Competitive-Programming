@@ -2,7 +2,7 @@
 using namespace std;
 
 #define endl "\n"
-#define INF 9e18
+#define INF (int) 9e18
 #define HELL (int) (1e9 + 7)
 #define int long long
 #define double long double
@@ -22,34 +22,46 @@ int fastpow(int a, int b, int m) {
 }
 
 int now() {
-    return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()
+    return chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now()
     .time_since_epoch()).count();
-}
-
-vector<int> fact(5e5 + 5);
-
-int nck(int n, int k) {
-    return ((fastpow(fact[n - k], HELL - 2, HELL)) * 
-            ((fact[n] * fastpow(fact[k], HELL - 2, HELL)) % HELL)) % HELL;
 }
 
 int32_t main() { fastio;
     time_t start = now();
-    
-    int n, k;
-    cin >> n >> k;
 
-    fact[0] = 1;
-    for (int i = 1; i < fact.size(); i++) {
-        fact[i] = (i * fact[i - 1]) % HELL;
+    int n; cin >> n;
+    vector<vector<pair<int, int>>> adj(n + 1);
+    int u, v;
+    for (int i = 0; i < n - 1; i++) {
+        cin >> u >> v;
+        adj[u].push_back({ v, i });
+        adj[v].push_back({ u, i });
+    } 
+    vector<int> res(n - 1, -1);
+    bool found = false;
+    for (int i = 1; i <= n; i++) {
+        if (adj[i].size() > 2) {
+            found = true;
+            res[adj[i][0].second] = 0;
+            res[adj[i][1].second] = 1;
+            res[adj[i][2].second] = 2;
+            break;
+        }
     }
-
-    int res = nck(2 * n - 1, n - 1);
-    for (int i = k + 1; i < n; i++) {
-        res = (res - (nck(n, i) * nck(n - 1, n - i - 1)) % HELL + HELL) % HELL;
+    if (found) {
+        int val = 3;
+        for (int i = 0; i < n - 1; i++) {
+            if (res[i] == -1) {
+                cout << val++ << endl;
+            } else {
+                cout << res[i] << endl;
+            }
+        }
+    } else {
+        for (int i = 0; i < n - 1; i++) {
+            cout << i << endl;
+        }
     }
-    cout << res << endl;
-
     cerr << "TIME => " << now() - start << endl;
     return 0;
 }
