@@ -29,27 +29,33 @@ int now() {
 int32_t main() { fastio;
     time_t start = now();
 
-    // 2 * (a & b) + (a ^ b) = (a + b)
-
-    int xr, sum;
-    cin >> xr >> sum;
-    if (xr == 0 and sum == 0) {
-        cout << 0 << endl;
-    } else if (xr > sum) {
-        cout << -1 << endl;
-    } else if (xr % 2 != sum % 2) {
-        cout << -1 << endl;
-    } else if (sum == xr) {
-        cout << 1 << endl;
-        cout << sum << endl;
-    } else {
-        int a = (sum - xr) / 2;
-        if ((a + xr) == (a ^ xr)) {
-            cout << 2 << endl;
-            cout << a << " " << a + xr << endl;
+    int t; cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<int> arr(n);
+        for (int i = 0; i < n; i++) {
+            char x; cin >> x;
+            arr[i] = (x == 'H');
+        }
+        bool flag = false;
+        int i = 0, j = n - 1;
+        while (i < k) {
+            if (arr[j] and !flag) {
+                flag = !flag;
+            } else if (!arr[j] and flag) {
+                flag = !flag;
+            }
+            i++; j--;
+        }
+        int sum = 0;
+        for (int i = 0; i < n - k; i++) {
+            sum += arr[i];
+        }
+        if (flag) {
+            cout << n - k - sum << endl;
         } else {
-            cout << 3 << endl;
-            cout << a << " " << a << " " << xr << endl;
+            cout << sum << endl;
         }
     }
 

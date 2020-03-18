@@ -14,9 +14,38 @@ using namespace std;
 #define fastio ios_base :: sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 #define pout cout << fixed << setprecision(10)
 
-int32_t main() { fastio;
-    
-    
+// brute
+void solve() {
+    int n; cin >> n;
+    vector<int> arr(2 * n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+        arr[i + n] = arr[i];
+    }
+    for (int i = 1; i <= n; i++) {
+        int res = 0;
+        for (int k = 0; k < n; k++) {
+            res += *max_element(arr.begin() + k, arr.begin() + k + i);
+        }
+        cout << res << " ";
+    } cout << endl;
+}
 
+// efficient
+void solveEff() {
+    int n; cin >> n;
+    vector<int> arr(2 * n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+        arr[i + n] = arr[i];
+    }
+}
+
+int32_t main() { fastio;
+    int t; cin >> t;
+    while (t--) {
+        // solve();
+        solveEff();
+    }
     return 0;
 }

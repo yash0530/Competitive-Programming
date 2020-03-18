@@ -29,27 +29,27 @@ int now() {
 int32_t main() { fastio;
     time_t start = now();
 
-    // 2 * (a & b) + (a ^ b) = (a + b)
-
-    int xr, sum;
-    cin >> xr >> sum;
-    if (xr == 0 and sum == 0) {
-        cout << 0 << endl;
-    } else if (xr > sum) {
-        cout << -1 << endl;
-    } else if (xr % 2 != sum % 2) {
-        cout << -1 << endl;
-    } else if (sum == xr) {
-        cout << 1 << endl;
-        cout << sum << endl;
-    } else {
-        int a = (sum - xr) / 2;
-        if ((a + xr) == (a ^ xr)) {
-            cout << 2 << endl;
-            cout << a << " " << a + xr << endl;
+    int b, n;
+    cin >> b >> n;
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+    if (b % 2 == 0) {
+        if (arr.back() & 1) {
+            cout << "odd" << endl;
         } else {
-            cout << 3 << endl;
-            cout << a << " " << a << " " << xr << endl;
+            cout << "even" << endl;
+        }
+    } else {
+        int o = 0;
+        for (int i = 0; i < n; i++) {
+            o += arr[i] % 2;
+        }
+        if (o & 1) {
+            cout << "odd" << endl;
+        } else {
+            cout << "even" << endl;
         }
     }
 

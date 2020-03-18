@@ -25,10 +25,6 @@ struct Edge {
     bool operator<(Edge const& other) {
         return weight < other.weight;
     }
-
-    bool operator>(Edge const& other) {
-        return weight > other.weight;
-    }
 };
 
 // ------------------------------- factors ---------------- //

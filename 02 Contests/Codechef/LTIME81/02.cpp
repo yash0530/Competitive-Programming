@@ -29,28 +29,35 @@ int now() {
 int32_t main() { fastio;
     time_t start = now();
 
-    // 2 * (a & b) + (a ^ b) = (a + b)
-
-    int xr, sum;
-    cin >> xr >> sum;
-    if (xr == 0 and sum == 0) {
-        cout << 0 << endl;
-    } else if (xr > sum) {
-        cout << -1 << endl;
-    } else if (xr % 2 != sum % 2) {
-        cout << -1 << endl;
-    } else if (sum == xr) {
-        cout << 1 << endl;
-        cout << sum << endl;
-    } else {
-        int a = (sum - xr) / 2;
-        if ((a + xr) == (a ^ xr)) {
-            cout << 2 << endl;
-            cout << a << " " << a + xr << endl;
-        } else {
-            cout << 3 << endl;
-            cout << a << " " << a << " " << xr << endl;
+    int t; cin >> t;
+    while (t--) {
+        int n, k; cin >> n >> k;
+        vector<int> arr(n);
+        for (int i = 0; i < n; i++) {
+            cin >> arr[i];
         }
+        int i = 0, j = 0;
+        int res = 0, count = 0;
+        vector<int> freq(k + 1);
+        while (i < n and j < n) {
+            freq[arr[i]]++;
+            if (freq[arr[i]] == 1) {
+                count++;
+            }
+            if (count < k) {
+                res = max(res, i - j + 1);
+            } else {
+                while (count == k and j <= i) {
+                    freq[arr[j]]--;
+                    if (freq[arr[j++]] == 0) {
+                        count--;
+                    }
+                }
+            }
+            i++;
+        }
+        res = max(res, i - j);
+        cout << res << endl;
     }
 
     cerr << "TIME => " << now() - start << endl;

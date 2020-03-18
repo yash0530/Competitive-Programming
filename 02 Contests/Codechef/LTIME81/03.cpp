@@ -26,31 +26,44 @@ int now() {
     .time_since_epoch()).count();
 }
 
+void solve() {
+    int n; cin >> n;
+    string s; cin >> s;
+    int i = 0, j = n - 1, count = 0;
+    vector<bool> used(n);
+    while (i < j) {
+        if (s[i] != s[j]) {
+            if (i + 1 == j) {
+                cout << "NO" << endl;
+                return;
+            }
+            if (s[i] == s[j - 1] and !used[j - 1] and !used[j]) {
+                used[j] = true;
+                used[j - 1] = true;
+                swap(s[j], s[j - 1]);
+                count++;
+            } else if (s[i + 1] == s[j] and !used[i] and !used[i + 1]) {
+                used[i] = true;
+                used[i + 1] = true;
+                swap(s[i], s[i + 1]);
+                count++;
+            } else {
+                cout << "NO" << endl;
+                return;
+            }
+        }
+        i++; j--;
+    }
+    cout << "YES" << endl;
+    cout << count << endl;
+}
+
 int32_t main() { fastio;
     time_t start = now();
 
-    // 2 * (a & b) + (a ^ b) = (a + b)
-
-    int xr, sum;
-    cin >> xr >> sum;
-    if (xr == 0 and sum == 0) {
-        cout << 0 << endl;
-    } else if (xr > sum) {
-        cout << -1 << endl;
-    } else if (xr % 2 != sum % 2) {
-        cout << -1 << endl;
-    } else if (sum == xr) {
-        cout << 1 << endl;
-        cout << sum << endl;
-    } else {
-        int a = (sum - xr) / 2;
-        if ((a + xr) == (a ^ xr)) {
-            cout << 2 << endl;
-            cout << a << " " << a + xr << endl;
-        } else {
-            cout << 3 << endl;
-            cout << a << " " << a << " " << xr << endl;
-        }
+    int t; cin >> t;
+    while (t--) {
+        solve();
     }
 
     cerr << "TIME => " << now() - start << endl;
