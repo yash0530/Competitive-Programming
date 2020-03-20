@@ -32,17 +32,66 @@ void solve() {
     string s; cin >> s;
     vector<int> arr(n + 1);
     for (int i = 1; i <= n; i++) {
-        if (s[i - 1] == '1') arr[i] = arr[i - 1] - 1;
-        else arr[i] += arr[i - 1] + 1;
+        arr[i] += arr[i - 1] + (s[i - 1] == '0' ? 1 : -1);
     }
-    int y = arr[n];
-    set<int> poss;
-    for (int i = 1; i <= n; i++) {
-        if ((x - arr[i]) % y == 0) {
-            poss.insert((x - arr[i]) / y);
+    if (arr.back() == 0) {
+        for (int i = 1; i <= n; i++) {
+            if (arr[i] == x) {
+                cout << -1 << endl;
+                return;
+            }
         }
+        if (x == 0) cout << 1 << endl;
+        else cout << 0 << endl;
+        return;
     }
-    deba(poss);
+    if (x >= 0 and arr.back() > 0) {
+        int count = 0;
+        for (int i = 1; i <= n; i++) {
+            if (x >= arr[i]) {
+                if ((x - arr[i]) % arr.back() == 0) {
+                    count++;
+                }    
+            }
+        }
+        if (x == 0) count++;
+        cout << count << endl;
+        return;
+    }
+    if (x < 0) {
+        if (arr.back() > 0) {
+            int count = 0;
+            for (int i = 1; i <= n; i++) {
+                if (arr[i] <= x) {
+                    if ((x - arr[i]) % arr.back() == 0) {
+                        count++;
+                    }
+                }
+            }
+            cout << count << endl;
+        } else {
+            int count = 0;
+            for (int i = 1; i <= n; i++) {
+                if (x <= arr[i]) {
+                    if ((arr[i] - x) % -arr.back() == 0) {
+                        count++;
+                    }
+                }
+            }
+            cout << count << endl;
+        }
+    } else if (x >= 0 and arr.back() < 0) {
+        int count = 0;
+        for (int i = 1; i <= n; i++) {
+            if (x <= arr[i]) {
+                if ((arr[i] - x) % -arr.back() == 0) {
+                    count++;
+                }
+            }
+        }
+        if (x == 0) count++;
+        cout << count << endl;
+    }
 }
 
 int32_t main() { fastio;

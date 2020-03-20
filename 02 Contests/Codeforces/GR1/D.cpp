@@ -29,6 +29,12 @@ int now() {
 int32_t main() { fastio;
     time_t start = now();
 
+    int n, m;
+    cin >> n >> m;
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
     
 
     cerr << "TIME => " << now() - start << endl;

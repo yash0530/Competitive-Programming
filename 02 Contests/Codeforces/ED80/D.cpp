@@ -25,35 +25,57 @@ int now() {
     .time_since_epoch()).count();
 }
 
-void solve() {
-    int a; cin >> a;
-    if ((a & (a + 1))) {
-        int res = 0;
-        int base = 1;
-        while (a) {
-            res += base;
-            base *= 2;
-            a >>= 1;
+int n, m;
+vector<vector<int>> arr;
+int x, y;
+
+bool poss(int val) {
+    set<int> nums;
+    map<int, int> H;
+    for (int k = 0; k < n; k++) {
+        int num = 0;
+        for (int i = 0; i < m; i++) {
+            if (arr[k][i] >= val) {
+                num = num | (1 << i);
+            }
         }
-        cout << res << endl;
-        return;
+        nums.insert(num);
+        H[num] = k + 1;
     }
-    for (int i = 2; i * i <= a; i++) {
-        if (a % i == 0) {
-            cout << a / i << endl;
-            return;
+    for (auto a : nums) {
+        for (auto b : nums) {
+            if ((a | b) == ((1 << m) - 1)) {
+                x = H[a]; y = H[b];
+                return true;
+            }
         }
     }
-    cout << 1 << endl;
+    return false;
 }
 
 int32_t main() { fastio;
     time_t start = now();
 
-    int t; cin >> t;
-    while (t--) {
-        solve();
+    cin >> n >> m;
+    arr.assign(n, vector<int>(m));
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cin >> arr[i][j];
+        }
     }
+    int low = 0, high = 1e9, res = -1;
+    int a = -1, b = -1;
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        if (poss(mid)) {
+            res = mid;
+            a = x, b = y;
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    cout << a << " " << b << endl;
 
     cerr << "TIME => " << now() - start << endl;
     return 0;

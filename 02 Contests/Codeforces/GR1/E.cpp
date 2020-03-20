@@ -29,7 +29,29 @@ int now() {
 int32_t main() { fastio;
     time_t start = now();
 
-    
+    int n; cin >> n;
+    vector<int> a(n), b(n), d1(n - 1), d2(n - 1);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        if (i) d1[i - 1] = a[i] - a[i - 1];
+    }
+    for (int i = 0; i < n; i++) {
+        cin >> b[i];
+        if (i) d2[i - 1] = b[i] - b[i - 1];
+    }
+    sort(d1.begin(), d1.end());
+    sort(d2.begin(), d2.end());
+    for (int i = 0; i < n - 1; i++) {
+        if (d1[i] != d2[i]) {
+            cout << "No" << endl;
+            return 0;
+        }
+    }
+    if (a[0] == b[0]) {
+        cout << "Yes" << endl;
+    } else {
+        cout << "No" << endl;
+    }
 
     cerr << "TIME => " << now() - start << endl;
     return 0;
