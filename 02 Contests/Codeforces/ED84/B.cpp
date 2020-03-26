@@ -3,7 +3,7 @@ using namespace std;
 
 #define endl "\n"
 #define INF (int) 9e18
-#define HELL 998244353LL
+#define HELL (int) (1e9 + 7)
 #define int long long
 #define double long double
 #define uint unsigned long long
@@ -25,40 +25,50 @@ int now() {
     .time_since_epoch()).count();
 }
 
-int n, x;
-const int maxW = 5e5 + 5;
-int c[maxW], d[maxW];
+void solve() {
+    int n; cin >> n;
+    vector<int> married(n, -1); 
+    vector<int> not_married;
+    vector<int> arr[n];
+    for (int i = 0; i < n; i++) {
+        int k; cin >> k;
+        arr[i] = vector<int>(k);
+        for (int j = 0; j < k; j++) {
+            cin >> arr[i][j];
+            arr[i][j]--;
+        }
+        bool m = false;
+        for (int j = 0; j < k; j++) {
+            if (married[arr[i][j]] == -1) {
+                married[arr[i][j]] = i;
+                m = true;
+                break;
+            }
+        }
+        if (!m) {
+            not_married.push_back(i);
+        }
+    }
+    if (not_married.size() == 0) {
+        cout << "OPTIMAL" << endl;
+    } else {
+        cout << "IMPROVE" << endl;
+        cout << not_married.front() + 1 << " ";
+        for (int i = 0; i < n; i++) {
+            if (married[i] == -1) {
+                cout << i + 1 << endl;
+                return;
+            }
+        }
+    }
+}
 
 int32_t main() { fastio;
     time_t start = now();
 
     int t; cin >> t;
     while (t--) {
-        cin >> n;
-        memset(c, 0, sizeof c);
-        memset(d, 0, sizeof d);
-        for (int i = 0; i < n; i++) {
-            cin >> x; c[x]++;
-        }
-        int total_pairs = ((n + 1) * (2 * n + 1)) % HELL;
-        total_pairs = (total_pairs * fastpow(6, HELL - 2, HELL)) % HELL;
-
-        for (int i = 1; i < maxW; i++) {
-            for (int j = i; j < maxW; j += i) {
-                d[i] += c[j];
-            }
-            d[i] = d[i] * d[i];
-        }
-        int gcd = 0;
-        for (int i = maxW - 1; i >= 1; i--) {
-            for (int j = 2 * i; j < maxW; j += i) {
-                d[i] -= d[j];
-            }
-            gcd = (gcd + ((i * d[i]) % HELL)) % HELL;
-        }
-        gcd = (gcd * fastpow(n * n, HELL - 2, HELL)) % HELL;
-        int res = (total_pairs * gcd) % HELL;
-        cout << res << endl;
+        solve();
     }
 
     cerr << "TIME => " << now() - start << endl;

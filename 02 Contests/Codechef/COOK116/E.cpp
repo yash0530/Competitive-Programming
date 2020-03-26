@@ -1,32 +1,33 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+int getDist(int node) {
+    cout << 1 << " " << node << endl;
+    fflush(stdout);
+    cin >> node; return node;
+}
+
+int getNode(int node, int dist) {
+    cout << 2 << " " << node << " " << dist << endl;
+    fflush(stdout);
+    cin >> node; return node;
+}
+
+int printRes(int node) {
+    cout << 3 << " " << node << endl;
+    fflush(stdout);
+    cin >> node; return node;
+}
+
 int32_t main() {
     int t; cin >> t;
     while (t--) {
         int h; cin >> h;
-        cout << 1 << " " << 2 << endl;
-        fflush(stdout);
-
-        int level; cin >> level;
-        cout << 2 << " " << 2 << " " << level << endl;
-        fflush(stdout);
-        int node; cin >> node;
-        int count = node > 0;
-
-        for (int i = 0; i < 2 * h - 1; i++) {
-            cout << 2 << " " << node << " " << 2 * h - 1 << endl;
-            fflush(stdout);
-            int x; cin >> x;
-            count += (x > 0);
-            if (x > 0) {
-                node = x;
-            }
+        int leaf = getNode(1, h);
+        for (int i = 0; i < h; i++) {
+            leaf = getNode(leaf, getDist(leaf));
         }
-
-        cout << 3 << " " << count << endl;
-        fflush(stdout);
-        int x; cin >> x;
+        printRes(leaf);
     }
     return 0;
 }

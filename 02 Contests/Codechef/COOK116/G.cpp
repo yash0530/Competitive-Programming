@@ -29,7 +29,6 @@ int32_t main() { fastio;
     time_t start = now();
 
 
-
     cerr << "TIME => " << now() - start << endl;
     return 0;
 }
