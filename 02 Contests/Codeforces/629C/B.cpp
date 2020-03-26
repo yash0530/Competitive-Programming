@@ -3,7 +3,7 @@ using namespace std;
 
 #define endl "\n"
 #define INF (int) 9e18
-#define HELL 998244353 
+#define HELL (int) (1e9 + 7)
 #define int long long
 #define double long double
 #define uint unsigned long long
@@ -25,23 +25,29 @@ int now() {
     .time_since_epoch()).count();
 }
 
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    int curr = 0, i = 1;
+    while (curr < k) {
+        curr += i;
+        i++;
+    }
+    vector<char> res(n + 1, 'a');
+    res[i] = 'b';
+    int y = k - ((i - 1) * (i - 2) / 2);
+    res[y] = 'b';
+    for (int i = n; i >= 1; i--) {
+        cout << res[i];
+    } cout << endl;
+}
+
 int32_t main() { fastio;
     time_t start = now();
 
-    int n; cin >> n;
-    if (n == 1) cout << 10 << endl;
-    else {
-         vector<int> res;
-        for (int i = 1; i <= n - 2; i++) {
-            int x = (((n - i - 1) * 810) % HELL * fastpow(10, n - i - 2, HELL)) % HELL;
-            x = (x + 2 * 90 * fastpow(10, n - i - 1, HELL)) % HELL;
-            res.push_back(x);   
-        }
-        res.push_back(180);
-        res.push_back(10);
-        for (auto r : res) {
-            cout << r << " ";
-        } cout << endl;
+    int t; cin >> t;
+    while (t--) {
+        solve();
     }
 
     cerr << "TIME => " << now() - start << endl;
