@@ -26,9 +26,65 @@ int now() {
     .time_since_epoch()).count();
 }
 
+int n, p, k;
+const int maxN = 1e5 + 5, maxK = 1e5 + 5, maxP = 8;
+pair<int, int> arr[maxN];
+int mat[maxN][maxP], mat2[maxN][maxP], dp[maxN][(1 << maxP)];
+
+int res(int index = 0, int mask = 0) {
+
+	if (dp[index][mask] != -1) {
+		return dp[index][mask];
+	}
+
+	int c = __builtin_popcount(mask);
+	int aud = index - c;
+	if (index == n) {
+		if (c == p) {
+			return 0;
+		} else {
+			return -INF;
+		}
+	}
+	int curr = 0;
+	if (aud < k) {
+		curr = res(index + 1, mask) + arr[index].first;
+	}
+	if (c < p) {
+		for (int i = 0; i < p; i++) {
+			if ((mask & (1 << i)) == 0) {
+				curr = max(curr, res(index + 1, mask | (1 << i)) + mat2[index][i]);
+			}
+		}
+		curr = max(curr, res(index + 1, mask));
+	}
+	dp[index][mask] = curr;
+	return curr;
+}
+
 int32_t main() { fastio;
     time_t start = now();
 
+    memset(dp, -1, sizeof dp);
+
+    cin >> n >> p >> k;
+    for (int i = 0; i < n; i++) {
+    	cin >> arr[i].first;
+    	arr[i].second = i;
+    }
+    sort(arr, arr + n, greater<pair<int, int>>());
+    
+    for (int i = 0; i < n; i++) {
+    	for (int j = 0; j < p; j++) {
+    		cin >> mat[i][j];
+    	}
+    }
+    for (int i = 0; i < n; i++) {
+    	for (int j = 0; j < p; j++) {
+    		mat2[i][j] = mat[arr[i].second][j];
+    	}
+    }
+    cout << res() << endl;
 
 
     cerr << "TIME => " << now() - start << endl;

@@ -19,9 +19,34 @@ int fastpow(int a, int b, int m) {
 #define inv(a) fastpow(a, HELL - 2, HELL)
 
 int32_t main() { fastio;
-
-	int t; cin >> t;
-	cout << t << endl;
-
+    int t; cin >> t;
+    while (t--) {
+    	int n; cin >> n;
+    	vector<int> ps = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31 };
+    	int arr[n], res[n];
+    	for (int i = 0; i < n; i++) {
+    		cin >> arr[i];
+    		for (int j = 0; j < 11; j++) {
+    			if ((arr[i] % ps[j]) == 0) {
+    				res[i] = j;
+    			}
+    		}
+    	}
+    	vector<int> mapping(11, -1);
+    	int curr = 1;
+    	for (int i = 0; i < n; i++) {
+    		if (mapping[res[i]] == -1) {
+    			mapping[res[i]] = curr;
+    			res[i] = curr;
+    			curr++;
+    		} else {
+    			res[i] = mapping[res[i]];
+    		}
+    	}
+    	cout << curr - 1 << endl;
+    	for (auto r : res) {
+    		cout << r << " ";
+    	} cout << endl;
+    }
     return 0;
 }

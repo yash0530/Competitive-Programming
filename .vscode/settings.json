@@ -4,5 +4,6 @@
         "iostream": "cpp",
         "random": "cpp",
         "chrono": "cpp"
-    }
+    },
+    "competitive-programming-helper.firstTime": false
 }

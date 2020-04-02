@@ -18,10 +18,29 @@ int fastpow(int a, int b, int m) {
     a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2, HELL)
 
+const int maxN = 4294967296;
+bitset<maxN> B;
+
 int32_t main() { fastio;
 
-	int t; cin >> t;
-	cout << t << endl;
-
+	int q, s, a, b;
+	cin >> q >> s >> a >> b;
+	int sum = 0;
+	while (q--) {
+		if (s & 1) {
+			if (!B[s / 2]) {
+				sum += (s / 2);
+				B[s / 2] = true;
+			}
+		} else {
+			if (B[s / 2]) {
+				sum -= (s / 2);
+				B[s / 2] = false;
+			}
+		}
+		s = (((a * s) % maxN) + b) % maxN;
+	}
+	cout << sum << endl;
+    
     return 0;
 }

@@ -19,9 +19,26 @@ int fastpow(int a, int b, int m) {
 #define inv(a) fastpow(a, HELL - 2, HELL)
 
 int32_t main() { fastio;
-
-	int t; cin >> t;
-	cout << t << endl;
-
+    
+	int k; cin >> k;
+	if (k == 0) {
+		cout << "1 1\n1\n";
+	} else {
+		cout << 3 << " " << 3 << endl;
+		int x = log2(k);
+		x = (1 << (x + 1));
+		int y = (x | k);
+		int mat[3][3] = {
+			{ y, k, x },
+			{ x, k, x },
+			{ x, y, k }
+		};
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				cout << mat[i][j] << " ";
+			} cout << endl;
+		}
+	}
+	
     return 0;
 }

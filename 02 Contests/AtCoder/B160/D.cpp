@@ -20,46 +20,40 @@ int fastpow(int a, int b, int m) {
     } return res;
 }
 
-int now() {
-    return chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now()
-    .time_since_epoch()).count();
-}
-
-int phi(int m) {
-    int M = m;
-    vector<int> primes;
-    for (int i = 2; i * i <= m; i++) {
-        if (m % i == 0) {
-            primes.push_back(i);  
-        }
-        while (m % i == 0) {
-            m /= i;
-        }
-    }
-    if (m > 1) {
-        primes.push_back(m);
-    }
-    int res = M;
-    for (auto p : primes) {
-        res -= res / p;
-    }
-    return res;
-}
-
-void solve() {
-    int a, m;
-    cin >> a >> m;
-    cout << phi(m / __gcd(a, m)) << endl;
-}
-
 int32_t main() { fastio;
-    time_t start = now();
+    
+    int n, x, y;
+    cin >> n >> x >> y;
 
-    int t; cin >> t;
-    while (t--) {
-        solve();
+    vector<int> adj[n + 1];
+    for (int i = 1; i < n; i++) {
+    	adj[i].push_back(i + 1);
+    	adj[i + 1].push_back(i);
+    }
+    adj[x].push_back(y);
+    adj[y].push_back(x);
+
+    vector<int> res(n);
+    for (int i = 1; i <= n; i++) {
+    	vector<bool> marked(n + 1);
+    	queue<pair<int, int>> Q;
+    	Q.push({ i, 0 });
+    	marked[i] = true;
+    	while (!Q.empty()) {
+    		int x = Q.front().first; y = Q.front().second;
+    		Q.pop();
+    		res[y]++;
+    		for (auto u : adj[x]) {
+    			if (!marked[u]) {
+    				marked[u] = true;
+    				Q.push({ u, y + 1 });
+    			}
+    		}
+    	}
+    }
+    for (int i = 1; i < n; i++) {
+    	cout << res[i] / 2 << endl;
     }
 
-    cerr << "TIME => " << now() - start << endl;
     return 0;
 }

@@ -18,10 +18,32 @@ int fastpow(int a, int b, int m) {
     a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2, HELL)
 
-int32_t main() { fastio;
+int res(int index, vector<int> arr) {
+    if (index >= 0) {
+        vector<int> zero, one;
+        for (auto a : arr) {
+            if ((1 << index) & a) {
+                one.push_back(a);
+            } else {
+                zero.push_back(a);
+            }
+        }
+        if (one.size() and zero.size()) {
+            return (1 << index) + min(res(index - 1, one), res(index - 1, zero));
+        }
+        return res(index - 1, arr);
+    }
+    return 0;
+}
 
-	int t; cin >> t;
-	cout << t << endl;
+int32_t main() { fastio;
+    
+	int n; cin >> n;
+	vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+    cout << res(30, arr) << endl;
 
     return 0;
 }

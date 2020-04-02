@@ -18,10 +18,37 @@ int fastpow(int a, int b, int m) {
     a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2, HELL)
 
-int32_t main() { fastio;
+bool valid(int sum, int diff) {
+	if (sum < diff) return false;
+	if ((sum & 1) == (diff & 1)) {
+		return true;
+	}
+	return false;
+}
 
+void solve() {
+	int a, b;
+	cin >> a >> b;
+	int d = abs(a - b);
+
+	if (d == 0) {
+		cout << 0 << endl;
+		return;
+	}
+	int res = 1, sum = 1;
+	while (!valid(sum, d)) {
+		res++;
+		sum += res;
+	}
+	cout << res << endl;
+}
+
+int32_t main() { fastio;
+    
 	int t; cin >> t;
-	cout << t << endl;
+	while (t--) {
+		solve();
+	}
 
     return 0;
 }

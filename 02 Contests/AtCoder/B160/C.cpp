@@ -20,46 +20,29 @@ int fastpow(int a, int b, int m) {
     } return res;
 }
 
-int now() {
-    return chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now()
-    .time_since_epoch()).count();
-}
-
-int phi(int m) {
-    int M = m;
-    vector<int> primes;
-    for (int i = 2; i * i <= m; i++) {
-        if (m % i == 0) {
-            primes.push_back(i);  
-        }
-        while (m % i == 0) {
-            m /= i;
-        }
-    }
-    if (m > 1) {
-        primes.push_back(m);
-    }
-    int res = M;
-    for (auto p : primes) {
-        res -= res / p;
-    }
-    return res;
-}
-
-void solve() {
-    int a, m;
-    cin >> a >> m;
-    cout << phi(m / __gcd(a, m)) << endl;
-}
-
 int32_t main() { fastio;
-    time_t start = now();
-
-    int t; cin >> t;
-    while (t--) {
-        solve();
+    
+    int k, n;
+    cin >> k >> n;
+    int arr[2 * n];
+    for (int i = 0; i < n; i++) {
+    	cin >> arr[i];
+    	arr[i + n] = arr[i];
     }
+    int pref[2 * n];
+    pref[0] = 0;
+    for (int i = 1; i < 2 * n; i++) {
+    	int diff = arr[i] - arr[i - 1];
+    	if (diff < 0) {
+    		diff += k;
+    	}
+    	pref[i] = pref[i - 1] + diff;
+    }
+    int ans = INF;
+    for (int i = n - 1; i < 2 * n; i++) {
+    	ans = min(ans, pref[i] - pref[i - n + 1]);
+    }
+    cout << ans << endl;
 
-    cerr << "TIME => " << now() - start << endl;
     return 0;
 }

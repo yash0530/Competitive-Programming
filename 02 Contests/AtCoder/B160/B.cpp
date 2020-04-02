@@ -20,46 +20,13 @@ int fastpow(int a, int b, int m) {
     } return res;
 }
 
-int now() {
-    return chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now()
-    .time_since_epoch()).count();
-}
-
-int phi(int m) {
-    int M = m;
-    vector<int> primes;
-    for (int i = 2; i * i <= m; i++) {
-        if (m % i == 0) {
-            primes.push_back(i);  
-        }
-        while (m % i == 0) {
-            m /= i;
-        }
-    }
-    if (m > 1) {
-        primes.push_back(m);
-    }
-    int res = M;
-    for (auto p : primes) {
-        res -= res / p;
-    }
-    return res;
-}
-
-void solve() {
-    int a, m;
-    cin >> a >> m;
-    cout << phi(m / __gcd(a, m)) << endl;
-}
-
 int32_t main() { fastio;
-    time_t start = now();
+    
+    int n; cin >> n;
+    int hap = 1000 * (n / 500);
+    n = n % 500;
+    hap += 5 * (n / 5);
+    cout << hap << endl;
 
-    int t; cin >> t;
-    while (t--) {
-        solve();
-    }
-
-    cerr << "TIME => " << now() - start << endl;
     return 0;
 }

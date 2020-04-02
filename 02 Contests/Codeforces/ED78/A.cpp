@@ -18,10 +18,45 @@ int fastpow(int a, int b, int m) {
     a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2, HELL)
 
-int32_t main() { fastio;
+void solve() {
+	string s, h; cin >> s;
+	cin >> h;
+	vector<int> freqS(128), freqH(128);
+	for (auto x : s) {
+		freqS[x]++;
+	}
+	int len = s.length(), hen = h.length();
+	if (hen < len) {
+		cout << "NO" << endl;
+		return;
+	}
+	for (int i = 0; i < hen; i++) {
+		if (i >= len) {
+			freqH[h[i - len]]--;
+		}
+		freqH[h[i]]++;
+		bool found = true;
+		for (int i = 0; i < 128; i++) {
+			if (freqS[i] != freqH[i]) {
+				found = false;
+				break;
+			}
+		}
+		if (found) {
+			cout << "YES" << endl;
+			return;
+		}
+	}
+	cout << "NO" << endl;
+	return;
+}
 
-	int t; cin >> t;
-	cout << t << endl;
+int32_t main() { fastio;
+    
+    int t; cin >> t;
+    while (t--) {
+    	solve();
+    }
 
     return 0;
 }
