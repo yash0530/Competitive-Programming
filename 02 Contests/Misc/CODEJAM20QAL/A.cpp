@@ -20,8 +20,43 @@ int fastpow(int a, int b, int m) {
 
 int32_t main() { fastio;
     int t; cin >> t;
-    while (t--) {
-    	int d; cin >> d;
+    for (int _ = 1; _ <= t; _++) {
+    	cout << "Case #" << _ << ": ";
+    	int n; cin >> n;
+    	int mat[n][n];
+    	for (int i = 0; i < n; i++) {
+    		for (int j = 0; j < n; j++) {
+	    		cin >> mat[i][j];
+    		}
+    	}
+    	int res = 0;
+    	for (int i = 0; i < n; i++) {
+    		res += mat[i][i];
+    	}
+    	int rows = 0, cols = 0;
+    	for (int i = 0; i < n; i++) {
+    		set<int> s;
+    		for (auto m : mat[i]) {
+    			s.insert(m);
+    		}
+    		if ((int) s.size() < n) {
+    			rows++;
+    		}
+    	}
+
+    	vector<set<int>> s(n);
+    	for (int i = 0; i < n; i++) {
+    		for (int j = 0; j < n; j++) {
+    			s[j].insert(mat[i][j]);
+    		}
+    	}
+    	for (auto x : s) {
+    		if ((int) x.size() < n) {
+    			cols++;
+    		}
+    	}
+
+    	cout << res << " " << rows << " " << cols << endl;
     }
     return 0;
 }

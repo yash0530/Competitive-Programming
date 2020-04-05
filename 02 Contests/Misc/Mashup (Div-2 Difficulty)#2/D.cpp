@@ -19,9 +19,27 @@ int fastpow(int a, int b, int m) {
 #define inv(a) fastpow(a, HELL - 2, HELL)
 
 int32_t main() { fastio;
-    int t; cin >> t;
-    while (t--) {
-    	int d; cin >> d;
+    int n, m, k;
+    cin >> n >> m >> k;
+    getMat(x, n + 5, m + 5, 0);
+    for (int i = 0; i < k; i++) {
+    	int a, b;
+    	cin >> a >> b;
+    	x[a][b] = 1;
+    	if (x[a - 1][b - 1] and x[a - 1][b] and x[a][b - 1]) {
+    		cout << i + 1 << endl;
+    		return 0;
+    	} else if (x[a + 1][b + 1] and x[a + 1][b] and x[a][b + 1]) {
+    		cout << i + 1 << endl;
+    		return 0;
+    	} else if (x[a - 1][b + 1] and x[a - 1][b] and x[a][b + 1]) {
+    		cout << i + 1 << endl;
+    		return 0;
+    	} else if (x[a + 1][b - 1] and x[a + 1][b] and x[a][b - 1]) {
+    		cout << i + 1 << endl;
+    		return 0;
+    	}
     }
+    cout << 0 << endl;
     return 0;
 }

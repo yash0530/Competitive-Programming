@@ -19,9 +19,23 @@ int fastpow(int a, int b, int m) {
 #define inv(a) fastpow(a, HELL - 2, HELL)
 
 int32_t main() { fastio;
-    int t; cin >> t;
-    while (t--) {
-    	int d; cin >> d;
+    int n, m;
+    cin >> n >> m;
+    int arr[n], sum = 0;
+    for (int i = 0; i < n; i++) {
+    	cin >> arr[i];
+    	sum += arr[i];
+    }
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+    	if (sum <= (4 * m * arr[i])) {
+    		count++;
+    	}
+    }
+    if (count >= m) {
+    	cout << "Yes" << endl;
+    } else {
+    	cout << "No" << endl;
     }
     return 0;
 }

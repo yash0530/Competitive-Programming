@@ -19,9 +19,23 @@ int fastpow(int a, int b, int m) {
 #define inv(a) fastpow(a, HELL - 2, HELL)
 
 int32_t main() { fastio;
-    int t; cin >> t;
-    while (t--) {
-    	int d; cin >> d;
-    }
+	int t; cin >> t;
+	while (t--) {
+		int n, x; cin >> n;
+		int mx = 0, mx2 = 0;
+		for (int i = 0; i < n; i++) {
+			cin >> x;
+			mx = max(mx, x);
+		}
+		for (int i = 0; i < n; i++) {
+			cin >> x;
+			mx2 = max(mx2, x);
+		}
+		if (mx2 == mx) {
+			cout << "NO" << endl;
+		} else {
+			cout << "YES" << endl;
+		}
+	}    
     return 0;
 }

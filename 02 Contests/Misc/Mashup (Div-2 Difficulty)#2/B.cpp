@@ -19,9 +19,14 @@ int fastpow(int a, int b, int m) {
 #define inv(a) fastpow(a, HELL - 2, HELL)
 
 int32_t main() { fastio;
-    int t; cin >> t;
-    while (t--) {
-    	int d; cin >> d;
+    int n, k;
+    cin >> n >> k;
+    if ((n * (n - 1)) > (2 * k)) {
+    	for (int i = 0; i < n; i++) {
+    		cout << 0 << " " << i << endl;
+    	}
+    } else {
+    	cout << "no solution" << endl;
     }
     return 0;
 }

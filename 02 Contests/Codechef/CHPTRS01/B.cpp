@@ -21,7 +21,18 @@ int fastpow(int a, int b, int m) {
 int32_t main() { fastio;
     int t; cin >> t;
     while (t--) {
-    	int d; cin >> d;
+    	uint a, b;
+    	cin >> a >> b;
+    	int max_pow = max(log2(a), log2(b));
+    	vector<uint> res = { a ^ b };
+    	for (int i = 1; i <= 64; i++) {
+    		uint x = b & 1ULL;
+    		b >>= 1ULL;
+    		b |= ((1ULL << max_pow) * x);
+    		res.push_back(a ^ b);
+    	}
+    	auto m = max_element(res.begin(), res.end());
+    	cout << (m - res.begin()) << " " << *m << endl;
     }
     return 0;
 }

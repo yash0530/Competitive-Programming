@@ -20,8 +20,9 @@ int fastpow(int a, int b, int m) {
 
 int32_t main() { fastio;
     int t; cin >> t;
-    while (t--) {
-    	int d; cin >> d;
+    for (int _ = 1; _ <= t; _++) {
+    	cout << "Case #" << _ << ": ";
+    	
     }
     return 0;
 }

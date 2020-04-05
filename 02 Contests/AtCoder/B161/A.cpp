@@ -19,9 +19,8 @@ int fastpow(int a, int b, int m) {
 #define inv(a) fastpow(a, HELL - 2, HELL)
 
 int32_t main() { fastio;
-    int t; cin >> t;
-    while (t--) {
-    	int d; cin >> d;
-    }
+	int a, b, c;
+	cin >> a >> b >> c;
+	cout << c << " " << a << " " << b << endl;
     return 0;
 }

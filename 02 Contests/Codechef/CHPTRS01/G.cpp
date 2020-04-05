@@ -18,10 +18,25 @@ int fastpow(int a, int b, int m) {
     a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2, HELL)
 
+int n, m, x;
+const int maxN = 1e6 + 5;
+vector<int> adj[maxN];
+int xs[maxN];
+
 int32_t main() { fastio;
     int t; cin >> t;
     while (t--) {
-    	int d; cin >> d;
+    	cin >> n >> m >> x;
+    	for (int i = 0; i < x; i++) {
+    		cin >> xs[i];
+    	}
+    	int u, v;
+    	for (int i = 0; i < m; i++) {
+    		cin >> u >> v;
+    		adj[u].push_back(v);
+    		adj[v].push_back(u);
+    	}
+    	
     }
     return 0;
 }

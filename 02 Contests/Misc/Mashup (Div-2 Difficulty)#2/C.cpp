@@ -19,6 +19,37 @@ int fastpow(int a, int b, int m) {
 #define inv(a) fastpow(a, HELL - 2, HELL)
 
 int32_t main() { fastio;
-    
+    int n; cin >> n;
+    string a, b; cin >> a >> b;
+    set<int> adj[26];
+    for (int i = 0; i < n; i++) {
+    	if (a[i] != b[i]) {
+    		adj[a[i] - 'a'].insert(b[i] - 'a');
+    		adj[b[i] - 'a'].insert(a[i] - 'a');
+    	}
+    }
+    vector<pair<char, char>> p;
+    vector<bool> marked(26);
+    for (int i = 0; i < 26; i++) {
+    	if (!marked[i]) {
+    		queue<int> Q;
+    		marked[i] = true;
+    		Q.push(i);
+    		while (!Q.empty()) {
+    			int x = Q.front(); Q.pop();
+    			for (auto y : adj[x]) {
+    				if (!marked[y]) {
+    					marked[y] = true;
+    					p.push_back({ y + 'a', x + 'a' });
+    					Q.push(y);
+    				}
+    			}
+    		}
+    	}
+    }
+    cout << p.size() << endl;
+    for (auto x : p) {
+    	cout << x.first << " " << x.second << endl;
+    }
     return 0;
 }

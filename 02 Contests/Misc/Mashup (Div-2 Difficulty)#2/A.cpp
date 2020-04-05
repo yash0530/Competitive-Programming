@@ -18,10 +18,27 @@ int fastpow(int a, int b, int m) {
     a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2, HELL)
 
+int getSum(int n) {
+	int res = 0;
+	while (n) {
+		res += n % 10;
+		n /= 10;
+	}
+	return res;
+}
+
 int32_t main() { fastio;
-    int t; cin >> t;
-    while (t--) {
-    	int d; cin >> d;
+    int n; cin >> n;
+
+    int nr = sqrt(n);
+    while (((nr * nr + nr * 163)) >= n) {
+    	if (((nr * nr) + nr * getSum(nr)) == n) {
+    		cout << nr << endl;
+    		return 0;
+    	}
+    	nr--;
     }
+    cout << -1 << endl;
+
     return 0;
 }

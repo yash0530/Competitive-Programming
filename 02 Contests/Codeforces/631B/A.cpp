@@ -21,7 +21,23 @@ int fastpow(int a, int b, int m) {
 int32_t main() { fastio;
     int t; cin >> t;
     while (t--) {
-    	int d; cin >> d;
+    	set<int> s;
+    	int n, x; cin >> n >> x;
+    	for (int i = 0; i < n; i++) {
+    		int a; cin >> a;
+    		s.insert(a);
+    	}
+    	int mx = 1;
+    	for (int i = 0; i < x; i++) {
+    		while (s.find(mx) != s.end()) {
+    			mx++;
+    		}
+    		s.insert(mx);
+    	}
+    	while (s.find(mx) != s.end()) {
+			mx++;
+		}
+    	cout << mx - 1 << endl;
     }
     return 0;
 }
