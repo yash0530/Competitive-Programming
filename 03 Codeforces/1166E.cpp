@@ -3,7 +3,7 @@ using namespace std;
 
 #define endl "\n"
 #define INF (int) 9e18
-#define HELL 998244353LL
+#define HELL (int) (1e9 + 7)
 #define int long long
 #define double long double
 #define uint unsigned long long
@@ -17,22 +17,41 @@ int fastpow(int a, int b, int m) {
     int res = 1; a %= m; while (b > 0) { if (b & 1) res = (res * a) % m;
     a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2, HELL)
+#define size(a) (int) a.size()
 
 int32_t main() { fastio;
-    int n, m, l, r;
-    cin >> n >> m >> l >> r;
-    int t = n * m;
-
-    int total = fastpow(r - l + 1, n * m, HELL);
-    if (t & 1) {
-    	cout << total << endl;
-    } else {
-    	int a = (r - l + 1) / 2;
-    	int b = (r - l + 1) - a;
-    	int sub = ((fastpow(a + b, t, HELL) - fastpow(a - b, t, HELL)) + HELL) % HELL;
-    	total = (total - ((sub * inv(2)) % HELL) + HELL) % HELL;
-    	cout << total << endl;
-    }
-
+	int m, n;
+	cin >> m >> n;
+	vector<vector<int>> arr(m);
+	for (int i = 0; i < m; i++) {
+		int x; cin >> x;
+		arr[i] = vector<int>(x);
+		for (int j = 0; j < x; j++) {
+			cin >> arr[i][j];
+		}
+		sort(arr[i].begin(), arr[i].end());
+	}
+	for (int i = 0; i < m; i++) {
+		for (int j = i + 1; j < m; j++) {
+			int a = 0, b = 0;
+			bool found = false;
+			while(a < size(arr[i]) and b < size(arr[j])) {
+				if (arr[i][a] == arr[j][b]) {
+					found = true;
+					break;
+				}
+				if (arr[i][a] > arr[j][b]) {
+					b++;
+				} else {
+					a++;
+				}
+			}
+			if (!found) {
+				cout << "impossible" << endl;
+				exit(0);
+			}
+		}
+	}
+	cout << "possible" << endl;
     return 0;
 }

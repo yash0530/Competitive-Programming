@@ -3,7 +3,7 @@ using namespace std;
 
 #define endl "\n"
 #define INF (int) 9e18
-#define HELL 998244353LL
+#define HELL (int) (1e9 + 7)
 #define int long long
 #define double long double
 #define uint unsigned long long
@@ -17,22 +17,48 @@ int fastpow(int a, int b, int m) {
     int res = 1; a %= m; while (b > 0) { if (b & 1) res = (res * a) % m;
     a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2, HELL)
+#define size(a) (int) a.size()
+
+int n, m;
+const int maxN = 3e5 + 5;
+int arr[maxN];
+
+bool poss(int x) {
+	int prev = 0;
+	for (int i = 0; i < n; i++) {
+		int l1 = arr[i];
+		int h1 = min(m - 1, arr[i] + x);
+		if ((arr[i] + x) >= m) {
+			int h2 = (arr[i] + x) % m;
+			if (h2 >= prev) {
+				continue;
+			}
+		}
+		if (h1 >= prev) {
+			prev = max(prev, l1);
+		} else {
+			return false;
+		}
+	}
+	return true;
+}
 
 int32_t main() { fastio;
-    int n, m, l, r;
-    cin >> n >> m >> l >> r;
-    int t = n * m;
-
-    int total = fastpow(r - l + 1, n * m, HELL);
-    if (t & 1) {
-    	cout << total << endl;
-    } else {
-    	int a = (r - l + 1) / 2;
-    	int b = (r - l + 1) - a;
-    	int sub = ((fastpow(a + b, t, HELL) - fastpow(a - b, t, HELL)) + HELL) % HELL;
-    	total = (total - ((sub * inv(2)) % HELL) + HELL) % HELL;
-    	cout << total << endl;
-    }
-
+	cin >> n >> m;
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+	}
+	int res = -1;
+	int low = 0, high = m - 1;
+	while (low <= high) {
+		int mid = (low + high) / 2;
+		if (poss(mid)) {
+			res = mid;
+			high = mid - 1;
+		} else {
+			low = mid + 1;
+		}
+	}
+	cout << res << endl;
     return 0;
 }

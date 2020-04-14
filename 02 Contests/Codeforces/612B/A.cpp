@@ -3,7 +3,7 @@ using namespace std;
 
 #define endl "\n"
 #define INF (int) 9e18
-#define HELL 998244353LL
+#define HELL (int) (1e9 + 7)
 #define int long long
 #define double long double
 #define uint unsigned long long
@@ -19,20 +19,30 @@ int fastpow(int a, int b, int m) {
 #define inv(a) fastpow(a, HELL - 2, HELL)
 
 int32_t main() { fastio;
-    int n, m, l, r;
-    cin >> n >> m >> l >> r;
-    int t = n * m;
+	
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		string s; cin >> s;
 
-    int total = fastpow(r - l + 1, n * m, HELL);
-    if (t & 1) {
-    	cout << total << endl;
-    } else {
-    	int a = (r - l + 1) / 2;
-    	int b = (r - l + 1) - a;
-    	int sub = ((fastpow(a + b, t, HELL) - fastpow(a - b, t, HELL)) + HELL) % HELL;
-    	total = (total - ((sub * inv(2)) % HELL) + HELL) % HELL;
-    	cout << total << endl;
-    }
+		vector<int> p;
+		for (int i = 0; i < n; i++) {
+			if (s[i] == 'A') {
+				p.push_back(i);
+			}
+		}
 
+		int sz = p.size();
+
+		if (sz == 0) {
+			cout << 0 << endl;
+		} else {
+			int res = n - 1 - p.back();
+			for (int i = sz - 2; i >= 0; i--) {
+				res = max(p[i + 1] - p[i] - 1, res);
+			}
+			cout << res << endl;
+		}
+	}
     return 0;
 }
