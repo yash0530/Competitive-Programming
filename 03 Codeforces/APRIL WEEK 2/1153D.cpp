@@ -19,19 +19,18 @@ int fastpow(int a, int b, int m) {
 #define inv(a) fastpow(a, HELL - 2, HELL)
 #define size(a) (int) a.size()
 
+int n;
+const int maxN = 3e5 + 5;
+vector<int> a(maxN), p(maxN);
+
 int32_t main() { fastio;
-	string s; cin >> s;
-	int res = 0;
-	int n = size(s);
-	int last_found = n;
-	for (int i = n - 1; ~i; i--) {
-		for (int k = 1; (k <= 4) and ((i + 2 * k) < last_found); k++) {
-			if ((s[i] == s[i + k]) and (s[i] == s[i + 2 * k])) {
-				res += (i + 1) * (last_found - (i + 2 * k));
-				last_found = i + 2 * k;
-			}
-		}
-	}
-	cout << res << endl;
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+    	cin >> a[i];
+    }
+    for (int i = 0; i < n; i++) {
+    	cin >> p[i];
+    }
+    
     return 0;
 }

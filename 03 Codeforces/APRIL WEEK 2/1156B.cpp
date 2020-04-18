@@ -19,19 +19,53 @@ int fastpow(int a, int b, int m) {
 #define inv(a) fastpow(a, HELL - 2, HELL)
 #define size(a) (int) a.size()
 
-int32_t main() { fastio;
-	string s; cin >> s;
-	int res = 0;
+bool poss(string s) {
 	int n = size(s);
-	int last_found = n;
-	for (int i = n - 1; ~i; i--) {
-		for (int k = 1; (k <= 4) and ((i + 2 * k) < last_found); k++) {
-			if ((s[i] == s[i + k]) and (s[i] == s[i + 2 * k])) {
-				res += (i + 1) * (last_found - (i + 2 * k));
-				last_found = i + 2 * k;
-			}
+	for (int i = 1; i < n; i++) {
+		if(abs(s[i - 1] - s[i]) == 1) {
+			return false;
 		}
 	}
-	cout << res << endl;
+	return true;
+}
+
+void solve() {
+	string s; cin >> s;
+	vector<int> freq(128);
+	for (auto x : s) {
+		freq[x]++;
+	}
+	vector<char> evens, odds;
+	for (int i = 'a'; i <= 'z'; i++) {
+		if (freq[i]) {
+			if (i & 1) odds.push_back(i);
+			else evens.push_back(i);
+		}
+	}
+	string even = "", odd = "";
+	for (auto e : evens) {
+		for (int i = 0; i < freq[e]; i++) {
+			even += e;
+		}
+	}
+	for (auto e : odds) {
+		for (int i = 0; i < freq[e]; i++) {
+			odd += e;
+		}
+	}
+	if (poss(even + odd)) {
+		cout << even + odd << endl;
+	} else if (poss(odd + even)) {
+		cout << odd + even << endl;
+	} else {
+		cout << "No answer" << endl;
+	}
+}
+
+int32_t main() { fastio;
+	int t; cin >> t;
+	while (t--) {
+		solve();
+	}	    
     return 0;
 }

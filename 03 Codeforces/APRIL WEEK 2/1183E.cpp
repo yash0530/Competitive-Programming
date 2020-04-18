@@ -19,19 +19,37 @@ int fastpow(int a, int b, int m) {
 #define inv(a) fastpow(a, HELL - 2, HELL)
 #define size(a) (int) a.size()
 
+int n, k;
+string s;
+const int maxN = 105;
+
 int32_t main() { fastio;
-	string s; cin >> s;
-	int res = 0;
-	int n = size(s);
-	int last_found = n;
-	for (int i = n - 1; ~i; i--) {
-		for (int k = 1; (k <= 4) and ((i + 2 * k) < last_found); k++) {
-			if ((s[i] == s[i + k]) and (s[i] == s[i + 2 * k])) {
-				res += (i + 1) * (last_found - (i + 2 * k));
-				last_found = i + 2 * k;
+	cin >> n >> k;
+	cin >> s;
+	queue<pair<string, int>> Q;
+	Q.push({ s, 0LL });
+	set<string> visited;
+	visited.insert(s);
+	int count = 0, res = 0;
+	while (!Q.empty() and count < k) {
+		string t = Q.front().first;
+		int add = Q.front().second;
+		Q.pop();
+		count++;
+		res += add;
+		int x = size(t);
+		for (int i = 0; i < x; i++) {
+			string nx = t.substr(0, i) + t.substr(i + 1, x - i - 1);
+			if (visited.find(nx) == visited.end()) {
+				visited.insert(nx);
+				Q.push({ nx, add + 1 });
 			}
 		}
 	}
-	cout << res << endl;
+	if (count < k) {
+		cout << -1 << endl;
+	} else {
+		cout << res << endl;
+	}
     return 0;
 }

@@ -3,7 +3,8 @@ using namespace std;
 #define int long long
 
 int n;
-vector<int> tree;
+const int maxN = 1e5 + 5;
+int tree[maxN];
 
 void update(int index, int val) {
     while (index <= n) {
@@ -23,5 +24,4 @@ int read(int index) {
 
 int32_t main() {
     int n; cin >> n;
-    tree.resize(n + 1);
 }

@@ -192,3 +192,39 @@ int32_t main() {
         cout << x << endl;
     }
 }
+
+// --------------------- BINARY LIFTING ----------------------- //
+int timer;
+const int LG = 22, maxN = 1e5 + 5;
+int tin[maxN], tout[maxN];
+int up[maxN][LG + 1];
+vector<int> adj[maxN];
+
+void dfs(int v = 1, int p = 1) {
+    tin[v] = ++timer;
+    up[v][0] = p;
+    for (int i = 1; i <= LG; ++i) {
+        up[v][i] = up[up[v][i-1]][i-1];
+    }
+    for (int u : adj[v]) {
+        if (u != p) {
+            dfs(u, v);
+        }
+    }
+    tout[v] = ++timer;
+}
+
+bool isAncestor(int u, int v) {
+    return (tin[u] <= tin[v]) and (tout[u] >= tout[v]);
+}
+
+int LCA(int u, int v) {
+    if (isAncestor(u, v)) return u;
+    if (isAncestor(v, u)) return v;
+    for (int i = LG; i >= 0; --i) {
+        if (!isAncestor(up[u][i], v)) {
+            u = up[u][i];
+        }
+    }
+    return up[u][0];
+}

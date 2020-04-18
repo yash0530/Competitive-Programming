@@ -20,18 +20,46 @@ int fastpow(int a, int b, int m) {
 #define size(a) (int) a.size()
 
 int32_t main() { fastio;
-	string s; cin >> s;
-	int res = 0;
-	int n = size(s);
-	int last_found = n;
-	for (int i = n - 1; ~i; i--) {
-		for (int k = 1; (k <= 4) and ((i + 2 * k) < last_found); k++) {
-			if ((s[i] == s[i + k]) and (s[i] == s[i + 2 * k])) {
-				res += (i + 1) * (last_found - (i + 2 * k));
-				last_found = i + 2 * k;
+	
+	const int maxP = 3e6 + 5;
+	vector<int> sieve(maxP, 1);
+	for (int i = 2; i * i <= maxP; i++) {
+		if (sieve[i] == 1) {
+			for (int j = i * i; j < maxP; j += i) {
+				if (sieve[j] == 1) {
+					sieve[j] = j / i;
+				}
 			}
 		}
 	}
-	cout << res << endl;
+	map<int, int> primes;
+	for (int i = 2, loc = 1; i < maxP; i++) {
+		if (sieve[i] == 1) {
+			primes[i] = loc++;
+		}
+	}
+
+	int n, x; cin >> n;
+	multiset<int> ms;
+	for (int i = 0; i < 2 * n; i++) {
+		cin >> x; ms.insert(x);
+	}
+	vector<int> arr;
+	while (!ms.empty()) {
+		int mx = *ms.rbegin();
+		if (sieve[mx] == 1) {
+			arr.push_back(primes[mx]);
+			ms.erase(ms.find(mx));
+			ms.erase(ms.find(primes[mx]));
+		} else {
+			arr.push_back(mx);
+			ms.erase(ms.find(mx));
+			ms.erase(ms.find(sieve[mx]));
+		}
+	}
+	for (auto a : arr) {
+		cout << a << " ";
+	} cout << endl;
+
     return 0;
 }

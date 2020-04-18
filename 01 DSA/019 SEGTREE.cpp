@@ -1,7 +1,108 @@
 #include <bits/stdc++.h>
 using namespace std;
+#define int long long
+#define INF (int) 1e18
 
+const int maxN = 1e5 + 5;
+int n;
+int tree[4 * maxN], lazy[4 * maxN], arr[maxN];
+
+// ----------------- STANDARD SEG TREE NO LAZY --------------------------- //
+
+// building tree from range sum
+void build(int v = 1, int tl = 0, int tr = n - 1) {
+    if (tl == tr) {
+        tree[v] = arr[tl];
+    } else {
+        int tm = (tl + tr) / 2;
+        build(v*2, tl, tm);
+        build(v*2+1, tm+1, tr);
+        tree[v] = tree[v*2] + tree[v*2+1];
+    }
+}
+
+// sum over range
+int sum(int l, int r, int v = 1, int tl = 0, int tr = n - 1) {
+    if (l > r) return 0;
+    if (l == tl && r == tr) {
+        return tree[v];
+    }
+    int tm = (tl + tr) / 2;
+    return sum(l, min(r, tm), v*2, tl, tm) + sum(max(l, tm+1), r, v*2+1, tm+1, tr);
+}
+
+// update a loc
+void update(int pos, int new_val, int v = 1, int tl = 0, int tr = n - 1) {
+    if (tl == tr) {
+        tree[v] = new_val;
+    } else {
+        int tm = (tl + tr) / 2;
+        if (pos <= tm)
+            update(pos, new_val, v*2, tl, tm);
+        else
+            update(pos, new_val, v*2+1, tm+1, tr);
+        tree[v] = tree[v*2] + tree[v*2+1];
+    }
+}
+
+// ------------------- Max subarray sum in range ---------------- //
+struct data {
+    int sum, pref, suff, ans;
+};
+
+data combine(data l, data r) {
+    data res;
+    res.sum = l.sum + r.sum;
+    res.pref = max(l.pref, l.sum + r.pref);
+    res.suff = max(r.suff, r.sum + l.suff);
+    res.ans = max(max(l.ans, r.ans), l.suff + r.pref);
+    return res;
+}
+
+data make_data(int val) {
+    data res;
+    res.sum = val;
+    res.pref = res.suff = res.ans = max(0LL, val);
+    return res;
+}
+
+// -------------------- Range update add, Range query Max (LAZY) ---------- //
+void push(int v) {
+    tree[v*2] += lazy[v];
+    lazy[v*2] += lazy[v];
+    tree[v*2+1] += lazy[v];
+    lazy[v*2+1] += lazy[v];
+    lazy[v] = 0;
+}
+
+void updateRange(int l, int r, int addend, int v = 1, int tl = 0, int tr = n - 1) {
+    if (l > r) 
+        return;
+    if (l == tl && tr == r) {
+        tree[v] += addend;
+        lazy[v] += addend;
+    } else {
+        push(v);
+        int tm = (tl + tr) / 2;
+        updateRange(l, min(r, tm), addend, v*2, tl, tm);
+        updateRange(max(l, tm+1), r, addend, v*2+1, tm+1, tr);
+        tree[v] = max(tree[v*2], tree[v*2+1]);
+    }
+}
+
+int queryMax(int l, int r, int v = 1, int tl = 0, int tr = n - 1) {
+    if (l > r)
+        return -INF;
+    if (l <= tl && tr <= r)
+        return tree[v];
+    push(v);
+    int tm = (tl + tr) / 2;
+    return max(queryMax(l, min(r, tm), v*2, tl, tm), queryMax(max(l, tm+1), r, v*2+1, tm+1, tr));
+}
+
+// --------------------- Range Update Add, Range Query sum (LAZY) ---------------------- //
 // 0 based indexed
+// Implementation by ScaryTerry
 class SegmentTree {
     private:
         int treeSize, arrSize;
@@ -18,7 +119,7 @@ class SegmentTree {
             int left = 2 * pos + 1;
             int right = 2 * pos + 2;
 
-            if (tree[pos].second) {
+            if (tree[pos].second != 0) {
                 int add = tree[pos].second;
                 tree[pos].first += (high - low + 1) * add;
                 tree[left].second += add;
@@ -42,7 +143,7 @@ class SegmentTree {
             int left = 2 * pos + 1;
             int right = 2 * pos + 2;
 
-            if (tree[pos].second) {
+            if (tree[pos].second != 0) {
                 int add = tree[pos].second;
                 tree[left].second += add;
                 tree[right].second += add;
@@ -91,29 +192,7 @@ class SegmentTree {
         }
 };
 
-int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
- 
-    int t; cin >> t;
-    while (t--) {
-        cin.ignore();
-        int n; int updates;
-        cin >> n >> updates;
- 
-        SegmentTree st(n);
-        while (updates--) {
-            int status; cin >> status;
-            if (status) {
-                int a, b;
-                cin >> a >> b;
-                cout << st._query(--a, --b) << endl;
-            }
-            else {
-                int a, b, val;
-                cin >> a >> b >> val;
-                st._update(--a, --b, val);
-            }
-        }
-    }
+
+int32_t main() {
+
 }

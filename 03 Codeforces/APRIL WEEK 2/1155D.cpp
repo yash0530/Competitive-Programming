@@ -20,17 +20,34 @@ int fastpow(int a, int b, int m) {
 #define size(a) (int) a.size()
 
 int32_t main() { fastio;
-	string s; cin >> s;
+	int n, x;
+	cin >> n >> x;
 	int res = 0;
-	int n = size(s);
-	int last_found = n;
-	for (int i = n - 1; ~i; i--) {
-		for (int k = 1; (k <= 4) and ((i + 2 * k) < last_found); k++) {
-			if ((s[i] == s[i + k]) and (s[i] == s[i + 2 * k])) {
-				res += (i + 1) * (last_found - (i + 2 * k));
-				last_found = i + 2 * k;
-			}
+	vector<int> pref(n), suff(n), arr(n), sum(n);
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+		if (i == 0) {
+			sum[i] = arr[i];
+			pref[i] = max(0LL, arr[i]);
+		} else {
+			sum[i] = sum[i - 1] + arr[i];
+			pref[i] = max(0LL, pref[i - 1] + arr[i]);
 		}
+		res = max(res, pref[i]);
+	}
+	suff[n - 1] = max(0LL, arr[n - 1]);
+	for (int i = n - 2; ~i; i--) {
+		suff[i] = max(0LL, suff[i + 1] + arr[i]);
+	}
+
+	int left_max = 0;
+	for (int i = 0; i < n; i++) {
+		if (i == n - 1) {
+			res = max(res, x * sum[i] + left_max);
+		} else {
+			res = max(res, suff[i + 1] + x * sum[i] + left_max);
+		}
+		left_max = max(left_max, pref[i] - x * sum[i]);
 	}
 	cout << res << endl;
     return 0;

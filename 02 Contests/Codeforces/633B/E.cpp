@@ -20,18 +20,6 @@ int fastpow(int a, int b, int m) {
 #define size(a) (int) a.size()
 
 int32_t main() { fastio;
-	string s; cin >> s;
-	int res = 0;
-	int n = size(s);
-	int last_found = n;
-	for (int i = n - 1; ~i; i--) {
-		for (int k = 1; (k <= 4) and ((i + 2 * k) < last_found); k++) {
-			if ((s[i] == s[i + k]) and (s[i] == s[i + 2 * k])) {
-				res += (i + 1) * (last_found - (i + 2 * k));
-				last_found = i + 2 * k;
-			}
-		}
-	}
-	cout << res << endl;
+		    
     return 0;
 }
