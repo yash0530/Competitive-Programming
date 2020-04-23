@@ -8,7 +8,7 @@ using namespace std;
 #define double long double
 #define uint unsigned long long
 #define pii pair<int, int>
-#define pb emplace_back
+#define pb push_back
 #define fs first
 #define sc second
 #define size(a) (int) a.size()
@@ -24,6 +24,19 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 
 int32_t main() { fastio;
-	
+	int n1, n2, k1, k2;
+	cin >> n1 >> n2 >> k1 >> k2;
+	int a1[n1], a2[n2];
+	for (int i = 0; i < n1; i++) {
+		cin >> a1[i];
+	}
+	for (int j = 0; j < n2; j++) {
+		cin >> a2[j];
+	}
+	if (a1[k1 - 1] < a2[n2 - k2]) {
+		cout << "YES" << endl;
+	} else {
+		cout << "NO" << endl;
+	}
 	return 0;
 }

@@ -8,7 +8,7 @@ using namespace std;
 #define double long double
 #define uint unsigned long long
 #define pii pair<int, int>
-#define pb emplace_back
+#define pb push_back
 #define fs first
 #define sc second
 #define size(a) (int) a.size()
@@ -23,7 +23,35 @@ int fastpow(int a, int b, int m = HELL) { int res = 1; a %= m;
 while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2)
 
+bool cmp1(pair<pii, int> a, pair<pii, int> b) {
+	return a.fs.sc < b.fs.sc;
+}
+
+bool cmp2(pair<pii, int> a, pair<pii, int> b) {
+	return a.fs.sc > b.fs.sc;
+}
+
 int32_t main() { fastio;
-	
+	int n; cin >> n;
+	vector<pair<pii, int>> forward, back;
+	for (int i = 0; i < n; i++) {
+		int u, v;
+		cin >> u >> v;
+		if (u > v) forward.pb({ { u, v }, i + 1 });
+		else back.pb({ { u, v }, i + 1 });
+	}
+	if (size(forward) > size(back)) {
+		cout << size(forward) << endl;
+		sort(forward.begin(), forward.end(), cmp1);
+		for (auto f : forward) {
+			cout << f.sc << " ";
+		} cout << endl;
+	} else {
+		cout << size(back) << endl;
+		sort(back.begin(), back.end(), cmp2);
+		for (auto b : back) {
+			cout << b.sc << " ";
+		} cout << endl;
+	}
 	return 0;
 }

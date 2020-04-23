@@ -8,7 +8,7 @@ using namespace std;
 #define double long double
 #define uint unsigned long long
 #define pii pair<int, int>
-#define pb emplace_back
+#define pb push_back
 #define fs first
 #define sc second
 #define size(a) (int) a.size()
@@ -23,7 +23,35 @@ int fastpow(int a, int b, int m = HELL) { int res = 1; a %= m;
 while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2)
 
+vector<vector<int>> curr = { { 1 } };
+
+void grow() {
+	vector<vector<int>> now;
+	for (auto a : curr) {
+		vector<int> x;
+		for (auto b : a) x.pb(b);
+		for (auto b : a) x.pb(b);
+		now.pb(x);
+	}
+	for (auto a : curr) {
+		vector<int> x;
+		for (auto b : a) x.pb(b);
+		for (auto b : a) x.pb(-b);
+		now.pb(x);
+	}
+	curr = now;
+}
+
 int32_t main() { fastio;
-	
+	int k; cin >> k;
+	while (k--) {
+		grow();
+	}
+	for (auto x : curr) {
+		for (auto y : x) {
+			if (y == 1) cout << '+';
+			else cout << '*';
+		} cout << endl;
+	}
 	return 0;
 }

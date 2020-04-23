@@ -3,12 +3,12 @@ using namespace std;
 
 #define en "\n"
 #define INF (int) 9e18
-#define HELL (int) (1e9 + 7)
+#define HELL 998244353LL
 #define int long long
 #define double long double
 #define uint unsigned long long
 #define pii pair<int, int>
-#define pb emplace_back
+#define pb push_back
 #define fs first
 #define sc second
 #define size(a) (int) a.size()
@@ -23,7 +23,25 @@ int fastpow(int a, int b, int m = HELL) { int res = 1; a %= m;
 while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2)
 
+string s, t;
+int n, m;
+
+int res(int ind = 0, int low = 0, int high = n - 1) {
+	if (ind == n) {
+		deb(low);
+		return low >= m;
+	}
+	int ans = 0;
+	if (t[low] == s[ind]) {
+		ans += res(ind + 1, low + 1, high);
+	}
+	ans += res(ind + 1, low, high - 1);
+	return ans;
+}
+
 int32_t main() { fastio;
-	
+	cin >> s >> t;
+	n = size(s); m = size(t);
+	cout << res() << endl;
 	return 0;
 }
