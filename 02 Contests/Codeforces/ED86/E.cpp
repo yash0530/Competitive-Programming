@@ -22,57 +22,42 @@ using namespace std;
 int fastpow(int a, int b, int m = HELL) { int res = 1; a %= m;
 while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2)
+#define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int n, m;
-const int maxN = 3007;
-string s, t;
-int dp[maxN][maxN];
-
-int res(int left, int right, int ind) {
-	int &ans = dp[left + 2][right + 2];
-	if (ans == -1) {
-		ans = 0;
-		if (left == -1 and right == n) {
-			ans = 1;
-		}
-		else if (left == right) {
-			if (left >= m or t[left] == s[ind]) {
-				ans = res(left - 1, right + 1, ind + 1);
-			}
-		}
-		else if (left == -1) {
-			if (right >= m) {
-				ans = 1 + res(left, right + 1, ind + 1);
-			} else if (t[right] == s[ind]) {
-				ans = res(left, right + 1, ind + 1);
-			}
-		}
-		else if (right == n) {
-			if (left >= m or t[left] == s[ind]) {
-				ans = res(left - 1, right, ind + 1);
-			}
-		}
-		else {
-			if (left >= m or t[left] == s[ind]) {
-				ans += res(left - 1, right, ind + 1);
-			}
-			if (right >= m or t[right] == s[ind]) {
-				ans += res(left, right + 1, ind + 1);
-			}
-		}
-		ans = ans % HELL;
+int n, k;
+const int maxN = 400005;
+vector<int> invN(maxN), fact(maxN), invFact(maxN);
+void precomp() {
+	fact[0] = fact[1] = invFact[0] = invFact[1] = invN[0] = invN[1] = 1;
+	for (int i = 2; i < maxN; i++) {
+		invN[i] = mul(HELL - (HELL / i), invN[HELL % i] % HELL);
+		fact[i] = mul(fact[i - 1], i);
+		invFact[i] = mul(invN[i], invFact[i - 1]);
 	}
-	return ans;
+}
+int nck(int n, int k) {
+	return mul(invFact[n - k], mul(fact[n], invFact[k]));
 }
 
 int32_t main() { fastio;
-	cin >> s >> t;
-	memset(dp , -1, sizeof dp);
-	n = size(s); m = size(t);
-	int ans = 0;
-	for (int i = 0; i < n; i++) {
-		ans = (ans + res(i, i, 0)) % HELL;
+	precomp();
+	cin >> n >> k;
+	if (k >= n) {
+		cout << 0 << endl;
+	} else if (k == 0) {
+		cout << fact[n] << endl;
+	} else {
+		int ans = 0;
+		k = n - k; int sign = 1;
+		for (int i = 0; i < k; i++) {
+			int curr = nck(k, i);
+			curr = mul(curr, fastpow(k - i, n));
+			curr = mul(sign, curr);
+			ans = (ans + curr + HELL) % HELL;
+			sign *= -1;
+		}
+		ans = mul(2, mul(ans, nck(n, k)));
+		cout << ans << endl;
 	}
-	cout << (2 * ans) % HELL << endl;
 	return 0;
 }

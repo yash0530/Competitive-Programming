@@ -1,8 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n; // number of nodes
-vector<vector<int>> adj; // adjacency list of graph
+int n;
+const int maxN = 1e5 + 5;
+vector<int> adj[maxN];
 
 vector<bool> visited;
 vector<int> tin, low;

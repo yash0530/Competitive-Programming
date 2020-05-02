@@ -1,7 +1,3 @@
-# Competitive Programming
-
-## TEMPLATE
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -29,7 +25,39 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		vector<int> b(n);
+		for (int i = 0; i < n; i++) {
+			cin >> b[i];
+		}
+		vector<int> res(2 * n);
+		set<int> avail;
+		for (int i = 1; i <= 2*n; i++) {
+			avail.insert(i);
+		}
+		for (int i = 0, j = 0; i < 2 * n; i += 2, j++) {
+			res[i] = b[j];
+			avail.erase(b[j]);
+		}
+		bool np = false;
+		for (int i = 1; i < 2 * n; i += 2) {
+			auto x = avail.upper_bound(res[i - 1]);
+			if (x == avail.end()) {
+				np = true;
+				break;
+			}
+			res[i] = *x;
+			avail.erase(x);
+		}
+		if (np) {
+			cout << -1 << endl;
+		} else {
+			for (auto r : res) {
+				cout << r << " ";
+			} cout << endl;
+		}
+	}
 	return 0;
 }
-```

@@ -1,7 +1,3 @@
-# Competitive Programming
-
-## TEMPLATE
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -26,10 +22,31 @@ using namespace std;
 int fastpow(int a, int b, int m = HELL) { int res = 1; a %= m;
 while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2)
-#define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
+
+int small, large;
+
+int getVal(int num) {
+	num++;
+	int curr = num / (small + large);
+	curr *= large;
+	num = num % (small + large);
+	num -= small;
+	curr += max(num, 0LL);
+	return curr;
+}
 
 int32_t main() { fastio;
 
+	int t; cin >> t;
+	while (t--) {
+		int a, b, q;
+		cin >> a >> b >> q;
+		small = max(a, b); large = ((a * b) / __gcd(a, b)) - small;
+		while (q--) {
+			int l, r;
+			cin >> l >> r;
+			cout << getVal(r) - getVal(l - 1) << " ";
+		} cout << endl;
+	}
 	return 0;
 }
-```

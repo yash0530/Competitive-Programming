@@ -1,7 +1,3 @@
-# Competitive Programming
-
-## TEMPLATE
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -28,8 +24,40 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int32_t main() { fastio;
+int n, m, u, v;
+const int maxN = 5e3 + 5;
+vector<int> adj[maxN];
+int res[maxN];
+map<pii, int> edges;
+int marked[maxN];
 
+void dfs(int curr) {
+	marked[curr] = 1;
+	for (auto x : adj[curr]) {
+		if (marked[x] == 0) { dfs(x);
+			res[edges[{ curr, x }]] = 1;
+		} else if (marked[x] == 1) {
+			res[edges[{ curr, x }]] = 2;
+		} else {
+			res[edges[{ curr, x }]] = 1;
+		}
+	}
+	marked[curr] = 2;
+}
+
+int32_t main() { fastio;
+	cin >> n >> m;
+	for (int i = 0; i < m; i++) {
+		cin >> u >> v;
+		edges[{ u, v }] = i;
+		adj[u].pb(v);
+	}
+	for (int i = 1; i <= n; i++) {
+		if (!marked[i]) dfs(i);
+	}
+	cout << *max_element(res, res + m) << endl;
+	for (int i = 0; i < m; i++) {
+		cout << res[i] << " ";
+	} cout << endl;
 	return 0;
 }
-```

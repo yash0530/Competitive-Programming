@@ -3,7 +3,7 @@ using namespace std;
 
 #define en "\n"
 #define INF (int) 9e18
-#define HELL 998244353LL
+#define HELL (int) (1e9 + 7)
 #define int long long
 #define double long double
 #define uint unsigned long long
@@ -23,56 +23,39 @@ int fastpow(int a, int b, int m = HELL) { int res = 1; a %= m;
 while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2)
 
-int n, m;
-const int maxN = 3007;
-string s, t;
-int dp[maxN][maxN];
-
-int res(int left, int right, int ind) {
-	int &ans = dp[left + 2][right + 2];
-	if (ans == -1) {
-		ans = 0;
-		if (left == -1 and right == n) {
-			ans = 1;
-		}
-		else if (left == right) {
-			if (left >= m or t[left] == s[ind]) {
-				ans = res(left - 1, right + 1, ind + 1);
-			}
-		}
-		else if (left == -1) {
-			if (right >= m) {
-				ans = 1 + res(left, right + 1, ind + 1);
-			} else if (t[right] == s[ind]) {
-				ans = res(left, right + 1, ind + 1);
-			}
-		}
-		else if (right == n) {
-			if (left >= m or t[left] == s[ind]) {
-				ans = res(left - 1, right, ind + 1);
-			}
-		}
-		else {
-			if (left >= m or t[left] == s[ind]) {
-				ans += res(left - 1, right, ind + 1);
-			}
-			if (right >= m or t[right] == s[ind]) {
-				ans += res(left, right + 1, ind + 1);
-			}
-		}
-		ans = ans % HELL;
-	}
-	return ans;
-}
-
 int32_t main() { fastio;
-	cin >> s >> t;
-	memset(dp , -1, sizeof dp);
-	n = size(s); m = size(t);
-	int ans = 0;
+	int n, k;
+	cin >> n >> k;
+	vector<int> arr(n);
 	for (int i = 0; i < n; i++) {
-		ans = (ans + res(i, i, 0)) % HELL;
+		cin >> arr[i];
 	}
-	cout << (2 * ans) % HELL << endl;
+	vector<int> limit(k + 1);
+	for (int i = 1; i <= k; i++) {
+		cin >> limit[i];
+	}
+	sort(arr.begin(), arr.end());
+	priority_queue<pii, vector<pii>, greater<pii>> pq;
+	vector<vector<int>> res;
+	res.pb({ arr.back() });
+	pq.push({ 1, 0 });
+	for (int i = n - 2; i >= 0; i--) {
+		int sz = pq.top().fs, ind = pq.top().sc;
+		if (limit[arr[i]] > sz) {
+			pq.pop();
+			res[ind].pb(arr[i]);
+			pq.push({ sz + 1, ind });
+		} else {
+			res.pb({ arr[i] });
+			pq.push({ 1, size(res) - 1 });
+		}
+	}
+	cout << size(res) << endl;
+	for (auto r : res) {
+		cout << size(r) << " ";
+		for (auto x : r) {
+			cout << x << " ";
+		} cout << endl;
+	}
 	return 0;
 }
