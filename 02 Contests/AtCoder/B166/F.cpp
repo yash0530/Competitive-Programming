@@ -27,66 +27,63 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 int32_t main() { fastio;
 	int n, a, b, c;
 	cin >> n >> a >> b >> c;
-	int zc = 0;
-	if (a == 0) zc++;
-	if (b == 0) zc++;
-	if (c == 0) zc++;
-	map<char, int> m;
-	m['A'] = a;
-	m['B'] = b;
-	m['C'] = c;
-	vector<char> res;
-	vector<string> arr(n);
-	bool np = false;
-	map<char, int> cc;
-	for (int i = 0; i < n; i++) {
-		cin >> arr[i];
-		cc['A'] += arr[i][0] == 'A';
-		cc['A'] += arr[i][1] == 'A';
-		cc['B'] += arr[i][0] == 'B';
-		cc['B'] += arr[i][1] == 'B';
-		cc['C'] += arr[i][0] == 'C';
-		cc['C'] += arr[i][1] == 'C';
-	}
-	for (auto s : arr) {
-		if (m[s[0]] > m[s[1]]) {
-			m[s[0]]--; m[s[1]]++;
-			res.pb(s[1]);
-			if (m[s[0]] < 0) np = true;
-		} else {
-			res.pb(s[0]);
-			m[s[0]]++; m[s[1]]--;
-			if (m[s[1]] < 0) np = true;
-		}
-	}
-	if (np) {
-		bool np = false;
-		m['A'] = a;
-		m['B'] = b;
-		m['C'] = c;
+	map<char, int> M;
+	M['A'] = a; M['B'] = b; M['C'] = c;
+	if (a + b + c == 0) {
+		cout << "No" << endl;
+	} else if (a + b + c == 1) {
+		bool poss = true; string s;
 		vector<char> res;
-		for (auto s : arr) {
-			if ((m[s[0]] - cc[s[0]] > m[s[1]] - cc[s[1]]) or m[s[1]] == 0) {
-				m[s[0]]--; m[s[1]]++;
+		for (int i = 0; i < n; i++) {
+			cin >> s;
+			if (M[s[0]] == 0 and M[s[1]] == 0) {
+				poss = false;
+				break;
+			}
+			if (M[s[0]]) {
 				res.pb(s[1]);
-				if (m[s[0]] < 0) np = true;
+				M[s[0]]--;
+				M[s[1]]++;
 			} else {
 				res.pb(s[0]);
-				m[s[0]]++; m[s[1]]--;
-				if (m[s[1]] < 0) np = true;
+				M[s[0]]++;
+				M[s[1]]--;
 			}
-			cc[s[0]]--;
-			cc[s[1]]--;
 		}
-		if (np) {
+		if (poss) {
+			cout << "Yes" << endl;
+			for (auto r : res) cout << r << endl;
+		} else {
+			cout << "No" << endl;
+		}
+	} else {
+		vector<string> inps(n);
+		for (string &inp : inps) cin >> inp;
+		vector<char> res;
+		if (M[inps[0][0]] == 0 and M[inps[0][1]] == 0) {
 			cout << "No" << endl;
 		} else {
 			cout << "Yes" << endl;
-			for (auto r : res) cout << r << endl;
+			for (int i = 0; i < n - 1; i++) {
+				if (M[inps[i][0]] and !M[inps[i][1]]) {
+					
+				} 
+				if (inps[i][0] != inps[i + 1][0] and inps[i][0] != inps[i + 1][1]) {
+					cout << inps[i][1] << endl;
+					M[inps[i][0]]--;
+					M[inps[i][1]]++;
+				} else {
+					cout << inps[i][0] << endl;
+					M[inps[i][1]]--;
+					M[inps[i][0]]++;
+				}
+			}
+			if (M[inps[n - 1][0]]) {
+				cout << inps[n - 1][1] << endl;
+			} else {
+				cout << inps[n - 1][0] << endl;
+			}
 		}
-	} else {
-		cout << "Yes" << endl;
-		for (auto r : res) cout << r << endl;
 	}
 	return 0;
 }

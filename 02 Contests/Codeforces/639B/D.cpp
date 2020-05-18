@@ -24,18 +24,100 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+int n, m;
+bool vis[1001][1001];
+vector<string> mat;
+vector<pii> d = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+
+void dfs(int i, int j) {
+	vis[i][j] = true;
+	for (auto x : d) {
+		int ni = i + x.fs, nj = j + x.sc;
+		if (ni >= 0 and ni < n) {
+			if (nj >= 0 and nj < m) {
+				if (!vis[ni][nj] and mat[ni][nj] == '#') {
+					dfs(ni, nj);
+				}
+			}
+		}
+	}
+}
+
 int32_t main() { fastio;
-	int n, m;
 	cin >> n >> m;
-	vector<string> mat;
-	int count = 0;
+	bool souths[n][m], rows[n], cols[m];
+	memset(souths, 0, sizeof souths);
+	memset(rows, 0, sizeof rows);
+	memset(cols, 0, sizeof cols);
+	bool poss = true;
 	for (int i = 0; i < n; i++) {
 		string s; cin >> s;
 		mat.pb(s);
+		int count = 0;
+		char prev = '.';
 		for (auto x : s) {
-			
+			if (prev == '.' and x == '#') {
+				count++;
+			}
+			prev = x;
+		}
+		if (count > 1) {
+			poss = false;
+		}
+		for (int j = 0; j < m; j++) {
+			if (s[j] == '#') {
+				rows[i] = 1;
+				cols[j] = 1;
+				souths[i][j] = 1;
+			}
 		}
 	}
-
+	for (int j = 0; j < m; j++) {
+		int count = 0;
+		char prev = '.';
+		for (int i = 0; i < n; i++) {
+			if (prev == '.' and mat[i][j] == '#') {
+				count++;
+			}
+			prev = mat[i][j];
+		}
+		if (count > 1) {
+			poss = false;
+		}
+	}
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			if (!rows[i] and !cols[j]) {
+				souths[i][j] = 1;
+			}
+		}
+	}
+	memset(rows, 0, sizeof rows);
+	memset(cols, 0, sizeof cols);
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			if (souths[i][j]) {
+				rows[i] = 1;
+				cols[j] = 1;
+			}
+		}
+	}
+	if (n != accumulate(rows, rows + n, 0)) poss = false;
+	if (m != accumulate(cols, cols + m, 0)) poss = false;
+	if (poss) {
+		int count = 0;
+		memset(vis, 0, sizeof vis);
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				if (!vis[i][j] and mat[i][j] == '#') {
+					dfs(i, j);
+					count++;
+				}
+			}
+		}
+		cout << count << endl;
+	} else {
+		cout << -1 << endl;
+	}
  	return 0;
 }
