@@ -13,8 +13,9 @@ using namespace std;
 #define sc second
 #define size(a) (int) a.size()
 #define deb(x) cerr << #x << " => " << x << en
+#define debp(a) cerr << #a << " => " <<"("<<a.fs<<", "<<a.sc<<") " << en;
 #define deba(x) cerr << #x << en; for (auto a : x) cerr << a << " "; cerr << en;
-#define debp(x) cerr << #x << en; for (auto a : x)cerr<<"("<<a.fs<<", "<<a.sc<<") "; cerr << en;
+#define debpa(x) cerr << #x << en; for (auto a : x)cerr<<"("<<a.fs<<", "<<a.sc<<") "; cerr << en;
 #define debm(x) cerr << #x << en; for (auto a : x){for(auto b : a) cerr << b << " "; cerr << en;}
 #define getMat(x, n, m, val) vector<vector<int>> x(n, vector<int> (m, val))
 #define fastio ios_base :: sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
@@ -24,18 +25,36 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+const int maxN = 200005;
+vector<int> invN(maxN), fact(maxN), invFact(maxN);
+void precomp() {
+	fact[0] = fact[1] = invFact[0] = invFact[1] = invN[0] = invN[1] = 1;
+	for (int i = 2; i < maxN; i++) {
+		invN[i] = mul(HELL - (HELL / i), invN[HELL % i] % HELL);
+		fact[i] = mul(fact[i - 1], i);
+		invFact[i] = mul(invN[i], invFact[i - 1]);
+	}
+}
+int nck(int n, int k) {
+	return mul(invFact[n - k], mul(fact[n], invFact[k]));
+}
+
+void solve() {
+	string s; cin >> s;
+	int n = size(s);
+	n--;
+	if (n == 0) {
+		cout << 1 << endl;
+		return;
+	}
+	cout << (nck(2 * n, n) - nck(2 * n, n - 1) + HELL) % HELL << endl;
+}
 
 int32_t main() { fastio;
-	int n, s;
-	cin >> n >> s;
-	if ((s > 2 * n) or (s % 2 == 0 and s >= 2 * n)) {
-		cout << "YES" << endl;
-		for (int i = 0; i < n - 1; i++) {
-			cout << 1 << " ";
-		} cout << s - (n - 1) << endl;
-		cout << s / 2 << endl;
-	} else {
-		cout << "NO" << endl;
+	precomp();
+	int t; cin >> t;
+	while (t--) {
+		solve();
 	}
 	return 0;
 }

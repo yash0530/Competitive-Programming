@@ -13,8 +13,9 @@ using namespace std;
 #define sc second
 #define size(a) (int) a.size()
 #define deb(x) cerr << #x << " => " << x << en
+#define debp(a) cerr << #a << " => " <<"("<<a.fs<<", "<<a.sc<<") " << en;
 #define deba(x) cerr << #x << en; for (auto a : x) cerr << a << " "; cerr << en;
-#define debp(x) cerr << #x << en; for (auto a : x)cerr<<"("<<a.fs<<", "<<a.sc<<") "; cerr << en;
+#define debpa(x) cerr << #x << en; for (auto a : x)cerr<<"("<<a.fs<<", "<<a.sc<<") "; cerr << en;
 #define debm(x) cerr << #x << en; for (auto a : x){for(auto b : a) cerr << b << " "; cerr << en;}
 #define getMat(x, n, m, val) vector<vector<int>> x(n, vector<int> (m, val))
 #define fastio ios_base :: sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
@@ -24,18 +25,37 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+void solve() {
+	int n, k;
+	cin >> n >> k;
+	set<int> arr;
+	for (int i = 0; i < n; i++) {
+		int x; cin >> x;
+		arr.insert(x);
+	}
+	arr.insert(k);
+	vector<int> now(arr.begin(), arr.end());
+	vector<int> diff;
+	for (int i = 1; i < size(now); i++) {
+		diff.pb(now[i] - now[i - 1]);
+	}
+	if (size(diff) == 0) {
+		cout << 0 << endl;
+	} else if (size(diff) == 1) {
+		cout << diff[0] << endl;
+	} else {
+		int res = __gcd(diff[0], diff[1]);
+		for (int i = 2; i < size(diff); i++) {
+			res = __gcd(res, diff[i]);
+		}
+		cout << res << endl;	
+	}
+}
 
 int32_t main() { fastio;
-	int n, s;
-	cin >> n >> s;
-	if ((s > 2 * n) or (s % 2 == 0 and s >= 2 * n)) {
-		cout << "YES" << endl;
-		for (int i = 0; i < n - 1; i++) {
-			cout << 1 << " ";
-		} cout << s - (n - 1) << endl;
-		cout << s / 2 << endl;
-	} else {
-		cout << "NO" << endl;
+	int t; t = 1;
+	while (t--) {
+		solve();
 	}
 	return 0;
 }

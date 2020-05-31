@@ -24,18 +24,33 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+int n, k, x;
+const int maxN = 205;
+int arr[maxN], dp[maxN][maxN][maxN];
+
+int res(int ind, int rem, int last) {
+	if (rem < 0) return -INF;
+	if (ind == n) return 0;
+	int &ans = dp[ind][rem][last + 1];
+	if (ans == -1) {
+		ans = res(ind + 1, rem - 1, ind) + arr[ind];
+		if ((ind - last) < k) {
+			ans = max(ans, res(ind + 1, rem, last));
+		}
+	}
+	return ans;
+}
 
 int32_t main() { fastio;
-	int n, s;
-	cin >> n >> s;
-	if ((s > 2 * n) or (s % 2 == 0 and s >= 2 * n)) {
-		cout << "YES" << endl;
-		for (int i = 0; i < n - 1; i++) {
-			cout << 1 << " ";
-		} cout << s - (n - 1) << endl;
-		cout << s / 2 << endl;
+	cin >> n >> k >> x;
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+	}
+	memset(dp, -1, sizeof dp);
+	if ((n / k) > x) {
+		cout << -1 << endl;
 	} else {
-		cout << "NO" << endl;
+		cout << res(0, x, -1) << endl;
 	}
 	return 0;
 }

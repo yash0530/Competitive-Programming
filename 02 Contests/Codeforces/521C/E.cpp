@@ -24,18 +24,35 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-
 int32_t main() { fastio;
-	int n, s;
-	cin >> n >> s;
-	if ((s > 2 * n) or (s % 2 == 0 and s >= 2 * n)) {
-		cout << "YES" << endl;
-		for (int i = 0; i < n - 1; i++) {
-			cout << 1 << " ";
-		} cout << s - (n - 1) << endl;
-		cout << s / 2 << endl;
-	} else {
-		cout << "NO" << endl;
+	int n; cin >> n;
+	vector<int> arr(n);
+	map<int, int> M;
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+		M[arr[i]]++;
 	}
+	multiset<int> freq;
+	for (auto m : M) {
+		freq.insert(m.sc);
+	}
+	int res = 0;
+	for (int i = 1; i <= n; i++) {
+		int count = 0;
+		int x = i;
+		vector<int> rems;
+		while (x <= n and freq.lower_bound(x) != freq.end()) {
+			auto alpha = freq.lower_bound(x);
+			rems.pb(*alpha);
+			freq.erase(alpha);
+			count += x;
+			x <<= 1;
+		}
+		for (auto r : rems) {
+			freq.insert(r);
+		}
+		res = max(res, count);
+	}
+	cout << res << endl;
 	return 0;
 }

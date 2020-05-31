@@ -24,18 +24,48 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-
 int32_t main() { fastio;
-	int n, s;
-	cin >> n >> s;
-	if ((s > 2 * n) or (s % 2 == 0 and s >= 2 * n)) {
-		cout << "YES" << endl;
-		for (int i = 0; i < n - 1; i++) {
-			cout << 1 << " ";
-		} cout << s - (n - 1) << endl;
-		cout << s / 2 << endl;
-	} else {
-		cout << "NO" << endl;
+	int n, k;
+	cin >> n >> k;
+	vector<int> arr(n);
+	vector<int> freq(2e5 + 5);
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+		freq[arr[i]]++;
 	}
+	priority_queue<pii> pq;
+	priority_queue<pair<pii, pii>> avails;
+	for (int i = 1; i <= 2e5; i++) {
+		if (freq[i]) {
+			pq.push({ freq[i], i });
+		}
+	}
+	vector<int> res;
+	while (size(res) < k) {
+		pii top = pq.top();
+		if (pq.empty() or !avails.empty()) {
+			auto tempTop = avails.top();
+			if (pq.empty() or tempTop.fs.fs >= top.fs) {
+				avails.pop();
+				if (freq[tempTop.fs.sc] > (tempTop.sc.fs + 1)) {
+					avails.push({ { tempTop.sc.sc / (tempTop.sc.fs + 2), tempTop.fs.sc }, { tempTop.sc.fs + 1, tempTop.sc.sc } });
+				}
+				res.pb(tempTop.fs.sc);
+			} else {
+				pq.pop();
+				if (freq[top.sc] > 1)
+					avails.push({ { top.fs / 2, top.sc }, { 1, top.fs } });
+				res.pb(top.sc);
+			}
+		} else {
+			pq.pop();
+			if (freq[top.sc] > 1)
+				avails.push({ { top.fs / 2, top.sc }, { 1, top.fs } });
+			res.pb(top.sc);
+		}
+	}
+	for (auto r : res) {
+		cout << r << " ";
+	} cout << endl;
 	return 0;
 }

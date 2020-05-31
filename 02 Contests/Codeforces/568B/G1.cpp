@@ -4,7 +4,7 @@ using namespace std;
 #define en "\n"
 #define INF (int) 9e18
 #define HELL (int) (1e9 + 7)
-#define int long long
+// #define int long long
 #define double long double
 #define uint unsigned long long
 #define pii pair<int, int>
@@ -24,18 +24,34 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+int n, t;
+const int maxN = 20, maxT = 250;
+pii arr[maxN];
+int dp[maxT][1 << 16][4];
+
+int ways(int time, int mask, int prev) {
+	if (time > t) return 0;
+	if (time == t) return 1;
+	int &ans = dp[time][mask][prev];
+	if (ans == -1) {
+		ans = 0;
+		for (int i = 0; i < n; i++) {
+			if ((mask & (1 << i)) == 0) {
+				if (arr[i].sc != prev) {
+					ans = (ans + ways(time + arr[i].fs, mask | (1 << i), arr[i].sc)) % HELL;
+				}
+			}
+		}
+	}
+	return ans;
+}
 
 int32_t main() { fastio;
-	int n, s;
-	cin >> n >> s;
-	if ((s > 2 * n) or (s % 2 == 0 and s >= 2 * n)) {
-		cout << "YES" << endl;
-		for (int i = 0; i < n - 1; i++) {
-			cout << 1 << " ";
-		} cout << s - (n - 1) << endl;
-		cout << s / 2 << endl;
-	} else {
-		cout << "NO" << endl;
+	cin >> n >> t;
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i].fs >> arr[i].sc;
 	}
+	memset(dp, -1, sizeof dp);
+	cout << ways(0, 0, 0) << endl;
 	return 0;
 }

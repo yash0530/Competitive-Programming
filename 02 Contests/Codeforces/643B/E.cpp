@@ -24,18 +24,53 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-
 int32_t main() { fastio;
-	int n, s;
-	cin >> n >> s;
-	if ((s > 2 * n) or (s % 2 == 0 and s >= 2 * n)) {
-		cout << "YES" << endl;
-		for (int i = 0; i < n - 1; i++) {
-			cout << 1 << " ";
-		} cout << s - (n - 1) << endl;
-		cout << s / 2 << endl;
-	} else {
-		cout << "NO" << endl;
+	int n, a, r, m;
+	cin >> n >> a >> r >> m;
+	m = min(m, a + r);
+	vector<int> arr(n);
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
 	}
+	sort(arr.begin(), arr.end());
+	vector<int> pref(n + 1);
+	for (int i = 0; i < n; i++) {
+		pref[i + 1] = pref[i] + arr[i];
+	}
+	int res = INF;
+	for (int i = 0; i < n; i++) {
+		int low = lower_bound(arr.begin(), arr.end(), arr[i]) - arr.begin();
+		int reqd = low * arr[i] - pref[low];
+		auto high = upper_bound(arr.begin(), arr.end(), arr[i]);
+		if (high == arr.end()) {
+			res = min(res, reqd * a);
+		} else {
+			int h = high - arr.begin();
+			int avail = pref.back() - pref[h] - (n - h) * arr[i];
+			if (avail > reqd) {
+				res = min(res, reqd * m + (avail - reqd) * r);
+			} else {
+				res = min(res, avail * m + (reqd - avail) * a);
+			}
+		}
+	}
+	vector<int> also = { (pref.back() + (n - 1)) / n, pref.back() / n };
+	for (auto xx : also) {
+		int low = lower_bound(arr.begin(), arr.end(), xx) - arr.begin();
+		int reqd = low * xx - pref[low];
+		auto high = upper_bound(arr.begin(), arr.end(), xx);
+		if (high == arr.end()) {
+			res = min(res, reqd * a);
+		} else {
+			int h = high - arr.begin();
+			int avail = pref.back() - pref[h] - (n - h) * xx;
+			if (avail > reqd) {
+				res = min(res, reqd * m + (avail - reqd) * r);
+			} else {
+				res = min(res, avail * m + (reqd - avail) * a);
+			}
+		}
+	}
+	cout << res << endl;
 	return 0;
 }

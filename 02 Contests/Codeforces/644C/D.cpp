@@ -13,8 +13,9 @@ using namespace std;
 #define sc second
 #define size(a) (int) a.size()
 #define deb(x) cerr << #x << " => " << x << en
+#define debp(a) cerr << #a << " => " <<"("<<a.fs<<", "<<a.sc<<") " << en;
 #define deba(x) cerr << #x << en; for (auto a : x) cerr << a << " "; cerr << en;
-#define debp(x) cerr << #x << en; for (auto a : x)cerr<<"("<<a.fs<<", "<<a.sc<<") "; cerr << en;
+#define debpa(x) cerr << #x << en; for (auto a : x)cerr<<"("<<a.fs<<", "<<a.sc<<") "; cerr << en;
 #define debm(x) cerr << #x << en; for (auto a : x){for(auto b : a) cerr << b << " "; cerr << en;}
 #define getMat(x, n, m, val) vector<vector<int>> x(n, vector<int> (m, val))
 #define fastio ios_base :: sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
@@ -24,18 +25,31 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+vector<int> getFactors(int n) {
+    vector<int> factors = { 1, n };
+    for (int i = 2; i * i <= n; i++) {
+        if (n % i == 0) {
+            factors.push_back(i);
+            if (i * i != n) {
+                factors.push_back(n / i);
+            }
+        }
+    }
+    return factors;
+}
 
 int32_t main() { fastio;
-	int n, s;
-	cin >> n >> s;
-	if ((s > 2 * n) or (s % 2 == 0 and s >= 2 * n)) {
-		cout << "YES" << endl;
-		for (int i = 0; i < n - 1; i++) {
-			cout << 1 << " ";
-		} cout << s - (n - 1) << endl;
-		cout << s / 2 << endl;
-	} else {
-		cout << "NO" << endl;
+	int t; cin >> t;
+	while (t--) {
+		int n, k;
+		cin >> n >> k;
+		vector<int> fcts = getFactors(n);
+		int best = n;
+		for (auto f : fcts) {
+			if (f <= k)
+				best = min(best, n / f);
+		}
+		cout << best << endl;
 	}
 	return 0;
 }

@@ -24,18 +24,32 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-
 int32_t main() { fastio;
-	int n, s;
-	cin >> n >> s;
-	if ((s > 2 * n) or (s % 2 == 0 and s >= 2 * n)) {
-		cout << "YES" << endl;
-		for (int i = 0; i < n - 1; i++) {
-			cout << 1 << " ";
-		} cout << s - (n - 1) << endl;
-		cout << s / 2 << endl;
-	} else {
-		cout << "NO" << endl;
+	int n, m;
+	cin >> n >> m;
+	vector<int> arr(n);
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
 	}
+	vector<int> freq(101);
+	int curr = 0;
+	for (int i = 0; i < n; i++) {
+		curr += arr[i];
+		int rem = curr - m, count = 0;
+		if (rem > 0) {
+			for (int i = 100; i > 0; i--) {
+				int torem = (rem + i - 1) / i;
+				if (freq[i] >= torem) {
+					count += torem;
+					rem = 0;
+				} else {
+					count += freq[i];
+					rem -= freq[i] * i;
+				}
+			}
+		}
+		freq[arr[i]]++;
+		cout << count << " ";
+	} cout << endl;
 	return 0;
 }

@@ -13,8 +13,9 @@ using namespace std;
 #define sc second
 #define size(a) (int) a.size()
 #define deb(x) cerr << #x << " => " << x << en
+#define debp(a) cerr << #a << " => " <<"("<<a.fs<<", "<<a.sc<<") " << en;
 #define deba(x) cerr << #x << en; for (auto a : x) cerr << a << " "; cerr << en;
-#define debp(x) cerr << #x << en; for (auto a : x)cerr<<"("<<a.fs<<", "<<a.sc<<") "; cerr << en;
+#define debpa(x) cerr << #x << en; for (auto a : x)cerr<<"("<<a.fs<<", "<<a.sc<<") "; cerr << en;
 #define debm(x) cerr << #x << en; for (auto a : x){for(auto b : a) cerr << b << " "; cerr << en;}
 #define getMat(x, n, m, val) vector<vector<int>> x(n, vector<int> (m, val))
 #define fastio ios_base :: sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
@@ -24,18 +25,25 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-
 int32_t main() { fastio;
-	int n, s;
-	cin >> n >> s;
-	if ((s > 2 * n) or (s % 2 == 0 and s >= 2 * n)) {
-		cout << "YES" << endl;
-		for (int i = 0; i < n - 1; i++) {
-			cout << 1 << " ";
-		} cout << s - (n - 1) << endl;
-		cout << s / 2 << endl;
-	} else {
-		cout << "NO" << endl;
+	int n; cin >> n;
+	vector<int> arr(n);
+	vector<vector<int>> lookups(1e6);
+	vector<int> dp(n);
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+		dp[i] = arr[i];
+		lookups[5e5 + i - arr[i]].pb(i);
 	}
+	for (int i = 0; i < 1e6; i++) {
+		reverse(lookups[i].begin(), lookups[i].end());
+	}
+	for (int i = 0; i < n; i++) {
+		lookups[5e5 + i - arr[i]].pop_back();
+		if (size(lookups[5e5 + i - arr[i]])) {
+			dp[lookups[5e5 + i - arr[i]].back()] += dp[i];
+		}
+	}
+	cout << *max_element(dp.begin(), dp.end()) << endl;
 	return 0;
 }
