@@ -3,7 +3,7 @@ using namespace std;
 
 #define en "\n"
 #define INF (int) 9e18
-#define HELL (int) (1e9 + 7)
+#define HELL 998244353LL
 #define int long long
 #define double long double
 #define uint unsigned long long
@@ -26,19 +26,48 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-	int tc; cin >> tc;
-	while (tc--) {
-		int h, c, t;
-		cin >> h >> c >> t;
-		if (t == h) {
-			cout << 1 << endl;
-			continue;
+	int n, m;
+	cin >> n >> m;
+	if (m > n) {
+		cout << 0 << endl;
+		exit(0);
+	}
+	vector<int> arr(n), brr(m);
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+	}
+	for (int i = 0; i < m; i++) {
+		cin >> brr[i];
+	}
+	reverse(arr.begin(), arr.end());
+	reverse(brr.begin(), brr.end());
+	int mpos = 0, npos = 0;
+	int ans = 1;
+	while (mpos < (m - 1) and npos < n) {
+		while (npos < n and brr[mpos] != arr[npos]) {
+			if (brr[mpos] > arr[npos]) {
+				cout << 0 << endl;
+				exit(0);
+			}
+			npos++;
 		}
-		double avg = (double) (h + c) / 2;
-		if (t <= avg) {
-			cout << 2 << endl;
-			continue;
+		npos++;
+		int count = 1;
+		while (npos < n and brr[mpos] <= arr[npos]) {
+			npos++;
+			count++;
 		}
+		ans = mul(ans, count);
+		mpos++;
+	}
+	if (npos == n) {
+		cout << 0 << endl;
+		exit(0);
+	}
+	if (brr.back() == *min_element(arr.begin() + npos, arr.end())) {
+		cout << ans << endl;
+	} else {
+		cout << 0 << endl;
 	}
 	return 0;
 }

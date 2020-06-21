@@ -3,7 +3,7 @@ using namespace std;
 
 #define en "\n"
 #define INF (int) 9e18
-#define HELL (int) (1e9 + 7)
+#define HELL 998244353LL
 #define int long long
 #define double long double
 #define uint unsigned long long
@@ -25,20 +25,34 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int32_t main() { fastio;
-	int tc; cin >> tc;
-	while (tc--) {
-		int h, c, t;
-		cin >> h >> c >> t;
-		if (t == h) {
-			cout << 1 << endl;
-			continue;
-		}
-		double avg = (double) (h + c) / 2;
-		if (t <= avg) {
-			cout << 2 << endl;
-			continue;
-		}
+int n, s;
+const int maxN = 3e3 + 5;
+int arr[maxN];
+int dp[maxN][maxN];
+
+int res(int pos, int sum) {
+	if (sum > s) {
+		return 0;
 	}
+	if (pos == n) {
+		return sum == s;
+	}
+	int &ans = dp[pos][sum];
+	if (ans == -1) {
+		ans = 0;
+		int x = res(pos + 1, sum);
+		if (x) ans = mul(2, x);
+		ans = (ans + res(pos + 1, sum + arr[pos])) % HELL;
+	}
+	return ans;
+}
+
+int32_t main() { fastio;
+	cin >> n >> s;
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+	}
+	memset(dp, -1, sizeof dp);
+	cout << res(0, 0) << endl;
 	return 0;
 }

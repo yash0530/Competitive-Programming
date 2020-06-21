@@ -2,7 +2,6 @@
 using namespace std;
 
 #define en "\n"
-#define INF (int) 9e18
 #define HELL (int) (1e9 + 7)
 #define int long long
 #define double long double
@@ -25,7 +24,34 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+int n;
+int kadane(vector<int> &arr) {
+	int res = arr[0], pref = arr[0];
+	for (int i = 1; i < n; i++) {
+		pref = max(arr[i], pref + arr[i]);
+		res = max(res, pref);
+	}
+	return res;
+}
+
 int32_t main() { fastio;
-	
+	cin >> n;
+	vector<int> arr(n);
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+	}
+	int res = 0;
+	for (int mx = -30; mx <= 30; mx++) {
+		vector<int> temp(n);
+		for (int i = 0; i < n; i++) {
+			if (arr[i] > mx) {
+				temp[i] = INT_MIN;
+			} else {
+				temp[i] = arr[i];
+			}
+		}
+		res = max(res, kadane(temp) - mx);
+	}
+	cout << res << endl;
 	return 0;
 }

@@ -26,19 +26,59 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-	int tc; cin >> tc;
-	while (tc--) {
-		int h, c, t;
-		cin >> h >> c >> t;
-		if (t == h) {
-			cout << 1 << endl;
-			continue;
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		vector<int> arr(n);
+		for (int i = 0; i < n; i++) {
+			cin >> arr[i];
 		}
-		double avg = (double) (h + c) / 2;
-		if (t <= avg) {
-			cout << 2 << endl;
-			continue;
+		vector<int> peaks;
+		vector<int> val;
+		for (int i = 0; i < n; i++) {
+			if (i == 0) {
+				if (arr[i] > arr[i + 1]) {
+					peaks.pb(i);
+				}
+				if (arr[i] < arr[i + 1]) {
+					val.pb(i);
+				}
+			} else if (i == n - 1) {
+				if (arr[i] > arr[i - 1]) {
+					peaks.pb(i);
+				}
+				if (arr[i] < arr[i - 1]) {
+					val.pb(i);
+				}
+			} else {
+				if (arr[i] > arr[i - 1] and arr[i] > arr[i + 1]) {
+					peaks.pb(i);
+				}
+				if (arr[i] < arr[i - 1] and arr[i] < arr[i + 1]) {
+					val.pb(i);
+				}
+			}
 		}
+		vector<int> res(size(peaks) + size(val));
+		if (peaks[0] > val[0]) {
+			for (int i = 0, j = 0; i < size(res); i += 2, j++) {
+				res[i] = arr[val[j]];
+			}
+			for (int i = 1, j = 0; i < size(res); i += 2, j++) {
+				res[i] = arr[peaks[j]];
+			}
+		} else {
+			for (int i = 1, j = 0; i < size(res); i += 2, j++) {
+				res[i] = arr[val[j]];
+			}
+			for (int i = 0, j = 0; i < size(res); i += 2, j++) {
+				res[i] = arr[peaks[j]];
+			}
+		}
+		cout << size(res) << endl;
+		for (auto r : res) {
+			cout << r << " ";
+		} cout << endl;
 	}
 	return 0;
 }

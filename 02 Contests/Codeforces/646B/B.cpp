@@ -26,19 +26,41 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-	int tc; cin >> tc;
-	while (tc--) {
-		int h, c, t;
-		cin >> h >> c >> t;
-		if (t == h) {
-			cout << 1 << endl;
-			continue;
+	int t; cin >> t;
+	while (t--) {
+		string s; cin >> s;
+		int n = size(s);
+		vector<int> zerosp(n), onesp(n), zeross(n), oness(n);
+		for (int i = 0; i < n; i++) {
+			if (i) zerosp[i] += zerosp[i - 1];
+			if (i) onesp[i] += onesp[i - 1];
+			if (s[i] == '0') {
+				zerosp[i]++;
+			}
+			if (s[i] == '1') {
+				onesp[i]++;
+			}
 		}
-		double avg = (double) (h + c) / 2;
-		if (t <= avg) {
-			cout << 2 << endl;
-			continue;
+		for (int i = n - 1; i >= 0; i--) {
+			if (i != n - 1) zeross[i] += zeross[i + 1];
+			if (i != n - 1) oness[i] += oness[i + 1];
+			if (s[i] == '0') {
+				zeross[i]++;
+			}
+			if (s[i] == '1') {
+				oness[i]++;
+			}
 		}
+		int res = min(onesp.back(), zerosp.back());
+		for (int i = 0; i < n - 1; i++) {
+			int curr0 = 0, curr1 = 0;
+			curr0 += onesp[i];
+			curr1 += zerosp[i];
+			curr0 += zeross[i + 1];
+			curr1 += oness[i + 1];
+			res = min(res, min(curr0, curr1));
+		}
+		cout << res << endl;
 	}
 	return 0;
 }

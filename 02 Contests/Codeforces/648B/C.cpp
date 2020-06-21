@@ -26,19 +26,21 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-	int tc; cin >> tc;
-	while (tc--) {
-		int h, c, t;
-		cin >> h >> c >> t;
-		if (t == h) {
-			cout << 1 << endl;
-			continue;
-		}
-		double avg = (double) (h + c) / 2;
-		if (t <= avg) {
-			cout << 2 << endl;
-			continue;
+	int n, x; cin >> n;
+	vector<int> freq(n + 5);
+	vector<int> counts(n + 5);
+	for (int i = 0; i < n; i++) {
+		cin >> x;
+		freq[x] = i;
+	}
+	for (int i = 0; i < n; i++) {
+		cin >> x;
+		if (freq[x] < i) {
+			counts[freq[x] + n - i]++;
+		} else {
+			counts[freq[x] - i]++;
 		}
 	}
+	cout << *max_element(counts.begin(), counts.end()) << endl;
 	return 0;
 }

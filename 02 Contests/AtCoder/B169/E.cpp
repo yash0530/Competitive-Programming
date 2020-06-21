@@ -26,19 +26,59 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-	int tc; cin >> tc;
-	while (tc--) {
-		int h, c, t;
-		cin >> h >> c >> t;
-		if (t == h) {
-			cout << 1 << endl;
-			continue;
-		}
-		double avg = (double) (h + c) / 2;
-		if (t <= avg) {
-			cout << 2 << endl;
-			continue;
-		}
+	int n; cin >> n;
+	vector<pii> arr(n);
+	vector<pii> events;
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i].fs >> arr[i].sc;
+		events.pb({ arr[i].fs, 1 });
+		events.pb({ arr[i].sc, 2 });
 	}
+	sort(events.begin(), events.end());
+	int res = 0;
+	if (n & 1) {
+		int ins = (n + 1) / 2;
+		int start = -1, stop = -1;
+		int curr = 0, rem = 0;
+		for (auto e : events) {
+			if (e.sc == 1) {
+				curr++;
+			} else {
+				rem++;
+			}
+			if (start == -1 and curr == ins) {
+				start = e.fs;
+			}
+			if (stop == -1 and rem == ins) {
+				stop = e.fs;
+			}
+		}
+		res = stop - start + 1;
+	} else {
+		int ins = n / 2;
+		int curr = 0, rem = 0;
+		int astart = -1, astop = -1, bstart = -1, bstop = -1;
+		for (auto e : events) {
+			if (e.sc == 1) {
+				curr++;
+			} else {
+				rem++;
+			}
+			if (astart == -1 and curr == ins) {
+				astart = e.fs;
+			}
+			if (bstart == -1 and curr == (ins + 1)) {
+				bstart = e.fs;
+			}
+			if (astop == -1 and rem == ins) {
+				astop = e.fs;
+			}
+			if (bstop == -1 and rem == (ins + 1)) {
+				bstop = e.fs;
+			}
+		}
+		res = bstop - bstart + 1 + astop - astart;
+	}
+	cout << res << endl;
 	return 0;
 }

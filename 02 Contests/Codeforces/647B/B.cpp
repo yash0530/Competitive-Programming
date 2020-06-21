@@ -26,19 +26,27 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-	int tc; cin >> tc;
-	while (tc--) {
-		int h, c, t;
-		cin >> h >> c >> t;
-		if (t == h) {
-			cout << 1 << endl;
-			continue;
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		vector<int> arr(n);
+		for (int i = 0; i < n; i++) {
+			cin >> arr[i];
 		}
-		double avg = (double) (h + c) / 2;
-		if (t <= avg) {
-			cout << 2 << endl;
-			continue;
+		sort(arr.begin(), arr.end());
+		int res = -1;
+		for (int z = 1; z <= 2048; z++) {
+			vector<int> temp(n);
+			for (int i = 0; i < n; i++) {
+				temp[i] = arr[i] ^ z; 
+			}
+			sort(temp.begin(), temp.end());
+			if (arr == temp) {
+				res = z;
+				break;
+			}
 		}
+		cout << res << endl;
 	}
 	return 0;
 }

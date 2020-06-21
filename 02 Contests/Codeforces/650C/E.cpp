@@ -25,20 +25,32 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+vector<int> getFactors(int n) {
+    vector<int> factors = { 1, n };
+    for (int i = 2; i * i <= n; i++) {
+        if (n % i == 0) {
+            factors.push_back(i);
+            if (i * i != n) {
+                factors.push_back(n / i);
+            }
+        }
+    }
+    return factors;
+}
+
 int32_t main() { fastio;
-	int tc; cin >> tc;
-	while (tc--) {
-		int h, c, t;
-		cin >> h >> c >> t;
-		if (t == h) {
-			cout << 1 << endl;
-			continue;
+	int t; cin >> t;
+	while (t--) {
+		int n, k;
+		cin >> n >> k;
+		string s; cin >> s;
+		int mx = 1;
+		if (k <= n) {
+			mx = k;
 		}
-		double avg = (double) (h + c) / 2;
-		if (t <= avg) {
-			cout << 2 << endl;
-			continue;
-		}
+		vector<int> fcts = getFactors(k);
+		int mx = 1;
+		if 
 	}
 	return 0;
 }

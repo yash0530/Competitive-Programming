@@ -25,19 +25,48 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int32_t main() { fastio;
-	int tc; cin >> tc;
-	while (tc--) {
-		int h, c, t;
-		cin >> h >> c >> t;
-		if (t == h) {
-			cout << 1 << endl;
-			continue;
+int n;
+void pswap(vector<int> &a, vector<int> &b, int k) {
+	vector<int> temp(n, -1);
+	for (int i = 0, j = n - k; i < k; i++, j++) {
+		temp[i] = b[j];
+		temp[j] = b[i];
+	}
+	for (int i = 0; i < n; i++) {
+		if (temp[i] == -1) {
+			temp[i] = b[i];
 		}
-		double avg = (double) (h + c) / 2;
-		if (t <= avg) {
-			cout << 2 << endl;
-			continue;
+	}
+	b = temp;
+}
+
+int32_t main() { fastio;
+	int t; cin >> t;
+	while (t--) {
+		cin >> n;
+		vector<int> ar(n), b(n);
+		for (int i = 0; i < n; i++) {
+			cin >> ar[i];
+		}
+		for (int i = 0; i < n; i++) {
+			cin >> b[i];
+		}
+		if (n & 1) {
+			if (ar[n / 2] != b[n / 2]) {
+				cout << "No" << endl;
+				continue;
+			}
+		}
+		for (int i = ((n + 1) / 2); i < n; i++) {
+			if (ar[i] != b[i]) {
+				int k = n - i;
+				pswap(ar, b, k);
+			}
+		}
+		if (ar == b) {
+			cout << "Yes" << endl;
+		} else {
+			cout << "No" << endl;
 		}
 	}
 	return 0;

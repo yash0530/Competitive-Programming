@@ -26,19 +26,41 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-	int tc; cin >> tc;
-	while (tc--) {
-		int h, c, t;
-		cin >> h >> c >> t;
-		if (t == h) {
-			cout << 1 << endl;
-			continue;
-		}
-		double avg = (double) (h + c) / 2;
-		if (t <= avg) {
-			cout << 2 << endl;
-			continue;
+	int n; cin >> n;
+	int maxN = 1e7 + 5;
+	vector<int> divs(maxN, -1);
+	for (int i = 2; i < maxN; i++) {
+		if (divs[i] == -1) {
+			divs[i] = i;
+			for (int j = i * i; j < maxN; j += i) {
+				if (divs[j] == -1) {
+					divs[j] = i;
+				}
+			}
 		}
 	}
+	int x;
+	vector<int> a(n, -1), b(n, -1);
+	for (int i = 0; i < n; i++) {
+		cin >> x;
+		int v = x;
+		map<int, int> M;
+		while(divs[v] != -1) {
+			M[divs[v]]++;
+			v = v / divs[v];
+		}
+		vector<pii> ds(M.begin(), M.end());
+		if (size(ds) > 1) {
+			a[i] = ds[0].fs;
+			b[i] = 1;
+			for (int j = 1; j < size(ds); j++) {
+				b[i] *= ds[j].fs;
+			}
+		}
+	}
+	for (auto y : a) cout << y << " ";
+	cout << endl;
+	for (auto y : b) cout << y << " ";
+	cout << endl;
 	return 0;
 }

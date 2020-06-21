@@ -2,7 +2,7 @@
 using namespace std;
 
 #define en "\n"
-#define INF (int) 9e18
+#define INF (int) 2e12
 #define HELL (int) (1e9 + 7)
 #define int long long
 #define double long double
@@ -25,7 +25,71 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+int n;
+const int maxN = 1e6 + 5;
+vector<int> pos;
+getMat(cache, maxN, 5, -1);
+
+void preprocess() {
+	for (int i = 0; i < size(pos); i++) {
+		for (int j = 0; j < 5; j++) {
+			cache[i][j] = -1;
+		}
+	}
+	int move = n - pos.back();
+	for (int i = 0; i < size(pos); i++) {
+		pos[i] = (pos[i] + move) % n;
+	}
+	sort(pos.begin(), pos.end());
+}
+
+int dp(int loc, int prev) {
+	if (loc == size(pos)) {
+		if (prev == 1) {
+			return INF;
+		}
+		return 0;
+	}
+	int &ans = cache[loc][prev];
+	if (ans == -1) {
+		if (prev == 0) {
+			ans = dp(loc + 1, 1);
+		}
+		else if (prev == 1) {
+			ans = dp(loc + 1, 2) + pos[loc] - pos[loc - 1];
+		}
+		else if (prev == 2) {
+			ans = min(dp(loc, 0), dp(loc + 1, 3) + pos[loc] - pos[loc - 1]);
+		}
+		else {
+			ans = dp(loc, 0);
+		}
+	}
+	return ans;
+}
+
 int32_t main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		pos.clear();
+		int x; cin >> n;
+		for (int i = 0; i < n; i++) {
+			cin >> x;
+			if (x) pos.pb(i);
+		}
+		if (size(pos) == 0) {
+			cout << 0 << endl;
+		} else if (size(pos) == 1) {
+			cout << -1 << endl;
+		} else {
+			preprocess();
+			int res = dp(0, 0);
+			preprocess();
+			res = min(res, dp(0, 0));
+			preprocess();
+			res = min(res, dp(0, 0));
+			cout << res << endl;
+		}
+	}
 	return 0;
 }

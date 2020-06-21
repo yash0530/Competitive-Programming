@@ -3,7 +3,7 @@ using namespace std;
 
 #define en "\n"
 #define INF (int) 9e18
-#define HELL (int) (1e9 + 7)
+#define HELL 998244353LL
 #define int long long
 #define double long double
 #define uint unsigned long long
@@ -25,7 +25,31 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+const int maxN = 500005;
+vector<int> invN(maxN), fact(maxN), invFact(maxN);
+void precomp() {
+	fact[0] = fact[1] = invFact[0] = invFact[1] = invN[0] = invN[1] = 1;
+	for (int i = 2; i < maxN; i++) {
+		invN[i] = mul(HELL - (HELL / i), invN[HELL % i] % HELL);
+		fact[i] = mul(fact[i - 1], i);
+		invFact[i] = mul(invN[i], invFact[i - 1]);
+	}
+}
+int nck(int n, int k) {
+	return mul(invFact[n - k], mul(fact[n], invFact[k]));
+}
+
 int32_t main() { fastio;
-	
+	precomp();
+	int n, k;
+	cin >> n >> k;
+	int ans = 0;
+	for (int i = 1; i <= n; i++) {
+		int avail = n / i;
+		if (avail >= k) {
+			ans = (ans + nck(avail - 1, k - 1)) % HELL;
+		}
+	}
+	cout << ans << endl;
 	return 0;
 }

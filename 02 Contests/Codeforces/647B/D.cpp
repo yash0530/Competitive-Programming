@@ -26,19 +26,50 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-	int tc; cin >> tc;
-	while (tc--) {
-		int h, c, t;
-		cin >> h >> c >> t;
-		if (t == h) {
-			cout << 1 << endl;
-			continue;
+	int n, m;
+	cin >> n >> m;
+	vector<int> adj[n + 5];
+	int u, v;
+	for (int i = 0; i < m; i++) {
+		cin >> u >> v;
+		adj[u].pb(v);
+		adj[v].pb(u);
+	}
+	vector<int> arr(n + 5);
+	vector<pii> nodes;
+	for (int i = 1; i <= n; i++) {
+		cin >> arr[i];
+		nodes.pb({ arr[i], i });
+	}
+	sort(nodes.begin(), nodes.end());
+	vector<bool> marked(n + 5);
+	bool poss = true;
+	for (auto no : nodes) {
+		set<int> found;
+		for (auto x : adj[no.sc]) {
+			if (marked[x]) {
+				found.insert(arr[x]);
+			}
 		}
-		double avg = (double) (h + c) / 2;
-		if (t <= avg) {
-			cout << 2 << endl;
-			continue;
+		int ct = 1;
+		for (auto f : found) {
+			if (ct != f) {
+				break;
+			}
+			ct++;
 		}
+		if (ct != no.fs) {
+			poss = false;
+		}
+		marked[no.sc] = true;
+	}
+	if (poss) {
+		for (auto no : nodes) {
+			cout << no.sc << " ";
+		}			
+		cout << endl;
+	} else {
+		cout << -1 << endl;
 	}
 	return 0;
 }

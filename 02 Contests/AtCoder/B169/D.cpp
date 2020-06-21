@@ -25,20 +25,44 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+vector<pii> primeFactors(int n) {
+    vector<pii> factorization;
+    int ct = 0;
+    while (n % 2 == 0) {
+        n /= 2;
+        ct++;
+    }
+    if (ct) {
+    	factorization.pb({ 2, ct });
+    }
+    for (int d = 3; d * d <= n; d += 2) {
+        ct = 0;
+        while (n % d == 0) {
+        	ct++;
+            n /= d;
+        }
+        if (ct) {
+        	factorization.pb({ d, ct });
+        }
+    }
+    if (n > 1)
+        factorization.push_back({ n, 1 });
+    return factorization;
+}
+
 int32_t main() { fastio;
-	int tc; cin >> tc;
-	while (tc--) {
-		int h, c, t;
-		cin >> h >> c >> t;
-		if (t == h) {
-			cout << 1 << endl;
-			continue;
-		}
-		double avg = (double) (h + c) / 2;
-		if (t <= avg) {
-			cout << 2 << endl;
-			continue;
+	int n; cin >> n;
+	vector<pii> fcts = primeFactors(n);
+	int res = 0;
+	for (auto f : fcts) {
+		int num = 1;
+		int ct = f.sc;
+		while (ct >= num) {
+			ct -= num;
+			res++;
+			num++;
 		}
 	}
+	cout << res << endl;
 	return 0;
 }

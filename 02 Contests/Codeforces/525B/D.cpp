@@ -25,20 +25,23 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+int getVal(int a, int b) {
+	cout << "? " << a << " " << b << endl;
+	int x; cin >> x;
+	return x;
+}
+
 int32_t main() { fastio;
-	int tc; cin >> tc;
-	while (tc--) {
-		int h, c, t;
-		cin >> h >> c >> t;
-		if (t == h) {
-			cout << 1 << endl;
-			continue;
-		}
-		double avg = (double) (h + c) / 2;
-		if (t <= avg) {
-			cout << 2 << endl;
-			continue;
+	int c = 0, d = 0;
+	for (int i = 0; i <= 30; i++) {
+		int curr = (1 << i);
+		int val = getVal(curr, curr);
+		if (val == 0) {
+
+		} else {
+
 		}
 	}
+	cout << "! " << c << " " << d << endl;
 	return 0;
 }

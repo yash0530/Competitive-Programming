@@ -64,12 +64,19 @@ void co_comp() {
 }
 
 int getCount(int mid) {
-	int high = 0, count = 0;
+	int high = 0, count = 0, cum = 0;
 	for (int i = 0; i < n; i++) {
-		while ((high < n) and (mid >= (read(n) - read(arr[high])))) {
+		while ((high < n) and (mid >= cum)) {
 			update(arr[high], 1);
 			high++;
+			cum += read(n) - read(arr[high]);
 		}
+ 		cum -= read(arr[i] - 1);
+ 		if (high != n) {
+ 			if (arr[i] > arr[high]) {
+ 				cum--;
+ 			}
+ 		}
 		count += high - i;
 		update(arr[i], -1);
 	}
@@ -84,18 +91,21 @@ int32_t main() { fastio;
 			cin >> arr[i];
 		}
 		co_comp();
+
 		int B = n * (n + 1) / 2;
-		int val = (B + 1) / 2 - 1;
+		int val = (B + 1) / 2;
 		int low = 0, high = 1e18;
 		int res = 0;
+
 		while (low <= high) {
 			int mid = (low + high) / 2;
 			int count = getCount(mid);
-			if (count <= val) {
-				low = mid + 1;
-			} else {
-				res = mid;
+		
+			if (count >= val) {
 				high = mid - 1;
+				res = mid;
+			} else {
+				low = mid + 1;
 			}
 		}
 		cout << res << endl;

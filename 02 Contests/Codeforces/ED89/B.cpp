@@ -25,19 +25,40 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+pii merge(pii a, pii b) {
+	if (b.sc < a.fs) {
+		return a;
+	}
+	if (b.fs > a.sc) {
+		return a;
+	}
+	return { min(a.fs, b.fs), max(a.sc, b.sc) };
+}
+
 int32_t main() { fastio;
-	int tc; cin >> tc;
-	while (tc--) {
-		int h, c, t;
-		cin >> h >> c >> t;
-		if (t == h) {
-			cout << 1 << endl;
-			continue;
+	int t; cin >> t;
+	while (t--) {
+		int n, x, m;
+		cin >> n >> x >> m;
+		bool found = false;
+		pii range;
+		int a, b;
+		for (int i = 0; i < m; i++) {
+			cin >> a >> b;
+			if (a <= x and x <= b) {
+				if (!found) {
+					range = { a, b };
+				}
+				found = true;
+			}
+			if (found) {
+				range = merge(range, { a, b });
+			}
 		}
-		double avg = (double) (h + c) / 2;
-		if (t <= avg) {
-			cout << 2 << endl;
-			continue;
+		if (found) {
+			cout << range.sc - range.fs + 1 << endl;
+		} else {
+			cout << 1 << endl;
 		}
 	}
 	return 0;

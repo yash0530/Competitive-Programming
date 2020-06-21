@@ -25,20 +25,55 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+int n, ans;
+const int maxN = 2e5 + 5;
+vector<int> adj[maxN];
+int arr[maxN], type[maxN];
+
+pii dfs(int u = 1, int p = 1) {
+	arr[u] = min(arr[u], arr[p]);
+	pii t = { 0, 0 };
+	for (auto x : adj[u]) {
+		if (x != p) {
+			pii temp = dfs(x, u);
+			t.fs += temp.fs;
+			t.sc += temp.sc;
+		}
+	}
+	if (type[u] == 1) {
+		t.fs++;
+	} else if (type[u] == 2) {
+		t.sc++;
+	}
+	int a = min(t.fs, t.sc);
+	ans += 2 * a * arr[u];
+	return { t.fs - a, t.sc - a };
+}
+
 int32_t main() { fastio;
-	int tc; cin >> tc;
-	while (tc--) {
-		int h, c, t;
-		cin >> h >> c >> t;
-		if (t == h) {
-			cout << 1 << endl;
-			continue;
+	cin >> n;
+	int x, y;
+	for (int i = 1; i <= n; i++) {
+		cin >> arr[i];
+		cin >> x >> y;
+		if (x == 0 and y == 1) {
+			type[i] = 1;
+		} else if (x == 1 and y == 0) {
+			type[i] = 2;
+		} else {
+			type[i] = 0;
 		}
-		double avg = (double) (h + c) / 2;
-		if (t <= avg) {
-			cout << 2 << endl;
-			continue;
-		}
+	}
+	for (int i = 1; i < n; i++) {
+		cin >> x >> y;
+		adj[x].pb(y);
+		adj[y].pb(x);
+	}
+	pii a = dfs();
+	if (a.fs or a.sc) {
+		cout << -1 << endl;
+	} else {
+		cout << ans << endl;
 	}
 	return 0;
 }
