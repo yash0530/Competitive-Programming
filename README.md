@@ -5,7 +5,7 @@
 * [Codechef](https://www.codechef.com/users/yash530)
 * [AtCoder](https://atcoder.jp/users/ScaryTerry)
 
-## TEMPLATE
+## CPP Template
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
