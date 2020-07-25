@@ -1,5 +1,10 @@
 # Competitive Programming
 
+## My Handles
+* [Codeforces](https://codeforces.com/profile/ScaryTerry)
+* [Codechef](https://www.codechef.com/users/yash530)
+* [AtCoder](https://atcoder.jp/users/ScaryTerry)
+
 ## TEMPLATE
 ```cpp
 #include <bits/stdc++.h>
