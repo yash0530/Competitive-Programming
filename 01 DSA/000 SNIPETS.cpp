@@ -137,13 +137,13 @@ vector<int> LIS(vector<int>& v) {
 
 // ----------------------- Floyd Warshall ------------------- //
 
-// for (int k = 1; k <= n; k++) {
-//     for (int i = 1; i <= n; i++) {
-//         for (int j = 1; j <= n; j++) {
-//             dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
-//         }
-//     }
-// }
+for (int k = 1; k <= n; k++) {
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+        }
+    }
+}
 
 // ------------------------ Dijkstra ----------------------- //
 vector<int> dijkstra(int x, int n, vector<vector<Edge>> adj) {
@@ -227,4 +227,55 @@ int LCA(int u, int v) {
         }
     }
     return up[u][0];
+}
+
+// ----------------- TOPO SORT ------------------- //
+void topoDFS(int v, vector<bool> &visited, vector<int> &res) {
+    visited[v] = true;
+    for (auto a : adj[v]) {
+        if (!visited[a]) {
+            topoDFS(a, visited, res); 
+        }
+    }
+    res.pb(v);
+}
+
+vector<int> topoSort() {
+    vector<int> res; 
+    vector<bool> visited(n + 5);
+    for (int i = 1; i <= n; i++) { 
+        if (!visited[i]) { 
+            topoDFS(i, visited, res); 
+        }
+    }
+    reverse(res.begin(), res.end());
+    return res;
+}
+
+// ------------------------ DIRECTED HAS CYCLE --------- //
+bool cycleDFS(int v, vector<bool> &visited, vector<bool> &recStack) { 
+    if(!visited[v]) {
+        visited[v] = true; 
+        recStack[v] = true;
+        for(auto a : adj[v]) { 
+            if (!visited[a] and cycleDFS(a, visited, recStack)) {
+                return true; 
+            }
+            else if (recStack[a]) {
+                return true; 
+            }
+        }
+    }
+    recStack[v] = false;
+    return false; 
+}
+
+bool hasCycle() {
+    vector<bool> visited(n + 5), recStack(n + 5);
+    for(int i = 1; i <= n; i++) {
+        if (cycleDFS(i, visited, recStack)) {
+            return true; 
+        }
+    }
+    return false; 
 }

@@ -25,59 +25,41 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
  
-struct comp {
-	bool operator()(const pii &a, const pii &b) {
-		return (((a.fs + 1) / 2) * a.sc) < (((b.fs + 1) / 2) * b.sc);
-	}
-};
-
-int n, s;
-const int maxN = 1e5 + 5;
-vector<pii> adj[maxN];
-priority_queue<pii, vector<pii>, comp> pq;
-int sum = 0;
- 
-int dfs(int source = 1, int parent = 1) {
-	int count = 0;
-	int sz = 0;
-	for (auto a : adj[source]) {
-		if (a.fs != parent) {
-			int curr = dfs(a.fs, source);
-			pq.push({ a.sc,  curr });
-			sum += a.sc * curr;
-			sz += curr;
-			count++;
-		}
-	}
-	if (count) return sz;
-	return 1;
-}
-
 int32_t main() {
-	int t; cin >> t;
-	while (t--) {
-		cin >> n >> s;
-		int u, v, w;
-		for (int i = 1; i < n; i++) {
-			cin >> u >> v >> w;
-			adj[u].pb({ v, w });
-			adj[v].pb({ u, w });
-		}
-		dfs();
-		int count = 0;
-		while (sum > s) {
-			pii tp = pq.top(); pq.pop();
-			sum -= ((tp.fs + 1) / 2) * tp.sc;
-			pq.push({ tp.fs / 2, tp.sc });
-			count++;
-		}
-		cout << count << endl;
- 
-		while (!pq.empty()) pq.pop();
-		for (int i = 1; i <= n; i++) {
-			adj[i].clear();
-		}
-		sum = 0;
+	int n; cin >> n;
+	vector<int> arr(n);
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
 	}
+	sort(arr.begin(), arr.end());
+	vector<int> res;
+	int lw = 0, hi = n - 1;
+	while (lw <= hi) {
+		if (lw == hi) res.pb(arr[lw]);
+		else {
+			res.pb(arr[hi]);
+			res.pb(arr[lw]);
+		}
+		lw++; hi--;
+	}
+	int d1 = 0;
+	for (int i = 1; i < n; i++) {
+		d1 = (d1 + abs(res[i] - res[i - 1]));
+	}
+	vector<int> nw;
+	lw = 0, hi = n - 1;
+	while (lw <= hi) {
+		if (lw == hi) nw.pb(arr[lw]);
+		else {
+			nw.pb(arr[lw]);
+			nw.pb(arr[hi]);
+		}
+		lw++; hi--;
+	}
+	int d2 = 0;
+	for (int i = 1; i < n; i++) {
+		d2 = (d2 + abs(nw[i] - nw[i - 1]));
+	}
+	cout << max(d1, d2) << endl;
 	return 0;
 }

@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
- 
+
 #define en "\n"
 #define INF (int) 9e18
 #define HELL (int) (1e9 + 7)
@@ -24,60 +24,38 @@ int fastpow(int a, int b, int m = HELL) { int res = 1; a %= m;
 while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
- 
-struct comp {
-	bool operator()(const pii &a, const pii &b) {
-		return (((a.fs + 1) / 2) * a.sc) < (((b.fs + 1) / 2) * b.sc);
-	}
-};
-
-int n, s;
-const int maxN = 1e5 + 5;
-vector<pii> adj[maxN];
-priority_queue<pii, vector<pii>, comp> pq;
-int sum = 0;
- 
-int dfs(int source = 1, int parent = 1) {
-	int count = 0;
-	int sz = 0;
-	for (auto a : adj[source]) {
-		if (a.fs != parent) {
-			int curr = dfs(a.fs, source);
-			pq.push({ a.sc,  curr });
-			sum += a.sc * curr;
-			sz += curr;
-			count++;
-		}
-	}
-	if (count) return sz;
-	return 1;
-}
 
 int32_t main() {
-	int t; cin >> t;
-	while (t--) {
-		cin >> n >> s;
-		int u, v, w;
-		for (int i = 1; i < n; i++) {
-			cin >> u >> v >> w;
-			adj[u].pb({ v, w });
-			adj[v].pb({ u, w });
+	int n; cin >> n;
+	if (n == 1) {
+		cout << 1 << endl;
+	} else if (n < 4) {
+		cout << "NO SOLUTION" << endl;
+	} else {
+		vector<int> base = { 2, 4, 1, 3 };
+		int times = (n / 4);
+		vector<int> res;
+		for (int i = 0; i < times; i++) {
+			int add = i * 4;
+			for (auto b : base) {
+				res.pb(b + add);
+			}
 		}
-		dfs();
-		int count = 0;
-		while (sum > s) {
-			pii tp = pq.top(); pq.pop();
-			sum -= ((tp.fs + 1) / 2) * tp.sc;
-			pq.push({ tp.fs / 2, tp.sc });
-			count++;
+		if (n % 4 == 1) {
+			res.pb(n);
 		}
-		cout << count << endl;
- 
-		while (!pq.empty()) pq.pop();
-		for (int i = 1; i <= n; i++) {
-			adj[i].clear();
+		if (n % 4 == 2) {
+			cout << n - 1 << " ";
+			res.pb(n);
 		}
-		sum = 0;
+		if (n % 4 == 3) {
+			cout << n - 1 << " ";
+			res.pb(n - 2); res.pb(n);
+		}
+		for (auto r : res) {
+			cout << r << " ";
+		}
+		cout << endl;
 	}
 	return 0;
 }

@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
- 
+
 #define en "\n"
 #define INF (int) 9e18
 #define HELL (int) (1e9 + 7)
@@ -24,60 +24,75 @@ int fastpow(int a, int b, int m = HELL) { int res = 1; a %= m;
 while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
- 
-struct comp {
-	bool operator()(const pii &a, const pii &b) {
-		return (((a.fs + 1) / 2) * a.sc) < (((b.fs + 1) / 2) * b.sc);
-	}
-};
 
-int n, s;
-const int maxN = 1e5 + 5;
-vector<pii> adj[maxN];
-priority_queue<pii, vector<pii>, comp> pq;
-int sum = 0;
- 
-int dfs(int source = 1, int parent = 1) {
-	int count = 0;
-	int sz = 0;
-	for (auto a : adj[source]) {
-		if (a.fs != parent) {
-			int curr = dfs(a.fs, source);
-			pq.push({ a.sc,  curr });
-			sum += a.sc * curr;
-			sz += curr;
-			count++;
-		}
-	}
-	if (count) return sz;
-	return 1;
-}
+int n, k;
+const int maxN = 2e5 + 5;
+vector<vector<int>> verts(maxN);
+
+struct comp {
+	bool operator()(const int &a, const int &b) {
+		if (size(verts[a]) == size(verts[b])) return a < b;
+		return size(verts[a]) > size(verts[b]);
+	}	
+};
 
 int32_t main() {
 	int t; cin >> t;
 	while (t--) {
-		cin >> n >> s;
-		int u, v, w;
+		int x, y; cin >> n >> k;
+
+		set<int> adj[n + 5];
 		for (int i = 1; i < n; i++) {
-			cin >> u >> v >> w;
-			adj[u].pb({ v, w });
-			adj[v].pb({ u, w });
+			cin >> x >> y;
+			adj[x].insert(y);
+			adj[y].insert(x);
 		}
-		dfs();
-		int count = 0;
-		while (sum > s) {
-			pii tp = pq.top(); pq.pop();
-			sum -= ((tp.fs + 1) / 2) * tp.sc;
-			pq.push({ tp.fs / 2, tp.sc });
-			count++;
+
+		if (k == 1) {
+			cout << n - 1 << endl;
+			continue;
 		}
-		cout << count << endl;
- 
-		while (!pq.empty()) pq.pop();
+
+		for (int i = 1; i <= n; i++) verts[i].clear();
 		for (int i = 1; i <= n; i++) {
-			adj[i].clear();
+			if (size(adj[i]) == 1) {
+				verts[*adj[i].begin()].pb(i);
+			}
 		}
-		sum = 0;
+		
+		set<int, comp> PQ;
+		for (int i = 1; i <= n; i++) {
+			if (size(verts[i])) {
+				PQ.insert(i);
+			}
+		}
+
+		int res = 0;
+		while (!PQ.empty()) {
+			int tp = *PQ.begin();
+			PQ.erase(PQ.begin());
+			if (size(verts[tp]) < k) {
+				break;
+			}
+			res++;
+			for (int i = 0; i < k; i++) {
+				int val = verts[tp].back();
+				adj[val].erase(tp);
+				adj[tp].erase(val);
+				verts[tp].pop_back();
+			}
+			if (size(verts[tp]) > 0) {
+				PQ.insert(tp);
+			} else {
+				if (size(adj[tp]) == 1) {
+					int vert = *adj[tp].begin();
+					PQ.erase(vert);
+					verts[vert].pb(tp);
+					PQ.insert(vert);
+				}
+			}
+		}
+		cout << res << endl;
 	}
 	return 0;
 }
