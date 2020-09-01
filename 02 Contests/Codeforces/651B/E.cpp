@@ -26,46 +26,41 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-	int t; cin >> t;
-	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
+	int n; cin >> n;
+	string a, b;
+	cin >> a >> b;
+	int c1 = 0, c2 = 0;
+	vector<int> alpha;
+	for (int i = 0; i < n; i++) {
+		c1 += (a[i] == '1');
+		c2 += (b[i] == '1');
+		if (a[i] != b[i]) {
+			if (a[i] == '1') alpha.pb(1);
+			else alpha.pb(0);
 		}
-		vector<int> res;
-		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
-				}
-			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
+	}
+	if (c1 != c2) {
+		cout << -1 << endl;
+	} else {
+		vector<int> ones, zeros;
+		for (auto x : alpha) {
+			if (x) {
+				if (zeros.empty()) {
+					ones.pb(1);
+				} else {
+					int al = zeros.back(); zeros.pop_back();
+					ones.pb(al + 1);
 				}
 			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
+				if (ones.empty()) {
+					zeros.pb(1);
+				} else {
+					int al = ones.back(); ones.pop_back();
+					zeros.pb(al + 1);
+				}
 			}
 		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
+		cout << size(ones) + size(zeros) << endl;
 	}
 	return 0;
 }

@@ -25,47 +25,52 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+const int maxN = 1e5 + 5;
+int n;
+int tree[4 * maxN], lazy[4 * maxN], arr[maxN];
+
+void push(int v) {
+    tree[v*2] += lazy[v];
+    lazy[v*2] += lazy[v];
+    tree[v*2+1] += lazy[v];
+    lazy[v*2+1] += lazy[v];
+    lazy[v] = 0;
+}
+
+void updateRange(int l, int r, int addend, int v = 1, int tl = 0, int tr = n - 1) {
+    if (l > r) 
+        return;
+    if (l == tl && tr == r) {
+        tree[v] += addend;
+        lazy[v] += addend;
+    } else {
+        push(v);
+        int tm = (tl + tr) / 2;
+        updateRange(l, min(r, tm), addend, v*2, tl, tm);
+        updateRange(max(l, tm+1), r, addend, v*2+1, tm+1, tr);
+        tree[v] = max(tree[v*2], tree[v*2+1]);
+    }
+}
+
+int queryMax(int l, int r, int v = 1, int tl = 0, int tr = n - 1) {
+    if (l > r)
+        return -INF;
+    if (l <= tl && tr <= r)
+        return tree[v];
+    push(v);
+    int tm = (tl + tr) / 2;
+    return max(queryMax(l, min(r, tm), v*2, tl, tm), queryMax(max(l, tm+1), r, v*2+1, tm+1, tr));
+}
+
+
 int32_t main() { fastio;
 	int t; cin >> t;
-	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
-		}
-		vector<int> res;
-		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
-				}
-			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
-				}
-			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
-			}
-		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
+	for (int _ = 1; _ <= t; _++) {
+		cout << "Case #" << _ << ": ";
+
+		cin >> n;
+
+		cout << endl;
 	}
 	return 0;
 }

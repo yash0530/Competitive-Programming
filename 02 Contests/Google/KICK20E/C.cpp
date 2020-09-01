@@ -25,47 +25,69 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+
 int32_t main() { fastio;
 	int t; cin >> t;
-	while (t--) {
+	for (int _ = 1; _ <= t; _++) {
+		cout << "Case #" << _ << ": ";
+
 		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
-		}
-		vector<int> res;
+		vector<pii> toys(n);
+
 		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
+			cin >> toys[i].fs >> toys[i].sc;
+		}
+		if (n == 1) {
+			cout << 0 << " " << toys[0].fs << endl;
+			continue;
+		}
+
+		int res = 0, mn = INF;
+		for (int mask = 1; mask <= (1LL << n); mask++) {
+			vector<pii> curr;
+			for (int i = 0; i < n; i++) {
+				if ((1 << i) & (mask)) {
+					curr.pb(toys[i]);
 				}
 			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
+			if (size(curr)) {
+ 				int val = 0;
+				if (size(curr) == 1) {
+					val = curr[0].fs;
+				} else {
+					int sum = 0;
+					bool in = true;
+					for (auto c : curr) {
+						sum += c.fs;
+					}
+					val = sum;
+					for (auto c : curr) {
+						if ((sum - c.fs) >= c.sc) {
+							val += c.fs;
+						} else {
+							in = false;
+							break;
+						}
+					}
+					if (in) {
+						val = INF;
 					}
 				}
-			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
+				if (res < val) {
+					mn = (n - size(curr));
+					res = val;
+				} else if (res == val) {
+					mn = min(mn, (n - size(curr)));
+				}
 			}
 		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
+		cout << mn << " ";
+		if (res == INF) {
+			cout << "INDEFINITELY";
+		} else {
+			cout << res;
+		}
+		cout << endl;
 	}
 	return 0;
 }

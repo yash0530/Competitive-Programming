@@ -25,47 +25,31 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int32_t main() { fastio;
-	int t; cin >> t;
-	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
+int n;
+const int maxN = 5e3 + 5;
+int dp[maxN][maxN], arr[maxN];
+
+int res(int pos, int val) {
+	if (pos > n) return 0;
+	int &ans = dp[pos][val];
+	if (ans == -1) {
+		if (arr[val] >= arr[pos]) {
+			ans = res(pos + 1, pos);
+		} else {
+			ans = 1 + res(pos + 1, val);
+			ans = min(ans, arr[pos] - arr[val] + res(pos + 1, pos));
 		}
-		vector<int> res;
-		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
-				}
-			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
-				}
-			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
-			}
-		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
 	}
+	return ans;
+}
+
+int32_t main() { fastio;
+	cin >> n;
+	memset(dp, -1, sizeof dp);
+	memset(arr, 0, sizeof arr);
+	for (int i = 1; i <= n; i++) {
+		cin >> arr[i];
+	}
+	cout << res(1, 0) << endl;
 	return 0;
 }

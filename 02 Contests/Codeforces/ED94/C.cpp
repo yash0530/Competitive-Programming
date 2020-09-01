@@ -28,44 +28,36 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 int32_t main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
-		}
-		vector<int> res;
+		string s; cin >> s;
+		int n = size(s);
+		int x; cin >> x;
+		string w(n, '1');
 		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
+			if (s[i] == '0') {
+				if ((i - x) >= 0) {
+					w[i - x] = '0';
 				}
-			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
+				if ((i + x) < n) {
+					w[i + x] = '0';
 				}
-			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
 			}
 		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
+		string temp(n, '0');
+		for (int i = 0; i < n; i++) {
+			bool found = false;
+			if ((i - x) >= 0) {
+				if (w[i - x] == '1') found = true;
+			}
+			if ((i + x) < n) {
+				if (w[i + x] == '1') found = true;
+			}
+			if (found) temp[i] = '1';
+		}
+		if (temp == s) {
+			cout << w << endl;
+		} else {
+			cout << -1 << endl;
+		}
 	}
 	return 0;
 }

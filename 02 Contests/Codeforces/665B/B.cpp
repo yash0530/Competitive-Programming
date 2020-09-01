@@ -28,44 +28,33 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 int32_t main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
-		}
-		vector<int> res;
-		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
-				}
-			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
-				}
-			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
-			}
-		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
+		int a1, b1, c1;
+		int a2, b2, c2;
+		cin >> a1 >> b1 >> c1 >> a2 >> b2 >> c2;
+
+		int x = min(c1, b2);
+		int sum = x * 2;
+		c1 -= x;
+		b2 -= x;
+
+		x = min(c2, a1);
+		c2 -= x;
+		a1 -= x;
+
+		x = min(a1, a2);
+		a1 -= x;
+		a2 -= x;
+
+		x = min(b1, b2);
+		b1 -= x;
+		b2 -= x;
+
+		x = min(c1, c2);
+		c1 -= x;
+		c2 -= x;
+
+		sum -= min(c2, b1) * 2;
+		cout << sum << endl;
 	}
 	return 0;
 }

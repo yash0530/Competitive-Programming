@@ -29,43 +29,37 @@ int32_t main() { fastio;
 	int t; cin >> t;
 	while (t--) {
 		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
-		}
+		vector<char> s(n);
+		for (int i = 0; i < n; i++) cin >> s[i];		
 		vector<int> res;
+		int prev = 'X';
 		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
+			if (prev != s[i]) {
+				if (s[i] == '0') {
+					res.pb(0);
 				}
 			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
-				}
-			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
+			prev = s[i];
+			if (prev == '0') {
+				res[size(res) - 1]++;
 			}
 		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
+		sort(res.begin(), res.end(), greater<int>());
+		if (size(res) == 1) {
+			if (res[0] & 1) {
+				cout << "Yes" << endl;
+			} else {
+				cout << "No" << endl;
+			}
+		} else if (size(res)) {
+			if ((res[0] & 1) and (res[1] <= (res[0] / 2))) {
+				cout << "Yes" << endl;
+			} else {
+				cout << "No" << endl;
+			}
+		} else {
+			cout << "No" << endl;
+		}
 	}
 	return 0;
 }

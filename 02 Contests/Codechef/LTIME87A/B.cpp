@@ -25,47 +25,56 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+int ncr(int n, int r) {
+	r = min(n, n - r);
+	int num = 1, den = 1;
+	for (int i = 1; i <= r; i++) {
+		num = mul(num, (n - i + 1));
+		den = mul(den, i);
+	}
+	return mul(num, inv(den));
+}
+
 int32_t main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(1005);
+		int n, m;
+		cin >> n >> m;
+		if (m != (n - 1)) {
+			cout << 0 << endl;
+			continue;
+		}
 		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
+		vector<int> freq(n + 5);
+		for (int i = 0; i < n - 1; i++) {
+			cin >> arr[i];
+			freq[arr[i]]++;
 		}
-		vector<int> res;
-		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
-				}
-			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
-				}
-			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
+		bool poss = true;
+		for (int i = 2; i <= n; i++) {
+			if (freq[i] and !freq[i - 1]) {
+				poss = false;
 			}
 		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
+		int res = 1;
+		int count = 0;
+		if (poss) {
+			for (int i = 2; i <= n; i++) {
+				if (freq[i]) {
+					res = mul(res, fastpow(freq[i - 1], freq[i]));
+					count += ((freq[i - 1] - 1) * freq[i]);
+				}
+			}
+			// if (count < (m - (n - 1))) {
+			// 	cout << 0 << endl;
+			// } else {
+				// int extra = ncr(count, m - (n - 1));
+				// cout << mul(res, extra) << endl;				
+			// }
+			cout << res << endl;
+		} else {
+			cout << 0 << endl;
+		}
 	}
 	return 0;
 }

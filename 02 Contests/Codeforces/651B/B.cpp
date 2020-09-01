@@ -29,43 +29,71 @@ int32_t main() { fastio;
 	int t; cin >> t;
 	while (t--) {
 		int n; cin >> n;
-		vector<int> freq(1005);
+		n *= 2;
+		int e = 0, o = 0;
 		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
-		}
-		vector<int> res;
 		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
+			cin >> arr[i];
+			e += !(arr[i] & 1);
+			o += (arr[i] & 1);
+		}
+		vector<bool> avail(n);
+		if (e & 1) {
+			int x = 1, y = 1;
+			for (int i = 0; i < n; i++) {
+				if ((arr[i] & 1) and (y)) {
+					y--;
+					avail[i] = true;
+				}
+				if ((!(arr[i] & 1)) and x) {
+					x--;
+					avail[i] = true;
 				}
 			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
+		} else if (e > o) {
+			int x = 2;
+			for (int i = 0; i < n; i++) {
+				if ((!(arr[i] & 1)) and x) {
+					x--;
+					avail[i] = true;
+				}
+			}
+		} else {
+			int y = 2;
+			for (int i = 0; i < n; i++) {
+				if ((arr[i] & 1) and (y)) {
+					y--;
+					avail[i] = true;
+				}
+			}
+		}
+		for (int i = 0; i < n; i++) {
+			if (!avail[i]) {
+				if (arr[i] & 1) {
+					for (int j = i + 1; j < n; j++) {
+						if (!avail[j]) {
+							if (arr[j] & 1) {
+								avail[i] = true;
+								avail[j] = true;
+								cout << i + 1 << " " << j + 1 << endl;
+								break;
+							}
+						}
+					}
+				} else {
+					for (int j = i + 1; j < n; j++) {
+						if (!avail[j]) {
+							if (arr[j] % 2 == 0) {
+								avail[i] = true;
+								avail[j] = true;
+								cout << i + 1 << " " << j + 1 << endl;
+								break;
+							}
+						}
 					}
 				}
-			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
 			}
 		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
 	}
 	return 0;
 }

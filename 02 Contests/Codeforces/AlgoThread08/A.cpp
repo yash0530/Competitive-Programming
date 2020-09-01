@@ -25,47 +25,42 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int32_t main() { fastio;
-	int t; cin >> t;
-	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
+int n;
+const int maxN = 3e5 + 5;
+vector<int> adj[maxN];
+int diameter;
+
+int dfs(int u = 1, int p = 1) {
+	vector<int> lens;
+	for (auto x : adj[u]) {
+		if (x != p) {
+			int curr = dfs(x, u);
+			lens.pb(curr);
 		}
-		vector<int> res;
-		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
-				}
-			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
-				}
-			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
-			}
-		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
 	}
+	sort(lens.begin(), lens.end(), greater<int>());
+	int val = 0;
+	if (size(lens)) {
+		val = lens[0];
+	}
+	if (size(lens) > 1) {
+		val += lens[1];
+	}
+	diameter = max(diameter, val);
+	if (size(lens)) return lens[0] + 1;
+	return 1;
+}
+
+int32_t main() { fastio;
+	cin >> n;
+	int u, v;
+	for (int i = 1; i < n; i++) {
+		cin >> u >> v;
+		adj[u].pb(v);
+		adj[v].pb(u);
+	}
+	diameter = 0;
+	dfs();
+	cout << 3 * diameter << endl;
 	return 0;
 }

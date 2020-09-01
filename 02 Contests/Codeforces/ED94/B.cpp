@@ -28,44 +28,32 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 int32_t main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
+		int p, f; cin >> p >> f;
+		int cs, cw; cin >> cs >> cw;
+		int s, w; cin >> s >> w;
+
+		if (s > w) {
+			swap(s, w);
+			swap(cs, cw);
 		}
-		vector<int> res;
-		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
-				}
-			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
-				}
-			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
-			}
+
+		int res = 0;
+		for (int i = 0; i <= min(cs, p / s); i++) {
+			int curr = i;
+			int tempp = p - (i * s);
+			int srem = cs - i;
+
+			int ptakesa = min(tempp / w, cw);
+			int arem = cw - ptakesa;
+			curr += ptakesa;
+
+			curr += min(f / s, srem);
+			int tempf = f - min(f / s, srem) * s;
+
+			curr += min(tempf / w, arem);
+			res = max(res, curr);
 		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
+		cout << res << endl;
 	}
 	return 0;
 }

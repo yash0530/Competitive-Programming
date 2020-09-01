@@ -25,47 +25,76 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+int n;
+const int maxN = 1e3 + 5;
+vector<int> adj[maxN];
+vector<int> nodes;
+
+void getAllNodesAtDist(int source, int parent, int current, int dist) {
+	if (current == dist) {
+		nodes.pb(source);
+	}
+	for (auto x : adj[source]) {
+		if (x != parent) {
+			getAllNodesAtDist(x, source, current + 1, dist);
+		}
+	}
+}
+
+pii getNodeDist() {
+	cout << "? " << size(nodes) << " ";
+	for (auto n : nodes) {
+		cout << n << " ";
+	} cout << endl;
+	int x, d; cin >> x >> d;
+	return { x, d };
+}
+
 int32_t main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
+		cin >> n;
+		for (int i = 1; i < n; i++) {
+			int u, v;
+			cin >> u >> v;
+			adj[u].pb(v);
+			adj[v].pb(u);
 		}
-		vector<int> res;
-		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
-				}
-			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
+
+		nodes.clear();
+		for (int i = 1; i <= n; i++) {
+			nodes.pb(i);
+		}
+		pii node = getNodeDist();
+		int poss = node.fs;
+
+		int low = 1, high = n;
+		while (low <= high) {
+			int mid = (low + high) / 2;
+			nodes.clear();
+			getAllNodesAtDist(node.fs, node.fs, 0, mid);
+			if (size(nodes)) {
+				pii curr = getNodeDist();
+				if (curr.sc == node.sc) {
+					low = mid + 1;
+					poss = curr.fs;
+				} else {
+					high = mid - 1;
 				}
 			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
+				high = mid - 1;
 			}
 		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
+
+		nodes.clear();
+		getAllNodesAtDist(poss, poss, 0, node.sc);
+		int ans = getNodeDist().fs;
+		cout << "! " << poss << " " << ans << endl;
+		string s; cin >> s;
+
+		for (int i = 1; i <= n; i++) {
+			adj[i].clear();
+		}
 	}
 	return 0;
 }

@@ -25,47 +25,67 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+int n;
+const int maxN = 1e5 + 5;
+vector<int> adj[maxN];
+vector<int> res;
+
+int dfs(int u = 1, int p = 1) {
+	int sz = 1;
+	for (auto a : adj[u]) {
+		if (a != p) {
+			int val = dfs(a, u);
+			res.pb(val * (n - val));
+			sz += val;
+		}
+	}
+	return sz;
+}
+
 int32_t main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
+		cin >> n;
+		int u, v;
+		for (int i = 1; i < n; i++) {
+			cin >> u >> v;
+			adj[u].pb(v);
+			adj[v].pb(u);
 		}
-		vector<int> res;
-		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
-				}
+		int m; cin >> m;
+		vector<int> arr(m);
+		for (int i = 0; i < m; i++) {
+			cin >> arr[i];
+		}
+		res.clear();
+		dfs();
+
+		sort(arr.begin(), arr.end(), greater<int>());
+		sort(res.begin(), res.end(), greater<int>());
+
+		int ans = 0;
+		if (m > (n - 1)) {
+			vector<int> arr2;
+			int extra = m - (n - 1);
+			int here = 1;
+			for (int i = 0; i <= extra; i++) {
+				here = mul(here, arr[i]);
 			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
-				}
-			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
+			arr2.pb(here);
+			for (int j = extra + 1; j < m; j++) {
+				arr2.pb(arr[j]);
+			}
+			arr = arr2;
+		} else {
+			for (int i = m; i < (n - 1); i++) {
+				arr.pb(1);
 			}
 		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
+		for (int i = 0; i < (n - 1); i++) {
+			ans = (ans + mul(res[i], arr[i])) % HELL;
+		}
+		cout << ans << endl;
+		for (int i = 1; i <= n; i++) adj[i].clear();
 	}
 	return 0;
 }

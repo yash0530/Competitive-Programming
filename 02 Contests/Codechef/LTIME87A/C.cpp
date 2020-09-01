@@ -25,47 +25,39 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+int n, d;
+const int maxN = 1e5 + 5;
+int arr[maxN];
+
+bool poss(int mid) {
+	double dist = (1e9) / (double) mid;
+	int start = arr[0];
+	
+	for (int i = 1; i < n; i++) {
+
+	}
+}
+
 int32_t main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
-		}
-		vector<int> res;
+		cin >> n >> d;
 		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
-				}
-			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
-				}
+			cin >> arr[i];
+		}
+		sort(arr, arr + n);
+		int ans = 1e15;
+		int low = 1, high = 1e15;
+		while (low <= high) {
+			int mid = (low + high) / 2;
+			if (poss(mid)) {
+				ans = mid;
+				high = mid - 1;
 			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
+				low = mid + 1;
 			}
 		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
+		cout << (1e9) / (double) ans << endl;
 	}
 	return 0;
 }

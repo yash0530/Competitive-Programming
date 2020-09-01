@@ -25,47 +25,42 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+vector<int> getFactors(int n) {
+    vector<int> factors = { 1, n };
+    for (int i = 2; i * i <= n; i++) {
+        if (n % i == 0) {
+            factors.push_back(i);
+            if (i * i != n) {
+                factors.push_back(n / i);
+            }
+        }
+    }
+    return factors;
+}
+
 int32_t main() { fastio;
 	int t; cin >> t;
 	while (t--) {
 		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
-		}
-		vector<int> res;
-		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
-				}
-			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
+		if (n == 2) {
+			cout << "Ashishgup" << endl;
+		} else if (n == 1) {
+			cout << "FastestFinger" << endl;
+		} else if (n & 1) {
+			cout << "Ashishgup" << endl;
+		} else {
+			if ((n & (n - 1)) == 0) {
+				cout << "FastestFinger" << endl;
+			} else if ((n / 2) & 1) {
+				if (size(getFactors(n)) > 4) {
+					cout << "Ashishgup" << endl;
+				} else {
+					cout << "FastestFinger" << endl;
 				}
 			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
+				cout << "Ashishgup" << endl;
 			}
 		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
 	}
 	return 0;
 }

@@ -26,46 +26,28 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-	int t; cin >> t;
-	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
-		}
-		vector<int> res;
-		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
-				}
-			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
-				}
-			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
+	int n; cin >> n;
+	vector<int> arr(n);
+	for (auto &a : arr) cin >> a;
+	vector<int> masks(30);
+	for (auto a : arr) {
+		for (int i = 0; i < 25; i++) {
+			if ((1 << i) & a) {
+				masks[i]++;
 			}
 		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
 	}
+	int res = 0;
+	for (int i = 0; i < n; i++) {
+		int curr = 0;
+		for (int j = 0; j < 25; j++) {
+			if (masks[j]) {
+				masks[j]--;
+				curr += (1 << j);
+			}
+		}
+		res += (curr * curr);
+	}
+	cout << res << endl;
 	return 0;
 }

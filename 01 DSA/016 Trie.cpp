@@ -4,24 +4,16 @@ using namespace std;
 
 struct node {
     node *children[ALPHABET_SIZE];
-    bool isEndOfWord; 
+    bool isEndOfWord;
 };
 
 class Trie {
     private:
         node *root;
-        node *__getNode() {
-            node *temp = new node();
-            temp->isEndOfWord = false;
-            for (int i = 0; i < ALPHABET_SIZE; i++) {
-                temp->children[i] = NULL;
-            }
-            return temp;
-        }
 
     public:
         Trie() {
-            root = __getNode();
+            root = new node();
         }
 
         void _insert(string key) {
@@ -30,7 +22,7 @@ class Trie {
             for (int i = 0; i < len; i++) {
                 int index = key[i] - 'a';
                 if (!pCrawl->children[index]) {
-                    pCrawl->children[index] = __getNode();
+                    pCrawl->children[index] = new node();
                 }
                 pCrawl = pCrawl->children[index];
             }

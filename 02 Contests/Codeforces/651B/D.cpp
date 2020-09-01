@@ -25,47 +25,56 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int32_t main() { fastio;
-	int t; cin >> t;
-	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
+int n, k;
+const int maxN = 2e5 + 5;
+int arr[maxN];
+
+bool poss1(int mid) {
+	int count = 0;
+	bool any = true;
+	for (int i = 0; i < n; i++) {
+		if (any) {
+			count++;
+			any = !any;
+		} else if (arr[i] <= mid) {
+			count++;
+			any = !any;
 		}
-		vector<int> res;
-		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
-				}
-			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
-				}
-			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
-			}
-		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
 	}
+	return count >= k;
+}
+
+bool poss2(int mid) {
+	int count = 0;
+	bool any = false;
+	for (int i = 0; i < n; i++) {
+		if (any) {
+			count++;
+			any = !any;
+		} else if (arr[i] <= mid) {
+			count++;
+			any = !any;
+		}
+	}
+	return count >= k;
+}
+
+int32_t main() { fastio;
+	cin >> n >> k;
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+	}
+	int low = 1, high = 1e9;
+	int res = INF;
+	while (low <= high) {
+		int mid = (low + high) / 2;
+		if (poss1(mid) or poss2(mid)) {
+			res = mid;
+			high = mid - 1;
+		} else {
+			low = mid + 1;
+		}
+	}
+	cout << res << endl;
 	return 0;
 }

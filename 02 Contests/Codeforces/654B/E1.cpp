@@ -14,7 +14,7 @@ using namespace std;
 #define size(a) (int) a.size()
 #define deb(x) cerr << #x << " => " << x << en
 #define debp(a) cerr << #a << " => " <<"("<<a.fs<<", "<<a.sc<<") " << en;
-#define deba(x) cerr << #x << en; for (auto a : x) cerr << a << " "; cerr << en;
+#define deba(x) cerr << #x << en; for (auto y : x) cerr << y << " "; cerr << en;
 #define debpa(x) cerr << #x << en; for (auto a : x)cerr<<"("<<a.fs<<", "<<a.sc<<") "; cerr << en;
 #define debm(x) cerr << #x << en; for (auto a : x){for(auto b : a) cerr << b << " "; cerr << en;}
 #define getMat(x, n, m, val) vector<vector<int>> x(n, vector<int> (m, val))
@@ -24,48 +24,48 @@ int fastpow(int a, int b, int m = HELL) { int res = 1; a %= m;
 while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } return res;}
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
+#define mulp(a, b, p) ((a % p) * (b % p)) % p
 
 int32_t main() { fastio;
-	int t; cin >> t;
-	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(1005);
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-			freq[a]++;
-		}
-		vector<int> res;
-		for (int i = 0; i < n; i++) {
-			int mex = -1;
-			for (int j = 0; j <= n; j++) {
-				if (freq[j] == 0) {
-					mex = j;
-					break;
-				}
-			}
-			if (mex == n) {
-				for (int j = 0; j < n; j++) {
-					if (arr[j] != j) {
-						res.pb(j + 1);
-						freq[arr[j]]--;
-						freq[n]++;
-						arr[j] = n;
-						i--;
-						break;
-					}
-				}
-			} else {
-				res.pb(mex + 1);
-				freq[arr[mex]]--;
-				freq[mex]++;
-				arr[mex] = mex;
-			}
-		}
-		cout << size(res) << endl;
-		for (auto r : res) {
-			cout << r << " ";
-		} cout << endl;
+	int n, p;
+	cin >> n >> p;
+	vector<int> arr(n);
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
 	}
+	sort(arr.begin(), arr.end());
+	vector<int> res;
+	for (int i = arr[0]; i <= arr.back(); i++) {
+		int x = i;
+		bool yes = true;
+		for (auto a : arr) {
+			if (a > x) yes = false;
+			x++;
+		}
+		if (yes) {
+			int times = 1;
+			vector<int> another;
+			for (int j = 0; j < n; j++) {
+				another.pb(i + j);
+			}
+			vector<int> th;
+			int a = 0, b = 0;
+			while (a < n) {
+				while (arr[a] > another[b]) b++;
+				th.pb(n - b);
+				a++;
+			}
+			for (int j = (n - 1), _ = 0; j >= 0; j--, _++) {
+				times = mulp(times, (th[j] - _), p);
+			}
+			if (times) {
+				res.pb(i);
+			}
+		}
+	}
+	cout << size(res) << endl;
+	for (auto r : res) {
+		cout << r << " ";
+	} cout << endl;
 	return 0;
 }

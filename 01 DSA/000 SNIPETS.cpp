@@ -177,7 +177,6 @@ vector<int> dijkstra(int x, int n, vector<vector<Edge>> adj) {
 
 // ----------------- Bellmon Ford ------------------------ //
 
-
 int32_t main() {
     int n = 5;
     vector<vector<Edge>> adj(n + 1);
@@ -278,4 +277,19 @@ bool hasCycle() {
         }
     }
     return false; 
+}
+
+// ----------------------- DFS ORDERING ------------------ //
+int location;
+pii dfsM[maxN];
+// set location to -1 before dfs call
+// dfs ordering
+void dfs(int u = 1, int p = 1) {
+    dfsM[u].fs = ++location;
+    for (auto x : adj[u]) {
+        if (x != p) {
+            dfs(x, u);
+        }
+    }
+    dfsM[u].sc = location;
 }
