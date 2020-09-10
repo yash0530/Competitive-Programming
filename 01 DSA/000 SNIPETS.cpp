@@ -146,19 +146,15 @@ for (int k = 1; k <= n; k++) {
 }
 
 // ------------------------ Dijkstra ----------------------- //
-vector<int> dijkstra(int x, int n, vector<vector<Edge>> adj) {
-
+vector<int> dijkstra(int x, int n, vector<vector<Edge>> &adj) {
     vector<int> distance(n + 1);
     vector<bool> processed(n + 1);
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
-
     for (int i = 1; i <= n; i++) {
         distance[i] = INF;
     }
-
     distance[x] = 0;
     q.push({ 0, x });
-
     while (!q.empty()) {
         int a = q.top().second; q.pop();
         if (processed[a]) continue;
@@ -171,25 +167,7 @@ vector<int> dijkstra(int x, int n, vector<vector<Edge>> adj) {
             }
         }
     }
-
     return distance;
-}
-
-// ----------------- Bellmon Ford ------------------------ //
-
-int32_t main() {
-    int n = 5;
-    vector<vector<Edge>> adj(n + 1);
-    for (int i = 0; i < 6; i++) {
-        int x, y, w;
-        cin >> x >> y >> w;
-        adj[x].push_back({ y, w });
-        adj[y].push_back({ x, w });
-    }
-    auto d = dijkstra(1, n, adj);
-    for (auto x : d) {
-        cout << x << endl;
-    }
 }
 
 // --------------------- BINARY LIFTING ----------------------- //
@@ -292,4 +270,19 @@ void dfs(int u = 1, int p = 1) {
         }
     }
     dfsM[u].sc = location;
+}
+
+// ------------------------------------------------------------- //
+const int maxN = 200005;
+vector<int> invN(maxN), fact(maxN), invFact(maxN);
+void precomp() {
+    fact[0] = fact[1] = invFact[0] = invFact[1] = invN[0] = invN[1] = 1;
+    for (int i = 2; i < maxN; i++) {
+        invN[i] = mul(HELL - (HELL / i), invN[HELL % i] % HELL);
+        fact[i] = mul(fact[i - 1], i);
+        invFact[i] = mul(invN[i], invFact[i - 1]);
+    }
+}
+int nck(int n, int k) {
+    return mul(invFact[n - k], mul(fact[n], invFact[k]));
 }
