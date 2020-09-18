@@ -27,6 +27,27 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-	
+	int n, k;
+	cin >> n >> k;
+	vector<int> arr(n);
+	for (auto &a : arr) {
+		cin >> a;
+	}
+	int low = 0, high = 1e18;
+	int res = INF;
+	while (low <= high) {
+		int mid = (low + high) / 2;
+		int count = 0;
+		for (auto a : arr) {
+			count += min((mid / a), (int) 1e9);
+		}
+		if (count >= k) {
+			res = mid;
+			high = mid - 1;
+		} else {
+			low = mid + 1;
+		}
+	}
+	cout << res << endl;
 	return 0;
 }

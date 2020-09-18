@@ -88,50 +88,17 @@ int lcmArray(vector<int> arr) {
 }
 
 // ---------------------------- LIS ----------------------------- //
-int CeilIndex(vector<int>& v, int l, int r, int key) {
-    while (r - l > 1) {
-        int m = l + (r - l) / 2;
-        if (v[m] >= key) {
-            r = m;
-        } else {
-            l = m;
-        }
-    }
-    return r; 
-}
 
-// returns array of indices
-vector<int> LIS(vector<int>& v) {
-    int n = v.size();
-    vector<int> tail(n, 0), tail_index(n, -1), res(n, -1);
-    int length = 1;
-    tail[0] = v[0];
-    tail_index[0] = 0;
-    for (size_t i = 1; i < v.size(); i++) {
-        if (v[i] < tail[0]) {
-            tail[0] = v[i];
-            tail_index[0] = i;
-        } else if (v[i] > tail[length - 1]) {
-            tail[length++] = v[i];
-            tail_index[length - 1] = i;
-            res[i] = tail_index[length - 2];
+vector<int> LIS(vector<int> &arr) {
+    vector<int> lis;
+    for (auto x : arr) {
+        int p = lower_bound(lis.begin(), lis.end(), x) - lis.begin();
+        if (p < size(lis)) {
+            lis[p] = x;
         } else {
-            int x = CeilIndex(tail, -1, length - 1, v[i]);
-            tail[x] = v[i];
-            tail_index[x] = i;
-            if (x) res[i] = tail_index[x - 1];
+            lis.pb(x);
         }
     }
-    
-    // return length; 
-    vector<int> lis;
-    int x = tail_index[length - 1];
-    while (res[x] != -1) {
-        lis.push_back(x);
-        x = res[x];
-    }
-    lis.push_back(x);
-    reverse(lis.begin(), lis.end());
     return lis;
 }
 
