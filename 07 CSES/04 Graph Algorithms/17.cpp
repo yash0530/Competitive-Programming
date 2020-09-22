@@ -1,4 +1,4 @@
-// CSES Round Trip
+// Game Routes
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -30,27 +30,26 @@ int n, m;
 const int maxN = 1e5 + 5;
 vector<int> adj[maxN];
 
-stack<int> st;
-vector<int> res;
-bool vis[maxN];
+void topoDFS(int v, vector<bool> &visited, vector<int> &res) {
+    visited[v] = true;
+    for (auto a : adj[v]) {
+        if (!visited[a]) {
+            topoDFS(a, visited, res); 
+        }
+    }
+    res.pb(v);
+}
 
-void dfs(int node, int parent) {
-	vis[node] = true;
-	st.push(node);
-	for (auto x : adj[node]) {
-		if (x != parent) {
-			if (!vis[x]) {
-				dfs(x, node);
-			} else if (size(res) == 0) {
-				res.pb(x);
-				while (!st.empty() and (st.top() != x)) {
-					res.pb(st.top()); st.pop();
-				}
-				res.pb(x);
-			}
-		}
-	}
-	if (st.top() == node) st.pop();
+vector<int> topoSort() {
+    vector<int> res; 
+    vector<bool> visited(n + 5);
+    for (int i = 1; i <= n; i++) { 
+        if (!visited[i]) { 
+            topoDFS(i, visited, res); 
+        }
+    }
+    reverse(res.begin(), res.end());
+    return res;
 }
 
 int32_t main() { fastio;
@@ -60,18 +59,14 @@ int32_t main() { fastio;
 		cin >> a >> b;
 		adj[a].pb(b);
 	}
-	for (int i = 1; i <= n; i++) {
-		if (!vis[i]) {
-			dfs(i, i);
+	auto ts = topoSort();
+	vector<int> final(n + 1, 0);
+	final[1] = 1;
+	for (auto t : ts) {
+		for (auto x : adj[t]) {
+			final[x] = (final[x] + final[t]) % HELL;
 		}
 	}
-	if (size(res)) {
-		cout << size(res) << endl;
-		reverse(res.begin(), res.end());
-		for (auto r : res) cout << r << " ";
-		cout << endl;
-	} else {
-		cout << "IMPOSSIBLE" << endl;
-	}
+	cout << final[n] << endl;
 	return 0;
 }

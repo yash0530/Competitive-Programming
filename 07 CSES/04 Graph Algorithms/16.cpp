@@ -1,4 +1,4 @@
-// CSES Round Trip
+// CSES Longest Flight Route
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -29,28 +29,35 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 int n, m;
 const int maxN = 1e5 + 5;
 vector<int> adj[maxN];
+vector<int> visited, res;
 
-stack<int> st;
-vector<int> res;
+void topoDFS(int v) {
+    visited[v] = true;
+    for (auto a : adj[v]) {
+        if (!visited[a]) {
+            topoDFS(a); 
+        }
+    }
+    res.pb(v);
+}
+
+vector<int> topoSort() {
+    visited = vector<int>(n + 5);
+    for (int i = 1; i <= n; i++) {
+        if (!visited[i]) {
+            topoDFS(i);
+        }
+    }
+    reverse(res.begin(), res.end());
+    return res;
+}
+
 bool vis[maxN];
-
-void dfs(int node, int parent) {
-	vis[node] = true;
-	st.push(node);
-	for (auto x : adj[node]) {
-		if (x != parent) {
-			if (!vis[x]) {
-				dfs(x, node);
-			} else if (size(res) == 0) {
-				res.pb(x);
-				while (!st.empty() and (st.top() != x)) {
-					res.pb(st.top()); st.pop();
-				}
-				res.pb(x);
-			}
-		}
+void dfs(int x) {
+	vis[x] = true;
+	for (auto y : adj[x]) {
+		if (!vis[y]) dfs(y);
 	}
-	if (st.top() == node) st.pop();
 }
 
 int32_t main() { fastio;
@@ -60,18 +67,35 @@ int32_t main() { fastio;
 		cin >> a >> b;
 		adj[a].pb(b);
 	}
-	for (int i = 1; i <= n; i++) {
-		if (!vis[i]) {
-			dfs(i, i);
+	dfs(1);
+	if (!vis[n]) {
+		cout << "IMPOSSIBLE\n"; exit(0);
+	}
+	auto ts = topoSort();
+	vector<int> final(n + 1, 0);
+	vector<int> parent(n + 1);
+	final[1] = 1;
+	parent[1] = 1;
+	for (auto t : ts) {
+		if (final[t]) {
+			for (auto x : adj[t]) {
+				if ((final[t] + 1) > final[x]) {
+					final[x] = final[t] + 1;
+					parent[x] = t;
+				}
+			}
 		}
 	}
-	if (size(res)) {
-		cout << size(res) << endl;
-		reverse(res.begin(), res.end());
-		for (auto r : res) cout << r << " ";
-		cout << endl;
-	} else {
-		cout << "IMPOSSIBLE" << endl;
+	vector<int> ans;
+	int loc = n;
+	while (parent[loc] != loc) {
+		ans.pb(loc);
+		loc = parent[loc];
 	}
+	ans.pb(1);
+	reverse(ans.begin(), ans.end());
+	cout << final[n] << endl;
+	for (auto y : ans) cout << y << " ";
+	cout << endl;
 	return 0;
 }

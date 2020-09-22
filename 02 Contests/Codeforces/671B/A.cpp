@@ -1,4 +1,3 @@
-// CSES Round Trip
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -26,52 +25,30 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int n, m;
-const int maxN = 1e5 + 5;
-vector<int> adj[maxN];
-
-stack<int> st;
-vector<int> res;
-bool vis[maxN];
-
-void dfs(int node, int parent) {
-	vis[node] = true;
-	st.push(node);
-	for (auto x : adj[node]) {
-		if (x != parent) {
-			if (!vis[x]) {
-				dfs(x, node);
-			} else if (size(res) == 0) {
-				res.pb(x);
-				while (!st.empty() and (st.top() != x)) {
-					res.pb(st.top()); st.pop();
-				}
-				res.pb(x);
-			}
-		}
-	}
-	if (st.top() == node) st.pop();
-}
-
 int32_t main() { fastio;
-	cin >> n >> m;
-	int a, b;
-	for (int i = 0; i < m; i++) {
-		cin >> a >> b;
-		adj[a].pb(b);
-	}
-	for (int i = 1; i <= n; i++) {
-		if (!vis[i]) {
-			dfs(i, i);
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		string s; cin >> s;
+		if (n & 1) {
+			bool found = false;
+			for (int i = 0; i < n; i += 2) {
+				if ((s[i] - '0') & 1) {
+					found = true;
+				}
+			}
+			if (found) cout << 1 << endl;
+			else cout << 2 << endl;
+		} else {
+			bool found = false;
+			for (int i = 1; i < n; i += 2) {
+				if ((s[i] - '0') % 2 == 0) {
+					found = true;
+				}
+			}
+			if (found) cout << 2 << endl;
+			else cout << 1 << endl;
 		}
-	}
-	if (size(res)) {
-		cout << size(res) << endl;
-		reverse(res.begin(), res.end());
-		for (auto r : res) cout << r << " ";
-		cout << endl;
-	} else {
-		cout << "IMPOSSIBLE" << endl;
 	}
 	return 0;
 }

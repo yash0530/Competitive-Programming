@@ -1,10 +1,9 @@
-// CSES Round Trip
 #include <bits/stdc++.h>
 using namespace std;
 
 #define en "\n"
 #define INF (int) 9e18
-#define HELL (int) (1e9 + 7)
+#define HELL 998244353LL
 #define int long long
 #define double long double
 #define uint unsigned long long
@@ -26,52 +25,50 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int n, m;
-const int maxN = 1e5 + 5;
-vector<int> adj[maxN];
+int n;
+const int maxN = 2e5 + 5;
+int tree[maxN];
 
-stack<int> st;
-vector<int> res;
-bool vis[maxN];
+void update(int index, int val) {
+    while (index <= n) {
+        tree[index] = (tree[index] + val) % HELL;
+        index += (index & -index);
+    }
+}
 
-void dfs(int node, int parent) {
-	vis[node] = true;
-	st.push(node);
-	for (auto x : adj[node]) {
-		if (x != parent) {
-			if (!vis[x]) {
-				dfs(x, node);
-			} else if (size(res) == 0) {
-				res.pb(x);
-				while (!st.empty() and (st.top() != x)) {
-					res.pb(st.top()); st.pop();
-				}
-				res.pb(x);
-			}
-		}
+int read(int index) {
+    int sum = 0;
+    while (index) {
+        sum = (sum + tree[index]) % HELL;
+        index -= (index & -index);
+    }
+    return sum;
+}
+
+int getSum(int low, int high) {
+	if (high <= 0) {
+		return 0;
 	}
-	if (st.top() == node) st.pop();
+	if (low <= 1) {
+		return read(high);
+	}
+	return (read(high) - read(low - 1) + HELL) % HELL;
 }
 
 int32_t main() { fastio;
-	cin >> n >> m;
-	int a, b;
-	for (int i = 0; i < m; i++) {
+	int k, a, b;
+	cin >> n >> k;
+	vector<vector<int>> s;
+	while (k--) {
 		cin >> a >> b;
-		adj[a].pb(b);
+		s.pb({ a, b });
 	}
-	for (int i = 1; i <= n; i++) {
-		if (!vis[i]) {
-			dfs(i, i);
+	update(1, 1);
+	for (int i = 2; i <= n; i++) {
+		for (auto x : s) {
+			update(i, getSum(i - x[1], i - x[0]));
 		}
 	}
-	if (size(res)) {
-		cout << size(res) << endl;
-		reverse(res.begin(), res.end());
-		for (auto r : res) cout << r << " ";
-		cout << endl;
-	} else {
-		cout << "IMPOSSIBLE" << endl;
-	}
+	cout << (read(n) - read(n - 1) + HELL) % HELL << endl;
 	return 0;
 }

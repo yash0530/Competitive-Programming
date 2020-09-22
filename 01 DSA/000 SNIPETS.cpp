@@ -138,21 +138,23 @@ vector<int> dijkstra(int x, int n, vector<vector<Edge>> &adj) {
 }
 
 // --------------------- BINARY LIFTING ----------------------- //
+
 int timer;
 const int LG = 22, maxN = 1e5 + 5;
 int tin[maxN], tout[maxN];
 int up[maxN][LG + 1];
 vector<int> adj[maxN];
-
-void dfs(int v = 1, int p = 1) {
+int depth[maxN];
+void dfs(int v = 1, int p = 1, int d = 0) {
     tin[v] = ++timer;
     up[v][0] = p;
+    depth[v] = d;
     for (int i = 1; i <= LG; ++i) {
         up[v][i] = up[up[v][i-1]][i-1];
     }
     for (int u : adj[v]) {
         if (u != p) {
-            dfs(u, v);
+            dfs(u, v, d + 1);
         }
     }
     tout[v] = ++timer;
@@ -171,6 +173,11 @@ int LCA(int u, int v) {
         }
     }
     return up[u][0];
+}
+
+int dist(int a, int b) {
+    int lca = LCA(a, b);
+    return depth[a] + depth[b] - depth[lca] * 2;
 }
 
 // ----------------- TOPO SORT ------------------- //
@@ -206,7 +213,7 @@ bool cycleDFS(int v, vector<bool> &visited, vector<bool> &recStack) {
                 return true; 
             }
             else if (recStack[a]) {
-                return true; 
+                return true;
             }
         }
     }
@@ -252,4 +259,58 @@ void precomp() {
 }
 int nck(int n, int k) {
     return mul(invFact[n - k], mul(fact[n], invFact[k]));
+}
+
+// ------------------ Co ordinate Compression ------------------ //
+vector<int> cocomp(vector<int> arr) {
+    map<int, int> MP;
+    vector<int> temp = arr;
+    int n = size(arr);
+    sort(temp.begin(), temp.end());
+    for (int i = 0, curr = 0; i < n; i++) {
+        if (MP.find(temp[i]) == MP.end()) {
+            MP[temp[i]] = ++curr;
+        }
+    }
+    vector<int> res;
+    for (auto a : arr) {
+        res.pb(MP[a]);
+    }
+    return res;
+}
+
+// ---------------- CENTROID DECOMPOSITION -------------- //
+int nn;
+int sub[maxN], par[maxN];
+
+void dfs1(int u,int p) {
+    sub[u] = 1; nn++;
+    for(auto v : adj[u]) {
+        if(v != p) {
+            dfs1(v, u);
+            sub[u] += sub[v];
+        }
+    }
+}
+
+int dfs2(int u,int p) {
+    for(auto v : adj[u]) {
+        if((v != p) and (sub[v] > nn / 2)) {
+            return dfs2(v, u);
+        }
+    }
+    return u;
+}
+
+void decompose(int root,int p) {
+    nn = 0;
+    dfs1(root, root);
+    int centroid = dfs2(root, root);
+    if(p == -1) p = centroid;
+    par[centroid] = p;
+    for(auto v : adj[centroid]) {
+        adj[v].erase(centroid);
+        decompose(v, centroid);
+    }
+    adj[centroid].clear();
 }

@@ -1,4 +1,4 @@
-// CSES Round Trip
+// CSES Round Trip II
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -38,19 +38,20 @@ void dfs(int node, int parent) {
 	vis[node] = true;
 	st.push(node);
 	for (auto x : adj[node]) {
-		if (x != parent) {
-			if (!vis[x]) {
-				dfs(x, node);
-			} else if (size(res) == 0) {
-				res.pb(x);
-				while (!st.empty() and (st.top() != x)) {
-					res.pb(st.top()); st.pop();
-				}
-				res.pb(x);
+		if (!vis[x]) {
+			dfs(x, node);
+		} else if (size(res) == 0) {
+			res.pb(x);
+			while (!st.empty() and (st.top() != x)) {
+				res.pb(st.top()); st.pop();
 			}
+			if (st.empty()) {
+				res.clear();
+			} else
+				res.pb(x);
 		}
 	}
-	if (st.top() == node) st.pop();
+	if (!st.empty() and st.top() == node) st.pop();
 }
 
 int32_t main() { fastio;

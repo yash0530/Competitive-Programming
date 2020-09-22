@@ -1,4 +1,3 @@
-// CSES Round Trip
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -26,52 +25,62 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int n, m;
-const int maxN = 1e5 + 5;
-vector<int> adj[maxN];
-
-stack<int> st;
-vector<int> res;
-bool vis[maxN];
-
-void dfs(int node, int parent) {
-	vis[node] = true;
-	st.push(node);
-	for (auto x : adj[node]) {
-		if (x != parent) {
-			if (!vis[x]) {
-				dfs(x, node);
-			} else if (size(res) == 0) {
-				res.pb(x);
-				while (!st.empty() and (st.top() != x)) {
-					res.pb(st.top()); st.pop();
-				}
-				res.pb(x);
-			}
+vector<int> cocomp(vector<int> arr) {
+	map<int, int> MP;
+	vector<int> temp = arr;
+	int n = size(arr);
+	sort(temp.begin(), temp.end());
+	for (int i = 0, curr = 0; i < n; i++) {
+		if (MP.find(temp[i]) == MP.end()) {
+			MP[temp[i]] = ++curr;
 		}
 	}
-	if (st.top() == node) st.pop();
+	vector<int> res;
+	for (auto a : arr) {
+		res.pb(MP[a]);
+	}
+	return res;
+}
+
+int n;
+const int maxN = 2e5 + 5;
+int t1[maxN], t2[maxN];
+
+void update(int index, int val, int *tree) {
+    while (index <= n) {
+        tree[index] += val;
+        index += (index & -index);
+    }
+}
+
+int read(int index, int *tree) {
+    int sum = 0;
+    while (index) {
+        sum += tree[index];
+        index -= (index & -index);
+    }
+    return sum;
 }
 
 int32_t main() { fastio;
-	cin >> n >> m;
-	int a, b;
-	for (int i = 0; i < m; i++) {
-		cin >> a >> b;
-		adj[a].pb(b);
+	cin >> n;
+	vector<int> arr(n), brr(n);
+	for (auto &a : arr) cin >> a;
+	for (auto &b : brr) cin >> b;
+	
+	brr = cocomp(brr);
+	vector<pii> events(n);
+	for (int i = 0; i < n; i++) {
+		events[i] = { arr[i], brr[i] };
 	}
-	for (int i = 1; i <= n; i++) {
-		if (!vis[i]) {
-			dfs(i, i);
-		}
+	sort(events.begin(), events.end());
+	
+	int res = 0;
+	for (int i = 0; i < n; i++) {
+		res += (read(events[i].sc, t1) * events[i].fs - read(events[i].sc, t2));
+		update(events[i].sc, 1, t1);
+		update(events[i].sc, events[i].fs, t2);
 	}
-	if (size(res)) {
-		cout << size(res) << endl;
-		reverse(res.begin(), res.end());
-		for (auto r : res) cout << r << " ";
-		cout << endl;
-	} else {
-		cout << "IMPOSSIBLE" << endl;
-	}
+	cout << res << endl;
 	return 0;
 }

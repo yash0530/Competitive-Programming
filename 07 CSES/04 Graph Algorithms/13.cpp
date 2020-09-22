@@ -1,9 +1,9 @@
-// CSES Round Trip
+// CSES Flight Routes
 #include <bits/stdc++.h>
 using namespace std;
 
 #define en "\n"
-#define INF (int) 9e18
+#define INF (int) 1e16
 #define HELL (int) (1e9 + 7)
 #define int long long
 #define double long double
@@ -26,52 +26,43 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int n, m;
-const int maxN = 1e5 + 5;
-vector<int> adj[maxN];
+int k;
 
-stack<int> st;
-vector<int> res;
-bool vis[maxN];
+struct Edge {
+    int v, weight;
+    bool operator<(Edge const& other) {
+        return weight < other.weight;
+    }
+};
 
-void dfs(int node, int parent) {
-	vis[node] = true;
-	st.push(node);
-	for (auto x : adj[node]) {
-		if (x != parent) {
-			if (!vis[x]) {
-				dfs(x, node);
-			} else if (size(res) == 0) {
-				res.pb(x);
-				while (!st.empty() and (st.top() != x)) {
-					res.pb(st.top()); st.pop();
-				}
-				res.pb(x);
-			}
-		}
-	}
-	if (st.top() == node) st.pop();
+vector<vector<int>> dijkstra(int x, int n, vector<vector<Edge>> &adj) {
+    vector<vector<int>> distance(n + 1);
+    vector<bool> processed(n + 1);
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
+    q.push({ 0, x });
+    while (!q.empty()) {
+    	pii tp = q.top(); q.pop();
+    	if (size(distance[tp.sc]) >= k) continue;
+    	distance[tp.sc].pb(tp.fs);
+    	for (auto v : adj[tp.sc]) {
+    		q.push({ tp.fs + v.weight, v.v });
+    	}
+    }
+    return distance;
 }
 
 int32_t main() { fastio;
-	cin >> n >> m;
-	int a, b;
+	int n, m;
+	cin >> n >> m >> k;
+	int a, b, w;
+	vector<vector<Edge>> adj(n + 1);
 	for (int i = 0; i < m; i++) {
-		cin >> a >> b;
-		adj[a].pb(b);
+		cin >> a >> b >> w;
+		adj[a].pb({ b, w });
 	}
-	for (int i = 1; i <= n; i++) {
-		if (!vis[i]) {
-			dfs(i, i);
-		}
-	}
-	if (size(res)) {
-		cout << size(res) << endl;
-		reverse(res.begin(), res.end());
-		for (auto r : res) cout << r << " ";
-		cout << endl;
-	} else {
-		cout << "IMPOSSIBLE" << endl;
-	}
+	auto d = dijkstra(1, n, adj);
+	for (int i = 0; i < k; i++) {
+		cout << d[n][i] << " ";
+	} cout << endl;
 	return 0;
 }

@@ -1,4 +1,3 @@
-// CSES Round Trip
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -26,52 +25,28 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int n, m;
-const int maxN = 1e5 + 5;
-vector<int> adj[maxN];
-
-stack<int> st;
-vector<int> res;
-bool vis[maxN];
-
-void dfs(int node, int parent) {
-	vis[node] = true;
-	st.push(node);
-	for (auto x : adj[node]) {
-		if (x != parent) {
-			if (!vis[x]) {
-				dfs(x, node);
-			} else if (size(res) == 0) {
-				res.pb(x);
-				while (!st.empty() and (st.top() != x)) {
-					res.pb(st.top()); st.pop();
-				}
-				res.pb(x);
-			}
-		}
-	}
-	if (st.top() == node) st.pop();
-}
-
 int32_t main() { fastio;
-	cin >> n >> m;
-	int a, b;
-	for (int i = 0; i < m; i++) {
-		cin >> a >> b;
-		adj[a].pb(b);
+	int n; cin >> n;
+	vector<int> arr(n);
+	for (auto &a : arr) {
+		cin >> a;
 	}
-	for (int i = 1; i <= n; i++) {
-		if (!vis[i]) {
-			dfs(i, i);
+	sort(arr.begin(), arr.end());
+	vector<int> res;
+	for (int i = (n / 2), j = 0; j < (n / 2); j++, i++) {
+		res.pb(arr[i]);
+		res.pb(arr[j]);
+	}
+	if (n & 1) res.pb(arr.back());
+	int count = 0;
+	for (int i = 1; i < (n - 1); i++) {
+		if ((res[i] < res[i - 1]) and (res[i] < res[i + 1])) {
+			count++;
 		}
 	}
-	if (size(res)) {
-		cout << size(res) << endl;
-		reverse(res.begin(), res.end());
-		for (auto r : res) cout << r << " ";
-		cout << endl;
-	} else {
-		cout << "IMPOSSIBLE" << endl;
-	}
+	cout << count << endl;
+	for (auto r : res) {
+		cout << r << " ";
+	} cout << endl;
 	return 0;
 }

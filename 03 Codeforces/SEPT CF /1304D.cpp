@@ -1,4 +1,3 @@
-// CSES Round Trip
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -26,52 +25,22 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int n, m;
-const int maxN = 1e5 + 5;
-vector<int> adj[maxN];
-
-stack<int> st;
-vector<int> res;
-bool vis[maxN];
-
-void dfs(int node, int parent) {
-	vis[node] = true;
-	st.push(node);
-	for (auto x : adj[node]) {
-		if (x != parent) {
-			if (!vis[x]) {
-				dfs(x, node);
-			} else if (size(res) == 0) {
-				res.pb(x);
-				while (!st.empty() and (st.top() != x)) {
-					res.pb(st.top()); st.pop();
-				}
-				res.pb(x);
-			}
-		}
-	}
-	if (st.top() == node) st.pop();
-}
-
 int32_t main() { fastio;
-	cin >> n >> m;
-	int a, b;
-	for (int i = 0; i < m; i++) {
-		cin >> a >> b;
-		adj[a].pb(b);
-	}
-	for (int i = 1; i <= n; i++) {
-		if (!vis[i]) {
-			dfs(i, i);
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		string s; cin >> s;
+		vector<int> small(n), large(n);
+		iota(small.rbegin(), small.rend(), 1);
+		iota(large.begin(), large.end(), 1);
+		int j = 0;
+		for (int i = 0; i < size(s); i = j) {
+			while(j < n and s[i] == s[j]) j++;
+            if(s[i] == '<') reverse(small.begin() + i, small.begin() + j + 1);
+            else reverse(large.begin() + i, large.begin() + j + 1);
 		}
-	}
-	if (size(res)) {
-		cout << size(res) << endl;
-		reverse(res.begin(), res.end());
-		for (auto r : res) cout << r << " ";
-		cout << endl;
-	} else {
-		cout << "IMPOSSIBLE" << endl;
-	}
+		for (auto x : small) cout << x << " "; cout << endl;
+		for (auto x : large) cout << x << " "; cout << endl;
+ 	}
 	return 0;
 }

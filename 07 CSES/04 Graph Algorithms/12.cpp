@@ -1,9 +1,9 @@
-// CSES Round Trip
+// CSES Cycle Finding
 #include <bits/stdc++.h>
 using namespace std;
 
 #define en "\n"
-#define INF (int) 9e18
+#define INF (int) 1e16
 #define HELL (int) (1e9 + 7)
 #define int long long
 #define double long double
@@ -12,7 +12,7 @@ using namespace std;
 #define pb push_back
 #define fs first
 #define sc second
-#define size(a) (int) a.size()
+// #define size(a) (int) a.size()
 #define deb(x) cerr << #x << " => " << x << en
 #define debp(a) cerr << #a << " => " <<"("<<a.fs<<", "<<a.sc<<") " << en;
 #define deba(x) cerr << #x << en; for (auto a : x) cerr << a << " "; cerr << en;
@@ -26,52 +26,57 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+struct Edge {
+    int a, b, cost;
+};
+
 int n, m;
-const int maxN = 1e5 + 5;
-vector<int> adj[maxN];
+vector<Edge> edges;
 
-stack<int> st;
-vector<int> res;
-bool vis[maxN];
+void solve()
+{
+    vector<int> d(n);
+    vector<int> p(n, -1);
+    int x;
+    for (int i = 0; i < n; ++i) {
+        x = -1;
+        for (Edge e : edges) {
+            if (d[e.a] + e.cost < d[e.b]) {
+                d[e.b] = d[e.a] + e.cost;
+                p[e.b] = e.a;
+                x = e.b;
+            }
+        }
+    }
 
-void dfs(int node, int parent) {
-	vis[node] = true;
-	st.push(node);
-	for (auto x : adj[node]) {
-		if (x != parent) {
-			if (!vis[x]) {
-				dfs(x, node);
-			} else if (size(res) == 0) {
-				res.pb(x);
-				while (!st.empty() and (st.top() != x)) {
-					res.pb(st.top()); st.pop();
-				}
-				res.pb(x);
-			}
-		}
-	}
-	if (st.top() == node) st.pop();
+    if (x == -1) {
+        cout << "NO" << endl;
+    } else {
+        for (int i = 0; i < n; ++i)
+            x = p[x];
+
+        vector<int> cycle;
+        for (int v = x;; v = p[v]) {
+            cycle.push_back(v);
+            if (v == x && cycle.size() > 1)
+                break;
+        }
+        reverse(cycle.begin(), cycle.end());
+
+        cout << "YES" << endl;
+        for (int v : cycle)
+            cout << v + 1 << ' ';
+        cout << endl;
+    }
 }
 
 int32_t main() { fastio;
 	cin >> n >> m;
-	int a, b;
+	int a, b, w;
 	for (int i = 0; i < m; i++) {
-		cin >> a >> b;
-		adj[a].pb(b);
+		cin >> a >> b >> w; a--; b--;
+		edges.pb({ a, b, w });
 	}
-	for (int i = 1; i <= n; i++) {
-		if (!vis[i]) {
-			dfs(i, i);
-		}
-	}
-	if (size(res)) {
-		cout << size(res) << endl;
-		reverse(res.begin(), res.end());
-		for (auto r : res) cout << r << " ";
-		cout << endl;
-	} else {
-		cout << "IMPOSSIBLE" << endl;
-	}
+	solve();
 	return 0;
 }

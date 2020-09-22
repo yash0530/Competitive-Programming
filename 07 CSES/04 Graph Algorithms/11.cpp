@@ -1,9 +1,9 @@
-// CSES High Score
+// CSES Flight Discount
 #include <bits/stdc++.h>
 using namespace std;
 
 #define en "\n"
-#define INF (int) 9e18
+#define INF (int) 1e16
 #define HELL (int) (1e9 + 7)
 #define int long long
 #define double long double
@@ -26,68 +26,56 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int n, m;
-const int maxN = 2.5e3 + 5;
-vector<vector<int>> edges;
-vector<int> radj[maxN], xadj[maxN];
-bool haramkhor[maxN], vis[maxN];
-set<int> S;
-bool poss;
+struct Edge {
+    int v, weight;
+    bool operator<(Edge const& other) {
+        return weight < other.weight;
+    }
+};
 
-void dfs1(int node) {
-	vis[node] = true;
-	if (haramkhor[node]) {
-		S.insert(node);
-	}
-	for (auto x : radj[node]) {
-		if (!vis[x]) {
-			dfs1(x);
-		}
-	}
-}
-
-void dfs2(int node) {
-	vis[node] = true;
-	if (haramkhor[node]) {
-		if (S.find(node) != S.end()) {
-			poss = true;
-		}
-	}
-	for (auto x : xadj[node]) {
-		if (!vis[x]) {
-			dfs2(x);
-		}
-	}
+vector<int> dijkstra(int x, int n, vector<vector<Edge>> &adj) {
+    vector<int> distance(n + 1);
+    vector<bool> processed(n + 1);
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
+    for (int i = 1; i <= n; i++) {
+        distance[i] = INF;
+    }
+    distance[x] = 0;
+    q.push({ 0, x });
+    while (!q.empty()) {
+        int a = q.top().second; q.pop();
+        if (processed[a]) continue;
+        processed[a] = true;
+        for (auto u : adj[a]) {
+            int b = u.v, w = u.weight;
+            if (distance[a] + w < distance[b]) {
+                distance[b] = distance[a] + w;
+                q.push({ distance[b], b });
+            }
+        }
+    }
+    return distance;
 }
 
 int32_t main() { fastio;
+	vector<vector<int>> edges;
+	int n, m;
 	cin >> n >> m;
+	vector<vector<Edge>> adj(n + 1);
+	vector<vector<Edge>> radj(n + 1);
 	int a, b, w;
 	for (int i = 0; i < m; i++) {
 		cin >> a >> b >> w;
-		edges.pb({ a, b, -w });
-		radj[b].pb(a);
-		xadj[a].pb(b);
+		adj[a].pb({ b, w });
+		radj[b].pb({ a, w });
+		edges.pb({ a, b, w });
 	}
-	vector<int> distance(n + 1, INF);
-	for (int i = 1; i <= n; i++) distance[i] = INF;
-	distance[1] = 0;
-	for (int i = 1; i <= n - 1; i++) {
-		for (auto e : edges) {
-			distance[e[1]] = min(distance[e[1]], distance[e[0]] + e[2]);
-		}
-	}
+	auto distA = dijkstra(1, n, adj);
+	auto distB = dijkstra(n, n, radj);
+	int res = distA[n];
 	for (auto e : edges) {
-		if ((distance[e[0]] + e[2]) < distance[e[1]])
-			haramkhor[e[1]] = true;
+		res = min(res, distA[e[0]] + distB[e[1]] + e[2] / 2);
 	}
-	dfs1(n);
-	memset(vis, 0, sizeof vis);
-	dfs2(1);
-	if (poss) {
-		cout << -1 << endl;
-	} else {
-		cout <<	-distance[n] << endl;
-	}
+	cout << res << endl;
 	return 0;
 }

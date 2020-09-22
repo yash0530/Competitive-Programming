@@ -1,4 +1,3 @@
-// CSES Round Trip
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -26,52 +25,45 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int n, m;
-const int maxN = 1e5 + 5;
-vector<int> adj[maxN];
-
-stack<int> st;
-vector<int> res;
-bool vis[maxN];
-
-void dfs(int node, int parent) {
-	vis[node] = true;
-	st.push(node);
-	for (auto x : adj[node]) {
-		if (x != parent) {
-			if (!vis[x]) {
-				dfs(x, node);
-			} else if (size(res) == 0) {
-				res.pb(x);
-				while (!st.empty() and (st.top() != x)) {
-					res.pb(st.top()); st.pop();
-				}
-				res.pb(x);
+int32_t main() { fastio;
+	int t; cin >> t;
+	while (t--) {
+		vector<vector<int>> divs(2e4 + 5);
+		for (int i = 2; i <= 2e4; i++) {
+			for (int j = i; j <= 2e4; j += i) {
+				divs[j].pb(i);
 			}
 		}
-	}
-	if (st.top() == node) st.pop();
-}
-
-int32_t main() { fastio;
-	cin >> n >> m;
-	int a, b;
-	for (int i = 0; i < m; i++) {
-		cin >> a >> b;
-		adj[a].pb(b);
-	}
-	for (int i = 1; i <= n; i++) {
-		if (!vis[i]) {
-			dfs(i, i);
+		int a, b, c;
+		cin >> a >> b >> c;
+		int mn = a + b + c - 3;
+		int aa = 1, ab = 1, ac = 1;
+		for (int i = 1; i <= 2e4; i++) {
+			int curr_a = 1, curr_d = a - 1;
+			if (i > 1) {
+				for (auto x : divs[i]) {
+					if (curr_d > abs(x - a)) {
+						curr_a = x;
+						curr_d = abs(x - a);
+					}
+				}
+			}
+			int y1 = (c + i - (c % i));
+			int y2 = max(i, (c - (c % i)));
+			int curr_c = y1;
+			if (abs(c - y1) > abs(c - y2)) {
+				curr_c = y2;
+			}
+			int curr = abs(curr_a - a) + abs(c - curr_c) + abs(i - b);
+			if (mn > curr) {
+				mn = curr;
+				aa = curr_a;
+				ab = i;
+				ac = curr_c;
+			}
 		}
-	}
-	if (size(res)) {
-		cout << size(res) << endl;
-		reverse(res.begin(), res.end());
-		for (auto r : res) cout << r << " ";
-		cout << endl;
-	} else {
-		cout << "IMPOSSIBLE" << endl;
+		cout << mn << endl;
+		cout << aa << " " << ab << " " << ac << endl;
 	}
 	return 0;
 }
