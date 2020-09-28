@@ -145,6 +145,7 @@ int tin[maxN], tout[maxN];
 int up[maxN][LG + 1];
 vector<int> adj[maxN];
 int depth[maxN];
+
 void dfs(int v = 1, int p = 1, int d = 0) {
     tin[v] = ++timer;
     up[v][0] = p;
@@ -175,9 +176,18 @@ int LCA(int u, int v) {
     return up[u][0];
 }
 
-int dist(int a, int b) {
-    int lca = LCA(a, b);
-    return depth[a] + depth[b] - depth[lca] * 2;
+int getDist(int n1, int n2) {
+    return depth[n1] + depth[n2] - 2 * depth[LCA(n1, n2)];
+}
+
+int getNode(int node, int dist) {
+    int ans = node;
+    for (int i = 0; i <= LG; i++) {
+        if (dist & (1LL << i)) {
+            ans = up[ans][i];
+        }
+    }
+    return ans;
 }
 
 // ----------------- TOPO SORT ------------------- //
@@ -263,20 +273,15 @@ int nck(int n, int k) {
 
 // ------------------ Co ordinate Compression ------------------ //
 vector<int> cocomp(vector<int> arr) {
-    map<int, int> MP;
-    vector<int> temp = arr;
-    int n = size(arr);
-    sort(temp.begin(), temp.end());
-    for (int i = 0, curr = 0; i < n; i++) {
-        if (MP.find(temp[i]) == MP.end()) {
-            MP[temp[i]] = ++curr;
-        }
+    vector<int> compress;
+    int nn = size(arr);
+    for (int i = 0; i < nn; i++) {
+        compress.pb(arr[i]);
     }
-    vector<int> res;
-    for (auto a : arr) {
-        res.pb(MP[a]);
-    }
-    return res;
+    sort(compress.begin(), compress.end());
+    compress.resize(unique(compress.begin(), compress.end()) - compress.begin());
+    for (int i = 0; i < nn; i++) arr[i] = lower_bound(compress.begin(), compress.end(), arr[i]) - compress.begin();
+    return arr;
 }
 
 // ---------------- CENTROID DECOMPOSITION -------------- //
