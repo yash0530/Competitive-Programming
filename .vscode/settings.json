@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "*.sql": "sql",
-        "iostream": "cpp",
-        "random": "cpp",
-        "chrono": "cpp"
-    },
-    "competitive-programming-helper.firstTime": false
-}
