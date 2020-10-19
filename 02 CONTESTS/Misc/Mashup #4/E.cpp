@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -34,8 +25,29 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int32_t main() { fastio;
+int LIS(vector<array<int, 3>> &arr) {
+    vector<int> lis;
+    for (auto x : arr) {
+        int p = lower_bound(lis.begin(), lis.end(), x) - lis.begin();
+        if (p < size(lis)) {
+            lis[p] = x;
+        } else {
+            lis.pb(x);
+        }
+    }
+    return size(lis);
+}
 
+int32_t main() { fastio;
+	int n, m;
+	cin >> n >> m;
+	int u, v, w;
+	vector<array<int, 3>> arr(m);
+	for (int i = 0; i < m; i++) {
+		for (int j = 0; j < 3; j++) {
+			cin >> arr[i][j];
+		}
+	}
+	cout << LIS(arr) << endl;
 	return 0;
 }
-```

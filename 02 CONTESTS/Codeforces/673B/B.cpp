@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -35,7 +26,44 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-
+	int t; cin >> t;
+	while (t--) {
+		int n, k;
+		cin >> n >> k;
+		vector<int> arr(n);
+		set<int> FREQ;
+		for (int i = 0; i < n; i++) {
+			cin >> arr[i];
+			FREQ.insert(arr[i]);
+		}
+		map<int, int> ans;
+		for (auto m : FREQ) {
+			if (FREQ.find(k - m) != FREQ.end()) {
+				ans[m] = 1;
+				ans[k - m] = 0;
+			} else {
+				ans[m] = 1;
+			}
+		}
+		vector<int> res(n, -1);
+		if (k % 2 == 0) {
+			int val = k / 2;
+			bool curr = false;
+			for (int i = 0; i < n; i++) {
+				if (arr[i] == val) {
+					res[i] = curr;
+					curr = !curr;
+				}
+			}
+		}
+		for (int i = 0; i < n; i++) {
+			if (res[i] == -1) {
+				cout << ans[arr[i]] << " ";
+			} else {
+				cout << res[i] << " ";
+			}
+		}
+		cout << endl;
+	}
 	return 0;
 }
-```

@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -34,8 +25,53 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int32_t main() { fastio;
+int n, m, k;
+const int maxN = 505;
+vector<vector<int>> days(maxN);
+vector<vector<int>> removed_day(maxN);
+int dp[maxN][maxN];
 
+int res(int pos, int rem) {
+	if (pos == n) {
+		return 0;
+	}
+	int &ans = dp[pos][rem];
+	if (ans == -1) {
+		ans = INF;
+		for (int i = 0; i <= rem; i++) {
+			ans = min(ans, removed_day[pos][i] + res(pos + 1, rem - i));
+		}
+	}
+	return ans;
+}
+
+int32_t main() { fastio;
+	cin >> n >> m >> k;
+	memset(dp, -1, sizeof dp);
+	string s;
+	for (int i = 0; i < n; i++) {
+		cin >> s;
+		for (int j = 0; j < m; j++) {
+			if (s[j] == '1') {
+				days[i].pb(j);
+			}
+		}
+		for (int z = 0; z <= k; z++) {
+			if (size(days[i]) <= z) {
+				removed_day[i].pb(0);
+			} else {
+				if (z == 0) {
+					removed_day[i].pb(days[i].back() - days[i][0] + 1);
+				} else {
+					int val = INF;
+					for (int c = 0; c < z + 1; c++) {
+						val = min(val, days[i][size(days[i]) - 1 - z + c] - days[i][c] + 1);
+					}
+					removed_day[i].pb(val);
+				}
+			}
+		}
+	}
+	cout << res(0, k);
 	return 0;
 }
-```

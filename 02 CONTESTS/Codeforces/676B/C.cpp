@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -35,7 +26,12 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-
+	string s; cin >> s;
+	int n = size(s);
+	cout << 4 << endl;
+	cout << "L 2" << endl;
+	cout << "R " << n << endl;
+	cout << "L " << n + 1 << endl;
+	cout << "L 2" << endl;
 	return 0;
 }
-```

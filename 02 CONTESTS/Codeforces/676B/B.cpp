@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -35,7 +26,48 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		char mat[n][n];
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				cin >> mat[i][j];
+			}
+		}
 
+		vector<pii> ans;
+		if (mat[0][1] == '1') {
+			ans.pb({ 1, 2 });
+		}
+		if (mat[1][0] == '1') {
+			ans.pb({ 2, 1 });
+		}
+		if (mat[n - 1][n - 2] == '0') {
+			ans.pb({ n, n - 1 });
+		}
+		if (mat[n - 2][n - 1] == '0') {
+			ans.pb({ n - 1, n });
+		}
+		if (size(ans) > 2) {
+			ans.clear();
+			if (mat[0][1] == '0') {
+				ans.pb({ 1, 2 });
+			}
+			if (mat[1][0] == '0') {
+				ans.pb({ 2, 1 });
+			}
+			if (mat[n - 1][n - 2] == '1') {
+				ans.pb({ n, n - 1 });
+			}
+			if (mat[n - 2][n - 1] == '1') {
+				ans.pb({ n - 1, n });
+			}
+		}
+		cout << size(ans) << endl;
+		for (auto x : ans) {
+			cout << x.fs << " " << x.sc << endl;
+		}
+	}
 	return 0;
 }
-```

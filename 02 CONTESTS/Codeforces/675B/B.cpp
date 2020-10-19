@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -35,7 +26,55 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
+	int t; cin >> t;
+	while (t--) {
+		int n, m;
+		cin >> n >> m;
+		getMat(mat, n, m, 0);
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				cin >> mat[i][j];
+			}
+		}
+		int ans = 0;
+		for (int i = 0; i < ((n + 1) / 2); i++) {
+			for (int j = 0; j < ((m + 1) / 2); j++) {
+				vector<int> elems;
+				elems.pb(mat[i][j]);
+				if (i != (n - i - 1) and j != (m - j - 1))
+					elems.pb(mat[n - i - 1][m - j - 1]);
+				if (i != (n - i - 1))
+					elems.pb(mat[n - i - 1][j]);
+				if (j != (m - j - 1)) {
+					elems.pb(mat[i][m - j - 1]);
+				}
+				int curr = INF;
+				
+				for (auto x : elems) {
+					int now = 0;
+					for (auto y : elems) {
+						now += abs(x - y);
+					}
+					curr = min(curr, now);
+				}
 
+				int sum = 0;
+				for (auto x : elems) sum += x;
+				vector<int> nw;
+				nw.pb(sum / size(elems));
+				nw.pb(nw.back() + 1);
+				nw.pb(nw[0] - 1);
+				for (auto x : nw) {
+					int now = 0;
+					for (auto y : elems) {
+						now += abs(x - y);
+					}
+					curr = min(curr, now);
+				}
+				ans += curr;
+			}
+		}
+		cout << ans << endl;
+	}
 	return 0;
 }
-```

@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -34,8 +25,61 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int32_t main() { fastio;
+int getMin(vector<int> a, vector<int> b) {
 
+	int ans = a[0] + a[1] + a[2], t1;
+
+	if (min(a[0], b[2]) > 0) {
+		t1 = min(a[0], b[2]);
+		a[0] -= t1;
+		b[2] -= t1;
+		ans = min(ans, getMin(a, b));
+		a[0] += t1;
+		b[2] += t1;
+	}
+
+	if (min(a[1], b[0]) > 0) {
+		t1 = min(a[1], b[0]);
+		a[1] -= t1;
+		b[0] -= t1;
+		ans = min(ans, getMin(a, b));
+		a[1] += t1;
+		b[0] += t1;
+	}
+
+	if (min(a[2], b[1]) > 0) {
+		t1 = min(a[2], b[1]);
+		a[2] -= t1;
+		b[1] -= t1;
+		ans = min(ans, getMin(a, b));
+		a[2] += t1;
+		b[1] += t1;
+	}
+
+	for (int i = 0; i < 3; i++) {
+		if (min(a[i], b[i]) > 0) {
+			t1 = min(a[i], b[i]);
+			a[i] -= t1;
+			b[i] -= t1;
+			ans = min(ans, getMin(a, b));
+			a[i] += t1;
+			b[i] += t1;
+		}
+	}
+
+	return ans;	
+}
+
+int getMax(vector<int> a, vector<int> b) {
+	return min(a[0], b[1]) + min(a[1], b[2]) + min(a[2], b[0]);
+}
+
+int32_t main() { fastio;
+	int n; cin >> n;
+	vector<int> a(3), b(3);
+	cin >> a[0] >> a[1] >> a[2];
+	cin >> b[0] >> b[1] >> b[2];
+
+	cout << getMin(a, b) << " " << getMax(a, b) << endl;
 	return 0;
 }
-```

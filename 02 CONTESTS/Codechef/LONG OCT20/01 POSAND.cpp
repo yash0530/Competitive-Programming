@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -34,8 +25,48 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int32_t main() { fastio;
+bool po2(int n) {
+	return (n & (n - 1)) == 0;
+}
 
+void getSeq(int n) {
+	if (n == 1) {
+		cout << 1 << endl;
+		return;
+	}
+	if (po2(n)) {
+		cout << -1 << endl;
+		return;
+	}
+	if (n == 3) {
+		cout << "1 3 2" << endl;
+		return;
+	}
+	if (n == 5) {
+		cout << "2 3 1 5 4" << endl;
+		return;
+	}
+	vector<int> halva = { 2, 3, 1, 5, 4 };
+	for (int i = 6; i <= n; i++) {
+		if (po2(i)) {
+			halva.pb(i + 1);
+			halva.pb(i);
+			i++;
+		} else {
+			halva.pb(i);
+		}
+	}
+	for (auto alpha : halva) {
+		cout << alpha << " ";
+	}
+	cout << endl;
+}
+
+int32_t main() { fastio;
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		getSeq(n);
+	}
 	return 0;
 }
-```

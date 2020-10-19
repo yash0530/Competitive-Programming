@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -35,7 +26,65 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
+	int t; cin >> t;
+	while (t--) {
+		int n, p, k, x;
+		cin >> n >> x >> p >> k;
+		vector<int> elements(n);
+		for (auto &x : elements) {
+			cin >> x;
+		}
+		bool not_found = false;
+		sort(elements.begin(), elements.end());
+		p--;k--;
 
+		if (find(elements.begin(), elements.end(), x) == elements.end()) {
+			not_found = true;
+			elements[k] = x;
+			sort(elements.begin(), elements.end());
+		}
+
+		vector<int> exes;
+		for (int i = 0; i < n; i++) {
+			if (elements[i] == x) {
+				exes.pb(i);
+			}
+		}
+		deb(p);
+		deb(k);
+		if (elements[p] == x) {
+			cout << not_found << endl;
+			continue;
+		}
+		if (p == k) {
+			// x - k(p)
+			if (exes.back() < k) {
+				cout << p - exes.back() + not_found << endl;
+			} 
+			// k(p) - x
+			else {
+				cout << exes.front() - p + not_found << endl;
+			}
+			continue;
+		}
+
+		if (p > k) {
+			// k - p - x
+			if (exes.front() > p) {
+				cout << exes.front() - p + not_found << endl;
+				continue;
+			}
+		}
+
+		if (p < k) {
+			// x - p - k
+			if (exes.back() < p) {
+				cout << p - exes.back() + not_found << endl;
+				continue;
+			}
+		}
+
+		cout << -1 << endl;
+	}
 	return 0;
 }
-```

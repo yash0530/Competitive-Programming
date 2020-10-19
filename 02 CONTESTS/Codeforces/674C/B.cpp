@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -35,7 +26,30 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-
+	int t; cin >> t;
+	while (t--) {
+		int n, m;
+		cin >> n >> m;
+		if (m % 2 == 0) {
+			bool yes = false;
+			for (int i = 0; i < n; i++) {
+				int a, b, c, d;
+				cin >> a >> b >> c >> d;
+				if (b == c) {
+					yes = true;
+				}
+			}
+			if (yes) {
+				cout << "YES" << endl;
+			} else {
+				cout << "NO" << endl;
+			}
+		} else if (m & 1) {
+			cout << "NO" << endl;
+			for (int i = 0; i < 4 * n; i++) {
+				int x; cin >> x;
+			}
+		}
+	}
 	return 0;
 }
-```

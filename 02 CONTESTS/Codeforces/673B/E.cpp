@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -34,8 +25,59 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int32_t main() { fastio;
+int dp[35][3];
 
+void res(vector<int> &arr, int pos) {
+	if (pos < 0) {
+		return;
+	}
+
+	// for case bit is 0
+	int count = 0;
+	for (auto x : arr) {
+		if (x & (1 << pos)) {
+			count++;
+		} else {
+			dp[pos][0] += count;
+		}
+	}
+
+	// for case bit is 1
+	count = 0;
+	for (auto x : arr) {
+		if (x & (1 << pos)) {
+			dp[pos][1] += count;
+		} else {
+			count++;
+		}
+	}
+
+	vector<int> t1, t2;
+	for (auto x : arr) {
+		if (x & (1 << pos)) {
+			t1.pb(x);
+		} else {
+			t2.pb(x);
+		}
+	}
+	if (size(t1)) res(t1, pos - 1);
+	if (size(t2)) res(t2, pos - 1);
+}
+
+int32_t main() { fastio;
+	int n; cin >> n;
+	vector<int> arr(n);
+	for (auto &a : arr) cin >> a;
+	res(arr, 30);
+	int ans = 0, val = 0;
+	for (int i = 30; i >= 0; i--) {
+		if (dp[i][0] > dp[i][1]) {
+			ans |= (1 << i);
+			val += dp[i][1];
+		} else {
+			val += dp[i][0];
+		}
+	}
+	cout << val << " " << ans << endl;
 	return 0;
 }
-```

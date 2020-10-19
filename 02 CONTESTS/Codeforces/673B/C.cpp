@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -35,7 +26,46 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		vector<int> arr(n);
+		for (auto &a : arr) cin >> a;
+		vector<vector<int>> okays(n + 1, { 0, n + 1 });
+		for (int i = 1; i <= n; i++) {
+			okays[arr[i - 1]].pb(i);
+		}
+		for (auto &okay : okays) {
+			sort(okay.begin(), okay.end());
+		}
+		vector<int> res(n + 1, -1);
+		for (int i = 1; i <= n; i++) {
+			int mx = 0;
+			int prev = okays[i][0];
+			for (int j = 1; j < size(okays[i]); j++) {
+				int curr = okays[i][j] - prev;
+				prev = okays[i][j];
+				mx = max(curr, mx);
+			}
+			if (mx <= n) {
+				if (res[mx] == -1) {
+					res[mx] = i;
+				}
+			}
+		}
+		int prev = INF;
+		for (int i = 1; i <= n; i++) {
+			if (res[i] == -1 and prev == INF) {
+				cout << -1 << " ";
+				continue;
+			}
+			if (res[i] == -1) {
+				res[i] = prev;
+			}
+			res[i] = min(prev, res[i]);
+			cout << res[i] << " ";
+			prev = res[i];
+		} cout << endl;
+	}
 	return 0;
 }
-```

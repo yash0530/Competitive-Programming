@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -35,7 +26,40 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-
+	int n; cin >> n;
+	vector<int> arr(n);
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+	}
+	getMat(dp, n, n, 0);	
+	for (int i = 0; i < n; i++) {
+		int count_two = 0;
+		for (int j = i; j < n; j++) {
+			if (i == j) {
+				dp[i][j] = 1;
+			} else {
+				if (arr[j] == 1) {
+					dp[i][j] = dp[i][j - 1] + 1;
+				} else {
+					dp[i][j] = max(dp[i][j - 1], count_two + 1);
+				}
+			}
+			count_two += (arr[j] == 2);
+		}
+	}
+	vector<int> one_pref(n + 2), two_pref(n + 2);
+	for (int i = 1; i <= n; i++) {
+		one_pref[i] = one_pref[i - 1] + (arr[i - 1] == 1);
+	}
+	for (int i = n - 1; i >= 0; i--) {
+		two_pref[i] = two_pref[i + 1] + (arr[i] == 2);
+	}
+	int ans = 0;
+	for (int i = 0; i < n; i++) {
+		for (int j = i; j < n; j++) {
+			ans = max(ans, one_pref[i] + two_pref[j + 1] + dp[i][j]);
+		}
+	}
+	cout << ans << endl;
 	return 0;
 }
-```

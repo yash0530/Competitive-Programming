@@ -89,7 +89,7 @@ int lcmArray(vector<int> arr) {
 
 // ---------------------------- LIS ----------------------------- //
 
-vector<int> LIS(vector<int> &arr) {
+int LIS(vector<int> &arr) {
     vector<int> lis;
     for (auto x : arr) {
         int p = lower_bound(lis.begin(), lis.end(), x) - lis.begin();
@@ -99,7 +99,7 @@ vector<int> LIS(vector<int> &arr) {
             lis.pb(x);
         }
     }
-    return lis;
+    return size(lis);
 }
 
 // ----------------------- Floyd Warshall ------------------- //
@@ -244,10 +244,8 @@ bool hasCycle() {
 // ----------------------- DFS ORDERING ------------------ //
 int location;
 pii dfsM[maxN];
-// set location to -1 before dfs call
-// dfs ordering
 void dfs(int u = 1, int p = 1) {
-    dfsM[u].fs = ++location;
+    dfsM[u].fs = location++;
     for (auto x : adj[u]) {
         if (x != p) {
             dfs(x, u);
@@ -257,7 +255,7 @@ void dfs(int u = 1, int p = 1) {
 }
 
 // ------------------------------------------------------------- //
-const int maxN = 200005;
+const int maxN = (int) 2e5 + 5;
 vector<int> invN(maxN), fact(maxN), invFact(maxN);
 void precomp() {
     fact[0] = fact[1] = invFact[0] = invFact[1] = invN[0] = invN[1] = 1;
