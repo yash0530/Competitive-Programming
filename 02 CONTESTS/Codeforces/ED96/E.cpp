@@ -25,7 +25,44 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int32_t main() { fastio;
+const int maxN = 2e5 + 5;
+int tree[maxN];
 
+void update(int index, int val) {
+    while (index < maxN) {
+        tree[index] += val;
+        index += (index & -index);
+    }
+}
+
+int read(int index) {
+    int sum = 0;
+    while (index) {
+        sum += tree[index];
+        index -= (index & -index);
+    }
+    return sum;
+}
+
+int32_t main() { fastio;
+	int n; cin >> n;
+	string s; cin >> s;
+	string r = s;
+	reverse(r.begin(), r.end());
+	vector<set<int>> freq(128);
+	for (int i = 0; i < n; i++) {
+		freq[r[i]].insert(i);
+	}
+	vector<int> res(n);
+	for (int i = 0; i < n; i++) {
+		res[i] = *freq[s[i]].begin() + 1;
+		freq[s[i]].erase(freq[s[i]].begin());
+	}
+	int ans = 0;
+	for (int i = 0; i < n; i++) {
+		ans += (i - read(res[i]));
+		update(res[i] + 1, 1);
+	}
+	cout << ans << endl;
 	return 0;
 }

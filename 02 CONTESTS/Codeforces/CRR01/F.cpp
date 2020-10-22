@@ -25,7 +25,45 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+// histogram approach explained in the editorial
 int32_t main() { fastio;
+	int n; cin >> n;
+	string s; cin >> s;
+	s.pb('0');
+	vector<vector<int>> pos(n + 5);
+	for (int i = 0; i <= n; i++) {
+		if (i and s[i] == '0' and s[i - 1] == '1') {
+			int loc = i - 1, val = 1;
+			while (loc >= 0 and s[loc] == '1') {
+				pos[val].pb(loc);
+				val++; loc--;
+			}
+		}
+	}
+	s.pop_back();
 
+	int curr = 0, ans = 0, sum = 0, loc = -1;
+	for (int i = 0; i < n; i++) {
+		if (s[i] == '0') {
+			curr = 0;
+			ans += sum;
+			loc = i;
+		} else {
+			curr++;
+			if (pos[curr].empty()) {
+				sum += i + 1;
+			} else {
+				auto x = lower_bound(pos[curr].begin(), pos[curr].end(), loc);
+				if (x == pos[curr].begin()) {
+					sum += i + 1;
+				} else {
+					x--;
+					sum += (i - *x);
+				}
+			}
+			ans += sum;
+		}
+	}
+	cout << ans << endl;
 	return 0;
 }

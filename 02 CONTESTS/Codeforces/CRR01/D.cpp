@@ -26,6 +26,53 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-
+	int n; cin >> n;
+	vector<int> arr(n);
+	for (auto &a : arr) {
+		cin >> a;
+	}
+	vector<pii> res;
+	set<pii> avails_one, avails_two;
+	int col = 1;
+	for (int i = n - 1; i >= 0; i--) {
+		if (arr[i] == 1) {
+			res.pb({ col, i + 1 });
+			avails_one.insert({ col, i + 1 });
+			col++;
+		} else if (arr[i] == 2) {
+			if (size(avails_one)) {
+				auto avail = *avails_one.begin();
+				avails_one.erase(avail);
+				res.pb({ avail.fs, i + 1 });
+				avails_two.insert(res.back());
+			} else {
+				cout << -1 << endl;
+				exit(0);
+			}
+		} else if (arr[i] == 3) {
+			if (size(avails_two)) {
+				auto avail = *avails_two.begin();
+				avails_two.erase(avail);
+				res.pb({ col, i + 1 });
+				avails_two.insert(res.back());	
+				res.pb({ col, avail.sc });
+				col++;
+			} else if (size(avails_one)) {
+				auto avail = *avails_one.begin();
+				avails_one.erase(avail);
+				res.pb({ col, i + 1 });
+				avails_two.insert(res.back());	
+				res.pb({ col, avail.sc });	
+				col++;
+			} else {
+				cout << -1 << endl;
+				exit(0);
+			}
+		}
+	}
+	cout << size(res) << endl;
+	for (auto r : res) {
+		cout << n - r.fs + 1 << " " << r.sc << endl;
+	}
 	return 0;
 }

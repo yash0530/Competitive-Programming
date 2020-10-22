@@ -25,7 +25,40 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
-int32_t main() { fastio;
+int getVal(int val, int bk) {
+	int rem = val % bk;
+	int okay = val / bk;
+	int ans = (bk - rem) * okay * okay;
+	ans += rem * (okay + 1) * (okay + 1);
+	return ans;
+}
 
+int32_t main() { fastio;
+	int n, k, x;
+	cin >> n >> k;
+	// what poss val diff can I achieve
+	// what is my current val
+	// how many times have I divided it
+	priority_queue<array<int, 3>> pq;
+	for (int i = 0; i < n; i++) {
+		cin >> x;
+		if (x == 1) {
+			pq.push({ 0, 1, 1 });
+		} else {
+			pq.push({ getVal(x, 1) - getVal(x, 2), x, 1 });
+		}
+	}
+	int count = n;
+	while (count < k) {
+		count++;
+		auto x = pq.top(); pq.pop();
+		pq.push({ getVal(x[1], x[2] + 1) - getVal(x[1], x[2] + 2), x[1], x[2] + 1 });
+	}
+	int ans = 0;
+	while (!pq.empty()) {
+		auto x = pq.top(); pq.pop();
+		ans += getVal(x[1], x[2]);
+	}
+	cout << ans << endl;
 	return 0;
 }

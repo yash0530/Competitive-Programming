@@ -26,6 +26,32 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		string s; cin >> s;
+		int a = 0, b = 0, c = 0;
+		for (auto x : s) {
+			a += (x == '<');
+			b += (x == '>');
+			c += (x == '-');
+		}
+		if (a == n or b == n or c == n or a == 0 or b == 0) {
+			cout << n << endl;
+		} else {
+			vector<int> good(n, 0);
+			for (int i = 0; i < n; i++) {
+				if (s[i] == '-') {
+					good[i] = 1;
+					good[(i + 1) % n] = 1;
+				}
+			}
+			int sum = 0;
+			for (int i = 0; i < n; i++) {
+				sum += good[i];
+			}
+			cout << sum << endl;
+		}
+	}
 	return 0;
 }

@@ -26,6 +26,47 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		string s; cin >> s;
+		char prev = '2';
+		vector<int> blocks, left;
+		for (int i = 0; i < n; i++) {
+			if (prev != s[i]) {
+				blocks.pb(1);
+			} else {
+				blocks[size(blocks) - 1]++;
+			}
+			prev = s[i];
+		}
+		int m = size(blocks);
+		for (int i = 0; i < m; i++) {
+			if (blocks[i] > 1) {
+				left.pb(i);
+			}
+		}
+		reverse(left.begin(), left.end());
+		int count = 0;
+		for (int i = 0; i < m; i++) {
+			if (i == (m - 1)) {
+			} else {
+				if (size(left) and (left.back() == i)) {
+					left.pop_back();
+				} else {
+					if (size(left)) {
+						blocks[left[size(left) - 1]]--;
+						if (blocks[left.back()] == 1) {
+							left.pop_back();
+						}
+					} else {
+						i++;
+					}
+				}
+			}
+			count++;
+		}
+		cout << count << endl;
+	}
 	return 0;
 }

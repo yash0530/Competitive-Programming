@@ -26,6 +26,12 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-
+	int t; cin >> t;
+	while (t--) {
+		string s; cin >> s;
+		int ans = (s[0] - '1') * 10;
+		ans += size(s) * (size(s) + 1) / 2;
+		cout << ans << endl;
+	}
 	return 0;
 }

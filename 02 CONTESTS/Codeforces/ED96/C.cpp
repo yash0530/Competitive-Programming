@@ -26,6 +26,23 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		vector<array<int, 2>> ans;
+		multiset<int> s;
+		for (int i = 2; i <= n; i++) s.insert(i);
+		while (size(s) > 1) {
+			int v1 = *s.rbegin(); s.erase(*s.rbegin());
+			int v2 = *s.rbegin(); s.erase(*s.rbegin());
+			ans.pb({ v1, v2 });
+			s.insert((v1 + v2 + 1) / 2);
+		}
+		cout << (2 + *s.begin()) / 2 << endl;
+		for (auto x : ans) {
+			cout << x[0] << " " << x[1] << endl;
+		}
+		cout << 1 << " " << *s.begin() << endl;
+	}
 	return 0;
 }

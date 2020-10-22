@@ -26,6 +26,32 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-
+	int n, x, y;
+	cin >> n >> x >> y;
+	vector<pii> conts(n);
+	for (auto &c : conts) {
+		cin >> c.fs >> c.sc;
+	}
+	vector<int> starts(x), ends(y);
+	for (auto &s : starts) {
+		cin >> s;
+	}
+	sort(starts.begin(), starts.end());
+	for (auto &e : ends) {
+		cin >> e;
+	}
+	sort(ends.begin(), ends.end());
+	int mx = INF;
+	for (auto c : conts) {
+		auto aa = upper_bound(starts.begin(), starts.end(), c.fs);
+		if (aa != starts.begin()) {
+			--aa;
+			auto bb = lower_bound(ends.begin(), ends.end(), c.sc);
+			if (bb != ends.end()) {
+				mx = min(mx, *bb - *aa + 1);
+			}
+		}
+	}
+	cout << mx << endl;
 	return 0;
 }

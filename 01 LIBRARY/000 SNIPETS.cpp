@@ -113,7 +113,8 @@ for (int k = 1; k <= n; k++) {
 }
 
 // ------------------------ Dijkstra ----------------------- //
-vector<int> dijkstra(int x, int n, vector<vector<Edge>> &adj) {
+vector<int> dijkstra(int x, vector<vector<Edge>> &adj) {
+    int n = size(adj);
     vector<int> distance(n + 1);
     vector<bool> processed(n + 1);
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;

@@ -26,6 +26,16 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
 int32_t main() { fastio;
-
+	int t; cin >> t;
+	while (t--) {
+		int n, k; cin >> n >> k;
+		vector<int> arr(n);
+		for (auto &a : arr) cin >> a;
+		sort(arr.begin(), arr.end(), greater<int>());
+		for (int i = 1; i < min(n, k + 1); i++) {
+			arr[0] += arr[i];
+		}
+		cout << arr[0] << endl;
+	}
 	return 0;
 }

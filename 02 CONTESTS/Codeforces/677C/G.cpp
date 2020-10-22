@@ -32,8 +32,7 @@ struct Edge {
     }
 };
 
-vector<int> dijkstra(int x, vector<vector<Edge>> &adj) {
-    int n = size(adj);
+vector<int> dijkstra(int x, int n, vector<vector<Edge>> &adj) {
     vector<int> distance(n + 1);
     vector<bool> processed(n + 1);
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
@@ -58,38 +57,36 @@ vector<int> dijkstra(int x, vector<vector<Edge>> &adj) {
 }
 
 int32_t main() { fastio;
-	int n, k, a, b;
-	cin >> n >> k;	
-	int x1, y1, x2, y2;
-	cin >> x1 >> y1 >> x2 >> y2;
-	vector<array<int, 2>> xs, ys, portals;
-	vector<vector<Edge>> adj(k + 5);
+	int n, m, k;
+	cin >> n >> m >> k;
+	vector<vector<Edge>> adj(n + 1);
+	int u, v, w;
+	vector<pii> edges;
+	for (int i = 0; i < m; i++) {
+		cin >> u >> v >> w;
+		adj[u].pb({ v, w });
+		adj[v].pb({ u, w });
+		edges.pb({ u, v });
+	}
+	vector<vector<int>> dists(n + 1);
+	for (int i = 1; i <= n; i++) {
+		dists[i] = dijkstra(i, n, adj);
+	}
+	int ans = 0;
+	vector<pii> routes(k);
 	for (int i = 0; i < k; i++) {
-		cin >> a >> b;
-		portals.pb({ a, b });
-		xs.pb({ a, i });
-		ys.pb({ b, i });
+		cin >> routes[i].fs >> routes[i].sc;
+		ans += dists[routes[i].fs][routes[i].sc];
 	}
-	sort(xs.begin(), xs.end());
-	sort(ys.begin(), ys.end());
-	for (int i = 1; i < k; i++) {
-		adj[xs[i - 1][1] + 1].pb({ xs[i][1] + 1, xs[i][0] - xs[i - 1][0] });
-		adj[xs[i][1] + 1].pb({ xs[i - 1][1] + 1, xs[i][0] - xs[i - 1][0] });
-
-		adj[ys[i - 1][1] + 1].pb({ ys[i][1] + 1, ys[i][0] - ys[i - 1][0] });
-		adj[ys[i][1] + 1].pb({ ys[i - 1][1] + 1, ys[i][0] - ys[i - 1][0] });
+	for (auto e : edges) {
+		int curr = 0;
+		for (auto r : routes) {
+			curr += min({ dists[r.fs][r.sc], 
+						  dists[r.fs][e.fs] + dists[r.sc][e.sc],
+						  dists[r.fs][e.sc] + dists[r.sc][e.fs] });
+		}
+		ans = min(curr, ans);
 	}
-	for (int i = 0; i < k; i++) {
-		int th = i + 1;
-		auto p = portals[i];
-
-		adj[k + 1].pb({ th, min(abs(x1 - p[0]), abs(y1 - p[1])) });
-		adj[th].pb({ k + 1, min(abs(x1 - p[0]), abs(y1 - p[1])) });
-
-		adj[k + 2].pb({ th, abs(x2 - p[0]) + abs(y2 - p[1]) });
-		adj[th].pb({ k + 2, abs(x2 - p[0]) + abs(y2 - p[1]) });
-	}
-	auto da = dijkstra(k + 1, adj);
-	cout << min({ abs(x1 - x2) + abs(y1 - y2), da[k + 2] });
+	cout << ans << endl;
 	return 0;
 }

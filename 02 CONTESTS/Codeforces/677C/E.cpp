@@ -25,7 +25,20 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 
+const int maxN = 25;
+vector<int> invN(maxN), fact(maxN), invFact(maxN);
+void precomp() {
+    fact[0] = fact[1] = 1;
+    for (int i = 2; i < maxN; i++) {
+        fact[i] = fact[i - 1] * i;
+    }
+}
+int nck(int n, int k) {
+    return fact[n] / (fact[k] * fact[n - k]);
+}
 int32_t main() { fastio;
-
+	precomp();
+	int n; cin >> n;
+	cout << 2 * nck(n, n / 2) * fact[n / 2] * fact[n / 2] / (n * n) << endl;
 	return 0;
 }
