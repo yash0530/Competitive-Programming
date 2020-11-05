@@ -27,6 +27,27 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 int32_t main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		int n, k, x;
+		cin >> n >> k;
+		set<int> s;
+		for (int i = 0; i < n; i++) {
+			cin >> x; s.insert(x);
+		}
+		if (k == 1 and size(s) > 1) {
+			cout << -1 << endl;
+		} else if (k == 1) {
+			cout << 1 << endl;
+		} else {
+			int ans = 1;
+			int sz = size(s) - k;
+			if (sz > 0) {
+				ans += sz / (k - 1);
+				if (sz % (k - 1)) ans++;
+			}
+			cout << ans << endl;
+		}
+	}
 	return 0;
 }

@@ -27,6 +27,27 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 int32_t main() { fastio;
-	
+	int n, m;
+	cin >> n >> m;
+	vector<array<int, 2>> robs(n), lights(m);
+	for (auto &r : robs) cin >> r[0] >> r[1];
+	for (auto &l : lights) cin >> l[0] >> l[1];
+
+	int x = -1, y = -1;
+	for (auto r : robs) {
+		int mx = -1, my = -1;
+		for (auto l : lights) {
+			if (l[0] - r[0] > 0) {
+				mx = max(l[0] - r[0], mx);
+			}
+			if (l[1] - r[1] > 0) {
+				my = max(l[1] - r[1], my);
+			}
+		}
+		deb(mx);deb(my);
+		x = max(x, mx);
+		y = max(y, my);
+	}
+	cout << min(x, y) + 1 << endl;
 	return 0;
 }

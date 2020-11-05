@@ -27,6 +27,31 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 int32_t main() { fastio;
-	
+	int n, m; cin >> n >> m;
+	string x, y;
+	map<string, string> chef_country;
+	for (int i = 0; i < n; i++) {
+		cin >> x >> y;
+		chef_country[x] = y;
+	}
+	map<string, int> country_freq;
+	map<string, int> chef_freq;
+	for (int i = 0; i < m; i++) {
+		cin >> x;
+		chef_freq[x]++;
+		country_freq[chef_country[x]]++;
+	}
+	int mx = 0;
+	for (auto cf : country_freq) {
+		if (cf.sc > mx) {
+			mx = cf.sc; x = cf.fs;
+		}
+	} cout << x << endl;
+	mx = 0;
+	for (auto cf : chef_freq) {
+		if (cf.sc > mx) {
+			mx = cf.sc; x = cf.fs;
+		}
+	} cout << x << endl;
 	return 0;
 }

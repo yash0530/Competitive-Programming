@@ -27,6 +27,6 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 int32_t main() { fastio;
-	
+
 	return 0;
 }

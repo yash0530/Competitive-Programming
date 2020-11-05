@@ -1,3 +1,5 @@
+// Div2 C
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -26,7 +28,36 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
+int n;
+const int maxN = 1e5 + 5;
+vector<int> adj[maxN];
+
+pii dfs(int root = 1, int par = 1) {
+	int mx = 0, count = 1;
+	for (auto x : adj[root]) {
+		if (x != par) {
+			pii okay = dfs(x, root);
+			mx = max(mx, okay.sc);
+			count += okay.fs;
+		}
+	}
+	int ans = mx + count;
+	return { count, ans };
+}
+
 int32_t main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		int n, x; cin >> n;
+		for (int i = 2; i <= n; i++) {
+			cin >> x;
+			adj[i].pb(x);
+			adj[x].pb(i);
+		}
+		cout << dfs().sc << endl;
+		for (int i = 1; i <= n; i++) {
+			adj[i].clear();
+		}
+	}
 	return 0;
 }

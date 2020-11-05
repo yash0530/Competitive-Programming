@@ -27,6 +27,35 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 int32_t main() { fastio;
-	
+	int n, m;
+	cin >> n >> m;
+	vector<pii> A(n), B(m);
+	for (int i = 0; i < n; i++) {
+		cin >> A[i].fs;
+		A[i].sc = i;
+	}
+	for (int i = 0; i < m; i++) {
+		cin >> B[i].fs;
+		B[i].sc = i;
+	}
+	sort(_all(A));
+	sort(_all(B));
+
+	int i = 0, j = 0;
+	cout << A[0].sc << " " << B[0].sc << endl;
+	while (i < n and j < m) {
+		if (i == (n - 1) or j == (m - 1)) break;
+		cout << A[i].sc << " " << B[i + 1].sc << endl;
+		cout << A[i + 1].sc << " " << B[i + 1].sc << endl;
+		i++; j++;
+	}
+	while (i != (n - 1)) {
+		i++;
+		cout << A[i].sc << " " << B.back().sc << endl;
+	}
+	while (j != (m - 1)) {
+		j++;
+		cout << A.back().sc << " " << B[j].sc << endl;
+	}
 	return 0;
 }

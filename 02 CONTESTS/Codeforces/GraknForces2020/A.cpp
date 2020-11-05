@@ -27,6 +27,40 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 int32_t main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		int x, y, z;
+		vector<int> aa(n), bb(n), cc(n);
+		for (auto &a : aa) cin >> a;
+		for (auto &b : bb) cin >> b;
+		for (auto &c : cc) cin >> c;
+		cout << aa[0] << " ";
+		int prev = aa[0];
+		int ff = aa[0];
+		for (int i = 1; i < n; i++) {
+			x = aa[i], y = bb[i], z = cc[i];
+			if (i == (n - 1)) {
+				if (prev != x and ff != x) {
+					cout << x << " ";
+					prev = x;
+				} else if (prev != y and ff != y) {
+					cout << y << " ";
+					prev = y;
+				} else {
+					cout << z << " ";
+				}
+			} else {
+				if (prev != x) {
+					cout << x << " ";
+					prev = x;
+				} else {
+					cout << y << " ";
+					prev = y;
+				}
+			}
+		}
+		cout << endl;
+	}
 	return 0;
 }

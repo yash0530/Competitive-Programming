@@ -26,7 +26,49 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
+const int maxN = 1e5 + 5;
+
 int32_t main() { fastio;
-	
+	int t; cin >> t;
+	vector<vector<int>> sv(maxN);
+	for (int i = 2; i < maxN; i++) {
+		for (int j = i; j < maxN; j += i) {
+			sv[j].pb(i);
+		}
+	}
+	while (t--) {
+		int n; cin >> n;
+		vector<int> diff_arr(n + 1);
+		vector<pii> intervals(maxN, { -1, -1 });
+		for (int i = 0; i < n; i++) {
+			int x; cin >> x;
+			auto primes = sv[x];
+			for (auto p : primes) {
+				if (intervals[p].fs == -1) {
+					intervals[p].fs = i;
+					intervals[p].sc = i;
+				} else {
+					intervals[p].sc = i;
+				}
+			}
+		}
+		for (auto inv : intervals) {
+			if (inv.fs != -1) {
+				diff_arr[inv.fs]++;
+				diff_arr[inv.sc]--;
+			}
+		}
+		for (int i = 1; i <= n; i++) {
+			diff_arr[i] += diff_arr[i - 1];
+		}
+		int res = -1;
+		for (int i = 0; i < (n - 1); i++) {
+			if (diff_arr[i] == 0) {
+				res = i + 1;
+				break;
+			}
+		}
+		cout << res << endl;
+	}
 	return 0;
 }

@@ -27,6 +27,24 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 int32_t main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		vector<int> arr(n);
+		for (auto &a : arr) {
+			cin >> a;
+		}
+		int ans = 0;
+		for (int i = 0; i < 55; i++) {
+			int sum = 0;
+			for (auto a : arr) {
+				sum += (a % (1LL << (i + 1)));
+			}
+			if (sum >= (1LL << i)) {
+				ans |= (1LL << i);
+			}
+		}
+		cout << ans << endl;
+	}
 	return 0;
 }

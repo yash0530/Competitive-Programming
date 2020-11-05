@@ -1,43 +1,108 @@
-#include <bits/stdc++.h>
-using namespace std;
+// C++ program to find largest rectangle with all 1s 
+// in a binary matrix 
+#include <bits/stdc++.h> 
+using namespace std; 
 
-#define en "\n"
-#define INF (int) 9e18
-#define HELL (int) (1e9 + 7)
-#define int long long
-#define double long double
-#define uint unsigned long long
-#define pii pair<int, int>
-#define pb push_back
-#define fs first
-#define sc second
-#define size(a) (int) a.size()
-#define deb(x) cerr << #x << " => " << x << en
-#define debp(a) cerr << #a << " => " <<"("<<a.fs<<", "<<a.sc<<") " << en;
-#define deba(x) cerr << #x << en; for (auto a : x) cerr << a << " "; cerr << en;
-#define debpa(x) cerr << #x << en; for (auto a : x)cerr<<"("<<a.fs<<", "<<a.sc<<") "; cerr << en;
-#define debm(x) cerr << #x << en; for (auto a : x){for(auto b : a) cerr << b << " "; cerr << en;}
-#define getMat(x, n, m, val) vector<vector<int>> x(n, vector<int> (m, val))
-#define fastio ios_base :: sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-#define pout cout << fixed << setprecision(10)
-int fastpow(int a, int b, int m = HELL) { int res = 1; a %= m;
-while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } return res;}
-#define inv(a) fastpow(a, HELL - 2)
-#define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
+int R, C;
 
-int32_t main() { fastio;
-	int n, k, j;
-	cin >> n >> k >> j;
-	vector<int> arr(n);
-	for (auto &a : arr) {
-		cin >> a;
+// Rows and columns in input matrix 
+// Finds the maximum area under the histogram represented 
+// by histogram. See below article for details. 
+// https:// www.geeksforgeeks.org/largest-rectangle-under-histogram/ 
+int maxHist(vector<int> row) 
+{ 
+	// Create an empty stack. The stack holds indexes of 
+	// hist[] array/ The bars stored in stack are always 
+	// in increasing order of their heights. 
+	stack<int> result; 
+
+	int top_val; // Top of stack 
+
+	int max_area = 0; // Initialize max area in current 
+	// row (or histogram) 
+
+	int area = 0; // Initialize area with current top 
+
+	// Run through all bars of given histogram (or row) 
+	int i = 0; 
+	while (i < C) { 
+		// If this bar is higher than the bar on top stack, 
+		// push it to stack 
+		if (result.empty() || row[result.top()] <= row[i]) 
+			result.push(i++); 
+
+		else { 
+			// If this bar is lower than top of stack, then 
+			// calculate area of rectangle with stack top as 
+			// the smallest (or minimum height) bar. 'i' is 
+			// 'right index' for the top and element before 
+			// top in stack is 'left index' 
+			top_val = row[result.top()]; 
+			result.pop(); 
+			area = top_val * i; 
+
+			if (!result.empty()) 
+				area = top_val * (i - result.top() - 1); 
+			max_area = max(area, max_area); 
+		} 
+	} 
+
+	// Now pop the remaining bars from stack and calculate area 
+	// with every popped bar as the smallest bar 
+	while (!result.empty()) { 
+		top_val = row[result.top()]; 
+		result.pop(); 
+		area = top_val * i; 
+		if (!result.empty()) 
+			area = top_val * (i - result.top() - 1); 
+
+		max_area = max(area, max_area); 
+	} 
+	return max_area; 
+} 
+
+// Returns area of the largest rectangle with all 1s in A[][] 
+int maxRectangle(vector<vector<int>> A) 
+{ 
+	// Calculate area for first row and initialize it as 
+	// result 
+
+	R = A.size();
+	C = A[0].size();
+
+	int result = maxHist(A[0]); 
+
+	// iterate over row to find maximum rectangular area 
+	// considering each row as histogram 
+	for (int i = 1; i < R; i++) { 
+
+		for (int j = 0; j < C; j++) 
+
+			// if A[i][j] is 1 then add A[i -1][j] 
+			if (A[i][j]) 
+				A[i][j] += A[i - 1][j]; 
+
+		// Update result if area with current row (as last row) 
+		// of rectangle) is more 
+		result = max(result, maxHist(A[i])); 
+	} 
+
+	return result; 
+} 
+
+// Driver code 
+int main() 
+{ 
+	int n, m;
+	cin >> n >> m;
+	vector<vector<int>> mat(n, vector<int>(m));
+	for (auto &n : mat) {
+		for (auto &x : n) {
+			cin >> x;
+		}
 	}
-	int res = arr[j - 1];
-	arr[j - 1] = INF;
-	sort(arr.begin(), arr.end());
-	for (int i = 0; i < (k - 1); i++) {
-		res += arr[i];
-	}
-	cout << res << endl;
-	return 0;
-}
+
+	cout << maxRectangle(mat) << endl; 
+
+	return 0; 
+} 

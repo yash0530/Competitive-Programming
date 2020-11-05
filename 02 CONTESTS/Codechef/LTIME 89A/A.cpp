@@ -27,6 +27,41 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 int32_t main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		int n, q; cin >> n >> q;
+		vector<int> arr(n);
+		for (auto &a : arr) {
+			cin >> a;
+		}
+		vector<int> okays;
+		okays.pb(arr[0]);
+		for (int i = 1; i < n; i++) {
+			if (okays.back() != arr[i]) {
+				okays.pb(arr[i]);
+			}
+		}
+		int ans = size(okays);
+		while (q--) {
+			int p, v;
+			cin >> p >> v;
+			p--;
+			if (n == 1) {}
+			else if (p == 0) {
+				if (v != arr[p + 1] and arr[p] == arr[p + 1]) ans++;
+				if (v == arr[p + 1] and arr[p] != arr[p + 1]) ans--;
+			} else if (p == (n - 1)) {
+				if (v != arr[p - 1] and arr[p] == arr[p - 1]) ans++;
+				if (v == arr[p - 1] and arr[p] != arr[p - 1]) ans--;
+			} else {
+				if (v != arr[p + 1] and arr[p] == arr[p + 1]) ans++;
+				if (v == arr[p + 1] and arr[p] != arr[p + 1]) ans--;
+				if (v != arr[p - 1] and arr[p] == arr[p - 1]) ans++;
+				if (v == arr[p - 1] and arr[p] != arr[p - 1]) ans--;
+			}
+			arr[p] = v;
+			cout << ans << endl;
+		}
+	}
 	return 0;
 }

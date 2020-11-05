@@ -27,6 +27,57 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 int32_t main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		int n, l; cin >> n >> l;
+		vector<int> arr(n + 2);
+		arr[0] = 0;
+		for (int i = 1; i <= n; i++) {
+			cin >> arr[i];
+		}
+		arr[n + 1] = l;
+		n += 2;
+		vector<array<double, 2>> car1(n), car2(n);
+		double speed = 0, time = 0;
+		int prev = 0;
+		for (int i = 0; i < n; i++) {
+			if (i)
+				time += (arr[i] - prev) / speed;
+			car1[i][0] = speed;
+			car1[i][1] = time;
+			speed++;
+			prev = arr[i];
+		}
+		speed = 0, time = 0;
+		prev = l;
+		for (int i = n - 1; i >= 0; i--) {
+			if (i != n - 1) 
+				time += (prev - arr[i]) / speed;
+			car2[i][0] = speed;
+			car2[i][1] = time;
+			speed++;
+			prev = arr[i];
+		}
+
+		// [0] -> speed, [1] -> time
+		for (int i = 0; i < n; i++) {
+			if (car1[i][1] >= car2[i][1]) {
+				double dist = arr[i] - arr[i - 1];
+				double ans = 0;
+				if (car1[i - 1][1] < car2[i][1]) {
+					double tttt = car2[i][1] - car1[i - 1][1];
+					dist -= tttt * (car1[i - 1][0] + 1);
+					ans += tttt;
+				} else {
+					double tttt = car1[i - 1][1] - car2[i][1];
+					dist -= tttt * (car2[i][0] + 1);
+				}
+				double tt = (dist / (car1[i - 1][0] + car2[i][0] + 2));
+				ans += car1[i - 1][1] + tt;
+				pout << ans << endl;
+				break;
+			}
+		}
+	}
 	return 0;
 }
