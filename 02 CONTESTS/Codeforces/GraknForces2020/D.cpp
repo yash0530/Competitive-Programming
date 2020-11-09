@@ -32,22 +32,25 @@ int32_t main() { fastio;
 	vector<array<int, 2>> robs(n), lights(m);
 	for (auto &r : robs) cin >> r[0] >> r[1];
 	for (auto &l : lights) cin >> l[0] >> l[1];
-
-	int x = -1, y = -1;
+	vector<array<int, 2>> okays;
 	for (auto r : robs) {
-		int mx = -1, my = -1;
 		for (auto l : lights) {
-			if (l[0] - r[0] > 0) {
-				mx = max(l[0] - r[0], mx);
-			}
-			if (l[1] - r[1] > 0) {
-				my = max(l[1] - r[1], my);
-			}
+			okays.pb({ max(l[0] - r[0] + 1, 0LL), max(l[1] - r[1] + 1, 0LL) });
 		}
-		deb(mx);deb(my);
-		x = max(x, mx);
-		y = max(y, my);
 	}
-	cout << min(x, y) + 1 << endl;
+	sort(okays.begin(), okays.end(), greater<array<int, 2>>());
+	vector<int> r(1e6 + 5);
+	int pref = 0;
+	for (auto x : okays) {
+		pref = max(pref, x[1]);
+		if (x[0] - 1 >= 0)
+			r[x[0] - 1] = max(r[x[0] - 1], pref);
+	}
+	int ans = INF;
+	for (int i = 1e6 + 1; i >= 0; i--) {
+		r[i] = max(r[i], r[i + 1]);
+		ans = min(ans, i + r[i]);
+	}
+	cout << ans << endl;
 	return 0;
 }

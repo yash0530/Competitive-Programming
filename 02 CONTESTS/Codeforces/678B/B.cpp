@@ -26,36 +26,32 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-int np2(int n) {
-	int val = 1;
-	while (n) {
-		val *= 2;
-		n /= 2;
-	}
-	return val / 2;
-}
-
-vector<array<int, 2>> gen(int n) {
-	if (n == 1) {
-		return {};
-	}
-	vector<array<int, 2>> r1 = gen(n / 2);
-	vector<array<int, 2>> r2 = gen(n / 2);
-	for (auto r : r2) {
-		r1.pb({ r[0] + (n / 2), r[1] + (n / 2) });
-	}
-	for (int i = 1; i <= (n / 2); i++) {
-		r1.pb({ i, i + (n / 2) });
-	}
-	return r1;
+bool isPrime(int x) {
+    for (int d = 2; d * d <= x; d++) {
+        if (x % d == 0) return false;
+    } return true;
 }
 
 int32_t main() { fastio;
-	int n; cin >> n;
-	int loc = np2(n);
-	auto x = gen(loc);
-	cout << 2 * size(x) << endl;
-	for (auto xx : x) cout << xx[0] << " " << xx[1] << endl;
-	for (auto xx : x) cout << xx[0] + (n - loc) << " " << xx[1] + (n - loc) << endl;
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		int num = -1;
+		for (int i = 101; i <= 1e5; i++) {
+			if (isPrime(i) and !isPrime(i - (n - 1))) {
+				num = (i - (n - 1));
+				break;
+			}
+		}
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (i == j) {
+					cout << num << " ";
+				} else {
+					cout << 1 << " ";
+				}
+			} cout << endl;
+		}
+	}
 	return 0;
 }

@@ -26,36 +26,42 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-int np2(int n) {
-	int val = 1;
-	while (n) {
-		val *= 2;
-		n /= 2;
-	}
-	return val / 2;
+int n, x, pos;
+
+const int maxN = (int) 2e3 + 5;
+vector<int> fact(maxN);
+void precomp() {
+    fact[0] = fact[1] = 1;
+    for (int i = 2; i < maxN; i++) {
+        fact[i] = mul(fact[i - 1], i);
+    }
 }
 
-vector<array<int, 2>> gen(int n) {
-	if (n == 1) {
-		return {};
+int getRes(int low, int high, int sm, int lg) {
+	if (low >= high) {
+		if (low and (low - 1) == pos) {
+			return fact[sm + lg];
+		}
+		return 0;
 	}
-	vector<array<int, 2>> r1 = gen(n / 2);
-	vector<array<int, 2>> r2 = gen(n / 2);
-	for (auto r : r2) {
-		r1.pb({ r[0] + (n / 2), r[1] + (n / 2) });
+	int mid = (low + high) / 2;
+	if (mid <= pos) {
+		if (mid == pos) {
+			return getRes(mid + 1, high, sm, lg);
+		} else if (sm) {
+			return mul(sm, getRes(mid + 1, high, sm - 1, lg));
+		}
+	} else {
+		if (lg) {
+			return mul(lg, getRes(low, mid, sm, lg - 1));
+		}
 	}
-	for (int i = 1; i <= (n / 2); i++) {
-		r1.pb({ i, i + (n / 2) });
-	}
-	return r1;
+	return 0;
 }
 
 int32_t main() { fastio;
-	int n; cin >> n;
-	int loc = np2(n);
-	auto x = gen(loc);
-	cout << 2 * size(x) << endl;
-	for (auto xx : x) cout << xx[0] << " " << xx[1] << endl;
-	for (auto xx : x) cout << xx[0] + (n - loc) << " " << xx[1] + (n - loc) << endl;
+	precomp();
+	cin >> n >> x >> pos;
+	cout << getRes(0, n, x - 1, n - x) << endl;
 	return 0;
 }

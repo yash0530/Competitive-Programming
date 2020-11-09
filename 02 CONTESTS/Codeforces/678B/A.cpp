@@ -26,36 +26,18 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-int np2(int n) {
-	int val = 1;
-	while (n) {
-		val *= 2;
-		n /= 2;
-	}
-	return val / 2;
-}
-
-vector<array<int, 2>> gen(int n) {
-	if (n == 1) {
-		return {};
-	}
-	vector<array<int, 2>> r1 = gen(n / 2);
-	vector<array<int, 2>> r2 = gen(n / 2);
-	for (auto r : r2) {
-		r1.pb({ r[0] + (n / 2), r[1] + (n / 2) });
-	}
-	for (int i = 1; i <= (n / 2); i++) {
-		r1.pb({ i, i + (n / 2) });
-	}
-	return r1;
-}
-
 int32_t main() { fastio;
-	int n; cin >> n;
-	int loc = np2(n);
-	auto x = gen(loc);
-	cout << 2 * size(x) << endl;
-	for (auto xx : x) cout << xx[0] << " " << xx[1] << endl;
-	for (auto xx : x) cout << xx[0] + (n - loc) << " " << xx[1] + (n - loc) << endl;
+	int t; cin >> t;
+	while (t--) {
+		int n, m; cin >> n >> m;
+		int sum = 0;
+		vector<int> arr(n);
+		for (auto &a : arr) {
+			cin >> a;
+			sum += a;
+		}
+		if (sum == m) cout << "YES" << endl;
+		else cout << "NO" << endl;
+	}
 	return 0;
 }
