@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -36,7 +27,49 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-
+	int n, x; char ch; cin >> n;
+	stack<int> st;
+	vector<int> res(n);
+	vector<pair<char, int>> okays;
+	bool poss = true;
+	for (int i = 1, j = 0; i <= (2 * n); i++) {
+		cin >> ch;
+		okays.pb({ ch, -1 });
+		if (ch == '-') {
+			cin >> x;
+			okays[i - 1].sc = x;
+			if (st.empty()) {
+				poss = false;
+				break;
+			} else {
+				res[st.top()] = x;
+				st.pop();
+			}
+		} else {
+			st.push(j++);
+		}
+	}
+	if (poss) {
+		int i = 0;
+		set<int> ss;
+		for (auto x : okays) {
+			if (x.fs == '-') {
+				if (*ss.begin() != x.sc) {
+					poss = false;
+				}
+				ss.erase(ss.begin());
+			} else {
+				ss.insert(res[i++]);
+			}
+		}
+	}
+	if (poss) {
+		cout << "YES" << endl;
+		for (auto &r : res) {
+			cout << r << " ";
+		} cout << endl;
+	} else {
+		cout << "NO" << endl;
+	}
 	return 0;
 }
-```

@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -36,7 +27,33 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-
+	int t; cin >> t;
+	while (t--) {
+		int n, m;
+		cin >> n >> m;
+		getMat(rows, n, m, 0);
+		map<int, int> num_col;
+		int i = 0;
+		for (auto &r : rows) {
+			for (auto &x : r) {
+				cin >> x;
+				num_col[x] = i;
+			}
+			i++;
+		}
+		getMat(cols, m, n, 0);
+		for (auto &c : cols) {
+			for (auto &x : c) cin >> x;
+		}
+		vector<int> ans[n]; i = 0;
+		for (auto x : cols[0]) {
+			ans[i++] = rows[num_col[x]];
+		}
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				cout << ans[i][j] << " ";
+			} cout << endl;
+		}
+	}
 	return 0;
 }
-```

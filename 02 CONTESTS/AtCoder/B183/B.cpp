@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -36,7 +27,8 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-
+	double x1, y1, x2, y2;
+	cin >> x1 >> y1 >> x2 >> y2;
+	pout << (-1 * (x1 - x2) * y1) / (y1 + y2) + x1 << endl;
 	return 0;
 }
-```

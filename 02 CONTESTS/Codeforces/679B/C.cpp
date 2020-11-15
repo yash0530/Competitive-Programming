@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -34,9 +25,46 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
-
+                      
 signed main() { fastio;
-
+	vector<int> arr(6);
+	for (auto &a : arr) cin >> a;
+	int n, x; cin >> n; 
+	vector<array<int, 6>> okay(n);
+	for (auto &o : okay) {
+		cin >> x;
+		for (int i = 0; i < 6; i++) {
+			o[i] = x - arr[i];
+		}
+	}
+	vector<pii> pairs;
+	for (int i = 0; i < n; i++) {
+		for (auto x : okay[i]) {
+			pairs.pb({ x, i });
+		}
+	}
+	sort(pairs.begin(), pairs.end());
+	vector<int> freq(n + 5);
+	int count = 0, ans = INF;
+	int SZ = size(pairs);
+	int low = 0, high = 0;
+	multiset<int> vals;
+	while (high < SZ) {
+		freq[pairs[high].sc]++;
+		vals.insert(pairs[high].fs);
+		if (freq[pairs[high++].sc] == 1) count++;
+		if (count == n) {
+			while (low < high) {
+				ans = min(ans, *vals.rbegin() - *vals.begin());
+				vals.erase(vals.find(pairs[low].fs));
+				freq[pairs[low].sc]--;
+				if (freq[pairs[low++].sc] == 0) {
+					count--;
+					break;
+				}
+			}
+		}
+	}
+	cout << ans << endl;
 	return 0;
 }
-```

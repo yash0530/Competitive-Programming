@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -35,8 +26,45 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-signed main() { fastio;
+int mxBit(int a) {
+	int ans = 0;
+	while (a) {
+		ans = a;
+		a = (a & (a - 1));
+	}
+	return ans;
+}
 
+signed main() { fastio;
+	int n; cin >> n;
+	vector<int> arr(n);
+	for (auto &a : arr) {
+		cin >> a;
+	}
+	set<pii> ans;
+	for (int i = 0; i < (n - 2); i++) {
+		int sum = 0;
+		int mxbit = mxBit(arr[i]);
+		for (int j = i + 1; j < (n - 1); j++) {
+			sum += arr[j];
+			if (sum >= (2 * mxbit)) break;
+			if ((arr[i] ^ arr[j + 1]) == sum) {
+				ans.insert({ i, j + 1 });
+			}
+		}
+	}
+	reverse(arr.begin(), arr.end());
+	for (int i = 0; i < (n - 2); i++) {
+		int sum = 0;
+		int mxbit = mxBit(arr[i]);
+		for (int j = i + 1; j < (n - 1); j++) {
+			sum += arr[j];
+			if (sum >= (2 * mxbit)) break;
+			if ((arr[i] ^ arr[j + 1]) == sum) {
+				ans.insert({ n - j - 2, n - i - 1 });
+			}
+		}
+	}
+	cout << size(ans) << endl;
 	return 0;
 }
-```

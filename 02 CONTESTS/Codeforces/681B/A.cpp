@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -35,8 +26,37 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-signed main() { fastio;
+bool check(vector<int> &arr, int val) {
+	for (auto x : arr) {
+		if ((__gcd(x, val) == 1) or (x % val == 0) or (val % x) == 0) {
+			return false;
+		}
+	}
+	return true;
+}
 
+signed main() { fastio;
+	vector<int> final_ans[101];
+	for (int n = 1; n <= 100; n++) {
+		for (int chk = 1; chk <= 400; chk++) {
+			vector<int> ans;
+			for (int i = chk; i <= 400; i++) {
+				if (!size(ans) or check(ans, i)) {
+					ans.pb(i);
+				}
+			}
+			if (size(ans) >= n and ans[n - 1] <= (4 * n)) {
+				final_ans[n] = vector<int>(ans.begin(), ans.begin() + n);
+				break;
+			}
+		}
+	}
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		for (auto x : final_ans[n]) {
+			cout << x << " ";
+		} cout << endl;
+	}
 	return 0;
 }
-```

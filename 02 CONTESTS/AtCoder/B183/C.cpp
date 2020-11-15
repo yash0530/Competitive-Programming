@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -37,6 +28,24 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 
 signed main() { fastio;
 
+	int n, t;
+	cin >> n >> t;
+	getMat(adj, n + 1, n + 1, 0);
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			cin >> adj[i][j];
+		}
+	}
+	vector<int> arr(n - 1);
+	for (int i = 1; i <= n; i++) arr[i - 1] = i + 1;
+	int count = 0;
+	do {
+		int val = adj[1][arr[0]] + adj[arr.back()][1];
+		for (int i = 1; i < size(arr); i++) {
+			val += adj[arr[i - 1]][arr[i]];
+		}
+		if (val == t) count++;
+    } while (next_permutation(_all(arr))); 
+    cout << count << endl;
 	return 0;
 }
-```

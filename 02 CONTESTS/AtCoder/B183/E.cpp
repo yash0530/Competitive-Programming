@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -34,9 +25,47 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
+#define add(a, b) (a % HELL + b % HELL) % HELL
 
 signed main() { fastio;
-
+	int n, m;
+	cin >> n >> m;
+	vector<string> mat(n);
+	for (auto &x : mat) cin >> x;
+	getMat(dp, n, m, 0);
+	dp[0][0] = 1;
+	map<int, int> rows, cols, diags;
+	rows[0] = 1, cols[0] = 1, diags[0] = 1;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			if (j) {
+				if (mat[i][j] == '#') {
+					rows[i] = 0;
+				} else {
+					dp[i][j] = add(dp[i][j], rows[i]);
+				}
+			}
+			if (i) {
+				if (mat[i][j] == '#') {
+					cols[j] = 0;
+				} else {
+					dp[i][j] = add(dp[i][j], cols[j]);
+				}
+			}
+			if (i and j) {
+				if (mat[i][j] == '#') {
+					diags[i - j] = 0;
+				} else {
+					dp[i][j] = add(dp[i][j], diags[i - j]);
+				}
+			}
+			if (mat[i][j] == '.') {
+				rows[i] = add(rows[i], dp[i][j]);
+				cols[j] = add(cols[j], dp[i][j]);
+				diags[i - j] = add(diags[i - j], dp[i][j]);
+			}
+		}
+	}
+	cout << mul(dp[n - 1][m - 1], inv(2)) << endl;
 	return 0;
 }
-```

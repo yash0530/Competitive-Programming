@@ -1,18 +1,9 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
 #define endl "\n"
 #define INF (int) 9e18
-#define HELL (int) (1e9 + 7)
+#define HELL 998244353LL
 #define int long long
 #define double long double
 #define uint unsigned long long
@@ -36,7 +27,32 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-
+	int t; cin >> t;
+	while (t--) {
+		int n, k;
+		cin >> n >> k;
+		vector<int> arr(n);
+		map<int, int> pos; int pp = 0;
+		for (auto &a : arr) {
+			cin >> a;
+			pos[a] = pp++;
+		}
+		set<int> ss;
+		vector<int> seq(k);
+		for (auto &x : seq) {
+			cin >> x;
+			ss.insert(x);
+		}
+		int ans = 1;
+		for (auto x : seq) {
+			int count = 0;
+			int loc = pos[x];
+			if (loc and ss.find(arr[loc - 1]) == ss.end()) count++;
+			if ((loc != n - 1) and ss.find(arr[loc + 1]) == ss.end()) count++;
+			ans = mul(ans, count);
+			ss.erase(x);
+		}
+		cout << ans << endl;
+	}
 	return 0;
 }
-```
