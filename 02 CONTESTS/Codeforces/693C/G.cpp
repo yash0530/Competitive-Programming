@@ -26,7 +26,62 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
+const int maxN = 2e5 + 5;
+int n, m, u, v;
+vector<int> adj[maxN];
+int dp[maxN];
+vector<int> dist;
+
+void dists() {
+	vector<int> dd(n + 1, -1);
+	dd[1] = 0;
+	queue<int> pq;
+	pq.push(1);
+	while (!pq.empty()) {
+		int u = pq.front();
+		pq.pop();
+		for (int v : adj[u]) {
+			if (dd[v] == -1) {
+				dd[v] = dd[u] + 1;
+				pq.push(v);
+			}
+		}
+	}
+	dist = dd;
+}
+
+void dfs(int curr, vector<bool> &vis) {
+	vis[curr] = true;
+	dp[curr] = dist[curr];
+	for (auto x : adj[curr]) {
+		if (!vis[x] and dist[curr] < dist[x]) {
+			dfs(x, vis);
+		}
+
+		if (dist[curr] < dist[x]) {
+			dp[curr] = min(dp[curr], dp[x]);
+		} else {
+			dp[curr] = min(dp[curr], dist[x]);
+		}
+	}
+}
+
 signed main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		cin >> n >> m;
+		for (int i = 1; i <= n; i++) {
+			adj[i].clear();
+		}
+		for (int i = 0; i < m; i++) {
+			cin >> u >> v;
+			adj[u].pb(v);
+		}
+		vector<bool> vis(n + 1);
+		dists(); dfs(1, vis);
+		for (int i = 1; i <= n; i++) {
+			cout << dp[i] << " ";
+		} cout << endl;
+	}
 	return 0;
 }

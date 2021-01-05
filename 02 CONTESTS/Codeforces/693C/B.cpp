@@ -27,6 +27,26 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		int s = 0;
+		vector<int> arr(n);
+		for (auto &a : arr) {
+			cin >> a;
+			s += a;
+		}
+		if (s % 4 == 0) {
+			cout << "YES" << endl;
+		} else if (s % 2 == 0) {
+			if ((size(arr) & 1) and (size(arr) * 2 == s)) {
+				cout << "NO" << endl;
+			} else {
+				cout << "YES" << endl;
+			}
+		} else {
+			cout << "NO" << endl;
+		}
+	}
 	return 0;
 }

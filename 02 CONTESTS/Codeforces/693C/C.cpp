@@ -27,6 +27,22 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		vector<int> arr(n), dp(n);
+		for (auto &a : arr) {
+			cin >> a;
+		}
+		int ans = 0;
+		for (int i = (n - 1); i >= 0; i--) {
+			if ((i + arr[i]) < n) {
+				dp[i] += dp[i + arr[i]];
+			}
+			dp[i] += arr[i];
+			ans = max(ans, dp[i]);
+		}
+		cout << ans << endl;
+	}
 	return 0;
 }
