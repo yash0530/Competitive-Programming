@@ -30,17 +30,24 @@ signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
 		int n; cin >> n;
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-		}
-		set<int> vals;
+		int a, b, c, d;
+		map<array<int, 2>, int> mp;
 		for (int i = 0; i < n; i++) {
-			for (int j = i + 1; j < n; j++) {
-				vals.insert(abs(arr[i] - arr[j]));
-			}
+			cin >> a >> b >> c >> d;
+			int xx = (c - a);
+			int yy = (d - b);
+			pii xxx = { a, b };
+			pii yyy = { c, d };
+
+			int gg = __gcd(abs(xx), abs(yy));
+			int ox = xx; int oy = yy; 
+			mp[{ ox / gg, oy / gg }]++;
 		}
-		cout << size(vals) << endl;
+		int ans = 0;
+		for (auto m : mp) {
+			ans += (mp[{ -m.fs[0], -m.fs[1] }] * m.sc);
+		}
+		cout << ans / 2 << endl;
 	}
 	return 0;
 }

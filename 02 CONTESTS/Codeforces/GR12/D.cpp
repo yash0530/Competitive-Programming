@@ -69,55 +69,7 @@ signed main() { fastio;
 		for (auto &a : arr) {
 			cin >> a;
 		}
-		// minn::build(arr);
-		// int low = 0, high = n - 1;
-		// vector<int> res;
-		// int loc = 1;
-		// while (low <= high) {
-		// 	if (arr[low] == loc) {
-		// 		if (minn::query(low + 1, high) > loc) {
-		// 			res.pb(1);	
-		// 		} else {
-		// 			break;
-		// 		}
-		// 		low++;
-		// 	} else if (arr[high] == loc) {
-		// 		if (minn::query(low, high - 1) > loc) {
-		// 			res.pb(1);
-		// 		} else {
-		// 			break;
-		// 		}
-		// 		high--;
-		// 	} else {
-		// 		if (minn::query(low, high) == loc) {
-		// 			res.pb(1);
-		// 			loc++;
-		// 		}
-		// 		break;
-		// 	}
-		// 	loc++;
-		// }
-		// sort(_all(arr));
-		// bool poss = true;
-		// for (int i = 0; i < n; i++) {
-		// 	if ((i + 1) != arr[i]) {
-		// 		poss = false;
-		// 	}
-		// }
-		// reverse(_all(res));
-		// if (size(res) == n) {
-		// 	for (auto r : res) {
-		// 		cout << r;
-		// 	} cout << endl;
-		// } else {
-		// 	cout << poss;
-		// 	for (int i = 0; i < (n - 1 - size(res)); i++) {
-		// 		cout << 0;
-		// 	}
-		// 	for (auto r : res) {
-		// 		cout << r;
-		// 	} cout << endl;
-		// }
+		
 	}
 	return 0;
 }

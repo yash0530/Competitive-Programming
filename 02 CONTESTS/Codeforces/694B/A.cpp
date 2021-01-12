@@ -29,18 +29,15 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n; cin >> n;
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-		}
-		set<int> vals;
+		int n, x;
+		cin >> n >> x;
+		int a = 0, b = 0, y;
 		for (int i = 0; i < n; i++) {
-			for (int j = i + 1; j < n; j++) {
-				vals.insert(abs(arr[i] - arr[j]));
-			}
+			cin >> y;
+			a += (y + x - 1) / x;
+			b += y;
 		}
-		cout << size(vals) << endl;
+		cout << (b + x - 1) / x << " " << a << endl;
 	}
 	return 0;
 }

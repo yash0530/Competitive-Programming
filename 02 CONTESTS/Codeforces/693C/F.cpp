@@ -27,6 +27,29 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		int n, k; cin >> n >> k;
+		vector<pii> arr(k);
+		for (auto &a : arr) {
+			cin >> a.sc >> a.fs;
+		}
+		sort(_all(arr));
+		bool poss = true;
+		for (int i = 0; i < k; i++) {
+			if ((i != (k - 1)) and arr[i].sc == arr[i + 1].sc) {
+				i++;
+			} else if (i == (k - 1)) {
+
+			} else {
+				
+			}
+		}
+		if (poss) {
+			cout << "YES" << endl;
+		} else {
+			cout << "NO" << endl;
+		}
+	}
 	return 0;
 }

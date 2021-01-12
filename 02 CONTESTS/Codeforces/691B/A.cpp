@@ -30,17 +30,15 @@ signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
 		int n; cin >> n;
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-		}
-		set<int> vals;
+		string a, b; cin >> a >> b;
+		int x = 0, y = 0;
 		for (int i = 0; i < n; i++) {
-			for (int j = i + 1; j < n; j++) {
-				vals.insert(abs(arr[i] - arr[j]));
-			}
+			if (a[i] > b[i]) x++;
+			else if (a[i] < b[i]) y++;
 		}
-		cout << size(vals) << endl;
+		if (x > y) cout << "RED" << endl;
+		else if (x < y) cout << "BLUE" << endl;
+		else cout << "EQUAL" << endl;
 	}
 	return 0;
 }

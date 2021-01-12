@@ -26,21 +26,67 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
+vector<pii> primeFactors(int n) {
+    vector<pii> factorization;
+    int ct = 0;
+    while (n % 2 == 0) {
+        n /= 2;
+        ct++;
+    }
+    if (ct) {
+    	factorization.pb({ 2, ct });
+    }
+    for (int d = 3; d * d <= n; d += 2) {
+        ct = 0;
+        while (n % d == 0) {
+        	ct++;
+            n /= d;
+        }
+        if (ct) {
+        	factorization.pb({ d, ct });
+        }
+    }
+    if (n > 1)
+        factorization.push_back({ n, 1 });
+    return factorization;
+}
+
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
 		int n; cin >> n;
 		vector<int> arr(n);
+		map<int, int> mp;
 		for (auto &a : arr) {
 			cin >> a;
+			auto xx = primeFactors(a);
+			int reqd = 1;
+			for (auto x : xx) {
+				if (x.sc & 1) {
+					reqd *= x.fs;
+				}
+			}
+			mp[reqd]++;
 		}
-		set<int> vals;
-		for (int i = 0; i < n; i++) {
-			for (int j = i + 1; j < n; j++) {
-				vals.insert(abs(arr[i] - arr[j]));
+		int ans_0 = 0, ans_1 = 0, tt = 0;
+		for (auto x : mp) {
+			ans_0 = max(ans_0, x.sc);
+			if ((x.sc % 2 == 0) or (x.fs == 1)) {
+				tt += x.sc;
+			} else {
+				ans_1 = max(ans_1, x.sc);
 			}
 		}
-		cout << size(vals) << endl;
+		ans_1 = max(ans_1, tt);
+		int q, aa; cin >> q;
+		while (q--) {
+			cin >> aa;
+			if (aa == 0) {
+				cout << ans_0 << endl;
+			} else {
+				cout << ans_1 << endl;
+			}
+		}
 	}
 	return 0;
 }

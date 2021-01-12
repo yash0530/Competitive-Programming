@@ -30,17 +30,15 @@ signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
 		int n; cin >> n;
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
+		string s; cin >> s;
+		int count = 0;
+		for (int i = n - 1; i >= 0; i--) {
+			if (s[i] != ')') break;
+			count++;
 		}
-		set<int> vals;
-		for (int i = 0; i < n; i++) {
-			for (int j = i + 1; j < n; j++) {
-				vals.insert(abs(arr[i] - arr[j]));
-			}
-		}
-		cout << size(vals) << endl;
+		int a = n - count;
+		if (count > a) cout << "Yes" << endl;
+		else cout << "No" << endl;
 	}
 	return 0;
 }

@@ -27,6 +27,22 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		vector<int> arr(n);
+		map<int, int> mp;
+		for (auto &a : arr) {
+			cin >> a;
+			mp[a]++;
+		}
+		for (auto x : mp) {
+			if (x.sc > 1) {
+				mp[x.fs + 1]++;
+				mp[x.fs]--;
+			}
+		}
+		cout << size(mp) << endl;
+	}
 	return 0;
 }

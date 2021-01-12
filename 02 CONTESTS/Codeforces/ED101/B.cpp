@@ -31,16 +31,28 @@ signed main() { fastio;
 	while (t--) {
 		int n; cin >> n;
 		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
+		for (auto &x : arr) {
+			cin >> x;
 		}
-		set<int> vals;
-		for (int i = 0; i < n; i++) {
-			for (int j = i + 1; j < n; j++) {
-				vals.insert(abs(arr[i] - arr[j]));
-			}
+		int m; cin >> m;
+		vector<int> brr(m);
+		for (auto &x : brr) {
+			cin >> x;
 		}
-		cout << size(vals) << endl;
+		int i = 0, j = 0;
+		int mx1 = 0, sum1 = 0;
+		while (i < n) {
+			sum1 += arr[i];
+			i++;
+			mx1 = max(mx1, sum1);
+		}
+		int mx2 = 0, sum2 = 0;
+		while (j < m) {
+			sum2 += brr[j];
+			j++;
+			mx2 = max(mx2, sum2);
+		}
+		cout << mx1 + mx2 << endl;
 	}
 	return 0;
 }

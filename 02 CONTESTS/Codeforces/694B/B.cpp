@@ -29,18 +29,40 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n; cin >> n;
+		int n, x;
+		cin >> n >> x;
 		vector<int> arr(n);
+		bool end = true;
 		for (auto &a : arr) {
 			cin >> a;
 		}
-		set<int> vals;
+		vector<int> counts(n);
+		vector<int> sums(n);
+		int mn = INF, ans = 0;
+		int loc = -1;
 		for (int i = 0; i < n; i++) {
-			for (int j = i + 1; j < n; j++) {
-				vals.insert(abs(arr[i] - arr[j]));
+			int count = 0;
+			int temp = arr[i];
+			while ((temp % x) == 0) {
+				count++;
+				temp /= x;
+			}
+			counts[i] = count;
+			if (mn > counts[i]) {
+				loc = i;
+				mn = counts[i];
+			}
+			if (i) {
+				sums[i] = sums[i - 1] + arr[i];
+			} else {
+				sums[i] = arr[i];
 			}
 		}
-		cout << size(vals) << endl;
+		ans += sums.back() * (mn + 1);
+		if (loc) {
+			ans += sums[loc - 1];
+		}
+		cout << ans << endl;
 	}
 	return 0;
 }

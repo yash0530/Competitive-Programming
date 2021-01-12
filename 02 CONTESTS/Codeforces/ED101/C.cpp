@@ -26,21 +26,39 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
+bool _overlap(int a, int b, int c, int d) {
+	if (min(b, d) >= max(a, c)) return true;
+	return false;
+}
+
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n; cin >> n;
+		int n, k; cin >> n >> k;
 		vector<int> arr(n);
 		for (auto &a : arr) {
 			cin >> a;
 		}
-		set<int> vals;
-		for (int i = 0; i < n; i++) {
-			for (int j = i + 1; j < n; j++) {
-				vals.insert(abs(arr[i] - arr[j]));
+		int low = arr[0], high = arr[0] + k;
+		bool poss = true;
+		for (int i = 1; i < n; i++) {
+			int x = arr[i];
+			int ll = x, hh = x + 2 * k - 1;
+			low++; high--;
+			if (_overlap(low, high, ll, hh)) {
+				low = max(low - k, ll);
+				high = min(high + k, hh);
+			} else {
+				poss = false;
+				break;
+			}
+			if ((high - low) < k) {
+				poss = false;
+				break;
 			}
 		}
-		cout << size(vals) << endl;
+		if (poss and (low == arr.back())) cout << "YES" << endl;
+		else cout << "NO" << endl;
 	}
 	return 0;
 }

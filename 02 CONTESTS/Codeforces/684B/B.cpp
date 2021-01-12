@@ -27,6 +27,31 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		int n, k; cin >> n >> k;
+		int N = n * k;
+		vector<int> arr(N);
+		for (auto &a : arr) {
+			cin >> a;
+		}
+		vector<vector<int>> mat(k);
+		int loc = (n + 1) / 2;
+		for (int i = 0; i < (loc - 1) * k; i++) {
+			mat[i % k].pb(arr[i]);
+		}
+		for (int i = (loc - 1) * k, j = 0; i < N; i++) {
+			if (size(mat[j]) == n) {
+				j++;
+			}
+			mat[j].pb(arr[i]);
+		}
+		// debm(mat);
+		int ans = 0;
+		for (auto x : mat) {
+			ans += x[((n + 1) / 2) - 1];
+		}
+		cout << ans << endl;
+	}
 	return 0;
 }

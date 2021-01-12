@@ -27,6 +27,24 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		string s; cin >> s;
+		char curr = 0;
+		int ans = 0;
+		for (int i = 1; i < size(s); i++) {
+			if (s[i] == s[i - 1]) {
+				s[i] = (curr++) % 26 + 'A';
+				ans++;
+			}
+			if (i > 1) {
+				if (s[i] == s[i - 2]) {
+					s[i] = (curr++) % 26 + 'A';
+					ans++;
+				}
+			}
+		}
+		cout << ans << endl;
+	}
 	return 0;
 }

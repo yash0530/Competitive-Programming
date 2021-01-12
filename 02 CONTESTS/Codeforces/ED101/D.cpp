@@ -30,17 +30,24 @@ signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
 		int n; cin >> n;
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-		}
-		set<int> vals;
-		for (int i = 0; i < n; i++) {
-			for (int j = i + 1; j < n; j++) {
-				vals.insert(abs(arr[i] - arr[j]));
+		set<int> nums = { 2, 3, 5, 23, 500 };
+		vector<pii> ans;
+		int bigboy = n;
+		if (n > 2) {
+			for (int i = n - 1; i >= 2; i--) {
+				if (nums.find(i) != nums.end()) {
+					ans.pb({ bigboy, i });
+					ans.pb({ bigboy, i });
+					bigboy = i;
+				} else {
+					ans.pb({ i, bigboy });
+				}
 			}
 		}
-		cout << size(vals) << endl;
+		cout << size(ans) << endl;
+		for (auto a : ans) {
+			cout << a.fs << " " << a.sc << endl;
+		}
 	}
 	return 0;
 }

@@ -29,18 +29,34 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n; cin >> n;
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
+		int c1, c2, c3;
+		cin >> c1 >> c2 >> c3;
+		int a, b, c, d, e;
+		cin >> a >> b >> c >> d >> e;
+
+		c1 -= a;
+		c2 -= b;
+		c3 -= c;
+
+		if (c1 > 0) {
+			int x = min(c1, d);
+			d -= x;
+			c1 -= x;
 		}
-		set<int> vals;
-		for (int i = 0; i < n; i++) {
-			for (int j = i + 1; j < n; j++) {
-				vals.insert(abs(arr[i] - arr[j]));
-			}
+
+		if (c2 > 0) {
+			int x = min(c2, e);
+			e -= x;
+			c2 -= x;
 		}
-		cout << size(vals) << endl;
+
+		c3 -= (d + e);
+
+		if (c1 >= 0 and c2 >= 0 and c3 >= 0) {
+			cout << "YES" << endl;
+		} else {
+			cout << "NO" << endl;
+		}
 	}
 	return 0;
 }

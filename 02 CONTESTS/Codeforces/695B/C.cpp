@@ -27,20 +27,24 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-	int t; cin >> t;
-	while (t--) {
-		int n; cin >> n;
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-		}
-		set<int> vals;
-		for (int i = 0; i < n; i++) {
-			for (int j = i + 1; j < n; j++) {
-				vals.insert(abs(arr[i] - arr[j]));
-			}
-		}
-		cout << size(vals) << endl;
-	}
+	int a, b, c;
+	cin >> a >> b >> c;
+	int sa = 0, sb = 0, sc = 0;
+	vector<int> arr(a), brr(b), crr(c);
+	for (auto &x : arr) { cin >> x; sa += x; }
+	for (auto &x : brr) { cin >> x; sb += x; }
+	for (auto &x : crr) { cin >> x; sc += x; }
+	sort(_all(arr));
+	sort(_all(brr));
+	sort(_all(crr));
+	int ans = max({
+		sa + sb - sc,
+		sa - sb + sc,
+		-sa + sb + sc,
+		sa + sb + sc - 2 * (arr[0] + brr[0]),
+		sa + sb + sc - 2 * (brr[0] + crr[0]),
+		sa + sb + sc - 2 * (arr[0] + crr[0]),
+	});
+	cout << ans << endl;
 	return 0;
 }

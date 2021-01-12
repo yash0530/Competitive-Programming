@@ -71,27 +71,43 @@ class WeightedUF {
 };
 
 signed main() { fastio;
-	int n, m, t, u, v;		
-	cin >> m >> n;
-	WeightedUF uf(n + 2);
-	vector<int> res;
-	for (int i = 0; i < m; i++) {
-		cin >> t;
-		if (t == 1) {
-			cin >> u;
-			if (uf._union(n + 1, u)) {
-				res.pb(i + 1);
-			}
-		} else {
-			cin >> u >> v;
-			if (uf._union(u, v)) {
-				res.pb(i + 1);
+	int t; cin >> t;
+	while (t--) {
+		int n, m, k, u, v, w;
+		cin >> n >> m >> k;
+		vector<array<int, 3>> edges(m);
+		for (int i = 0; i < m; i++) {
+			cin >> u >> v >> w;
+			edges.pb({ w, u, v });
+		}
+		sort(_all(edges));
+		WeightedUF uf(n);
+		vector<array<int, 3>> mst;
+		for (auto e : edges) {
+			if (uf._union(e[1], e[2])) {
+				mst.pb(e);
 			}
 		}
+		int ans = 0;
+		if (mst.back()[0] < k) {
+			int near = INF;
+			int loc, i = 0;
+			for (auto e : edges) {
+				if (near > abs(k - e[0])) {
+					near = abs(k - e[0]);
+					loc = i;
+				}
+				i++;
+			}
+			ans += abs(k - edges[loc][0]);
+		} else {
+			for (auto m : mst) {
+				if (m[0] > k) {
+					ans += m[0] - k;
+				}
+			}
+		}
+		cout << ans << endl;
 	}
-	cout << fastpow(2, size(res)) << " " << size(res) << endl;
-	for (auto r : res) {
-		cout << r << " ";
-	} cout << endl;
 	return 0;
 }

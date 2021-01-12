@@ -27,20 +27,20 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-	int t; cin >> t;
-	while (t--) {
-		int n; cin >> n;
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
-		}
-		set<int> vals;
-		for (int i = 0; i < n; i++) {
-			for (int j = i + 1; j < n; j++) {
-				vals.insert(abs(arr[i] - arr[j]));
-			}
-		}
-		cout << size(vals) << endl;
+	int n, m; cin >> n >> m;
+	vector<int> arr(n), brr(m);
+	for (auto &a : arr) cin >> a;
+	for (auto &b : brr) cin >> b;
+	sort(_all(arr));
+	int okay = 0;
+	if (n > 1) {
+		okay = arr[1] - arr[0];
 	}
+	for (int i = 2; i < n; i++) {
+		okay = __gcd(arr[i] - arr[0], okay);
+	}
+	for (auto x : brr) {
+		cout << __gcd(arr[0] + x, okay) << " ";
+	} cout << endl;
 	return 0;
 }

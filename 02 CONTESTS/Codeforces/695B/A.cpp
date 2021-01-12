@@ -30,17 +30,22 @@ signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
 		int n; cin >> n;
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
+		vector<int> arr;
+		for (int i = 0; i <= 9; i++) {
+			arr.pb(i);
 		}
-		set<int> vals;
-		for (int i = 0; i < n; i++) {
-			for (int j = i + 1; j < n; j++) {
-				vals.insert(abs(arr[i] - arr[j]));
-			}
+		if (n == 1) {
+			cout << 9 << endl;
+		} else if (n == 2) {
+			cout << 98 << endl;
+		} else if (n == 3) {
+			cout << 989 << endl;
+		} else {
+			cout << 989;
+			for (int i = 0; i < n - 3; i++) {
+				cout << arr[i % 10];
+			} cout << endl;
 		}
-		cout << size(vals) << endl;
 	}
 	return 0;
 }

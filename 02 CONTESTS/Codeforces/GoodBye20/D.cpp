@@ -27,6 +27,41 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		int n, u, v; cin >> n;
+		int arr[n + 1];
+		for (int i = 1; i <= n; i++) {
+			cin >> arr[i];
+		}
+		int deg[n + 1];
+		memset(deg, 0, sizeof deg);
+		for (int i = 1; i < n; i++) {
+			cin >> u >> v;
+			deg[u]++; deg[v]++;
+		}
+		priority_queue<pii, vector<pii>, greater<pii>> pq;
+		int ans = 0;
+		for (int i = 1; i <= n; i++) {
+			pq.push({ arr[i], deg[i] });
+			ans += arr[i] * deg[i];
+		}
+		int count = 1;
+		vector<int> res; res.pb(ans);
+		while (count < (n - 1)) {
+			auto x = pq.top(); pq.pop();
+			if (x.sc > 1) {
+				count++;
+				x.sc--;
+				ans -= x.fs;
+				res.pb(ans);
+				pq.push(x);
+			}
+		}
+		reverse(_all(res));
+		for (auto r : res) {
+			cout << r << " ";
+		} cout << endl;
+	}
 	return 0;
 }

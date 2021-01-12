@@ -29,18 +29,60 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n; cin >> n;
-		vector<int> arr(n);
-		for (auto &a : arr) {
-			cin >> a;
+		string s; cin >> s;
+		vector<pii> stops;
+		int x = 0, y = 0;
+		for (auto a : s) {
+			if (a == 'L') {
+				x--;
+			} else if (a == 'R') {
+				x++;
+			} else if (a == 'U') {
+				y++;
+			} else {
+				y--;
+			}
+			stops.pb({ x, y });
 		}
-		set<int> vals;
-		for (int i = 0; i < n; i++) {
-			for (int j = i + 1; j < n; j++) {
-				vals.insert(abs(arr[i] - arr[j]));
+		if (x == 0 and y == 0) {
+			cout << 50000 << " " << 50000 << endl;
+			continue;
+		}
+		bool poss = false;
+		for (auto ss : stops) {
+			int x = 0, y = 0;
+			for (auto a : s) {
+				if (a == 'L') {
+					x--;
+					if (ss.fs == x and ss.sc == y) {
+						x++;
+					}
+				} else if (a == 'R') {
+					x++;
+					if (ss.fs == x and ss.sc == y) {
+						x--;
+					}
+				} else if (a == 'U') {
+					y++;
+					if (ss.fs == x and ss.sc == y) {
+						y--;
+					}
+				} else {
+					y--;
+					if (ss.fs == x and ss.sc == y) {
+						y++;
+					}
+				}
+			}
+			if (x == 0 and y == 0) {
+				cout << ss.fs << " " << ss.sc << endl;
+				poss = true;
+				break;
 			}
 		}
-		cout << size(vals) << endl;
+		if (!poss) {
+			cout << 0 << " " << 0 << endl;
+		}
 	}
 	return 0;
 }
