@@ -4,7 +4,7 @@ using namespace std;
 #define endl "\n"
 #define INF (int) 9e18
 #define HELL (int) (1e9 + 7)
-// #define int long long
+#define int long long
 #define double long double
 #define uint unsigned long long
 #define pii pair<int, int>
@@ -26,37 +26,36 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
+bool isdiv(string &a, string &b) {
+	if (size(a) < size(b)) return false;
+	if (size(a) % size(b)) return false;
+	for (int i = 0; i < size(a); i++) {
+		if (a[i] != b[i % size(b)]) return false;
+	}
+	return true;
+}
+
 signed main() { fastio;
-	int n; cin >> n;
-	int a[n + 1], b[n + 1];
-	int val = 0;
-	for (int i = 1; i <= n; i++) {
-		cin >> a[i];
-		cin >> b[i];
-		val += b[i];
-	}
-	int dp[n + 5][10005];
-	for (int j = 0; j <= n; j++) {
-		for (int k = 0; k <= 10000; k++) {
-			dp[j][k] = -1000000;
+	int t; cin >> t;
+	while (t--) {
+		string a, b; cin >> a >> b;
+		if (size(a) < size(b)) {
+			swap(a, b);
 		}
-	}
-	dp[0][0] = 0;
-	for (int i = 1; i <= n; i++) {
-		for (int k = 10000; k >= 0; k--) {
-			for (int j = 1; j <= i; j++) {
-				if ((k - a[i]) >= 0) {
-					dp[j][k] = max(dp[j][k], dp[j - 1][k - a[i]] + b[i]);
-				}
+		string res = b;
+		bool found = false;
+		for (int i = 1; i <= 25; i++) {
+			if (isdiv(res, a)) {
+				found = true;
+				break;
 			}
+			res += b;
+		}
+		if (found) {
+			cout << res << endl;
+		} else {
+			cout << -1 << endl;
 		}
 	}
-	for (int j = 1; j <= n; j++) {
-		double ans = 0;
-		for (int k = 0; k <= 10000; k++) {
-			ans = max(ans, min((double)k, ((double)dp[j][k] / 2.0) + ((double)val / 2.0)));
-		}
-		pout << ans << " ";
-	} cout << endl;
 	return 0;
 }

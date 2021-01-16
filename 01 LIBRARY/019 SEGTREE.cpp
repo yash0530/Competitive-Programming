@@ -192,7 +192,102 @@ class SegmentTree {
         }
 };
 
+// ------------------------------ MAXX ------------------------- //
+namespace maxx {
 
-int32_t main() {
+    int *arr, *tree, *lazy;
+    int n;
 
-}
+    void build(int nn) {
+        n = nn + 1;
+        arr = new int[n];
+        tree = new int[4 * n];
+        lazy = new int[4 * n];
+        for (int i = 0; i < n; i++) arr[i] = 0;
+        for (int i = 0; i < 4 * n; i++) tree[i] = 0;
+        for (int i = 0; i < 4 * n; i++) lazy[i] = 0;
+    }
+
+    void push(int v) {
+        tree[v*2] += lazy[v];
+        lazy[v*2] += lazy[v];
+        tree[v*2+1] += lazy[v];
+        lazy[v*2+1] += lazy[v];
+        lazy[v] = 0;
+    }
+
+    void updateRange(int l, int r, int addend, int v = 1, int tl = 0, int tr = n - 1) {
+        if (l > r) 
+            return;
+        if (l == tl && tr == r) {
+            tree[v] += addend;
+            lazy[v] += addend;
+        } else {
+            push(v);
+            int tm = (tl + tr) / 2;
+            updateRange(l, min(r, tm), addend, v*2, tl, tm);
+            updateRange(max(l, tm+1), r, addend, v*2+1, tm+1, tr);
+            tree[v] = max(tree[v*2], tree[v*2+1]);
+        }
+    }
+
+    int queryMax(int l, int r, int v = 1, int tl = 0, int tr = n - 1) {
+        if (l > r)
+            return -1000000;
+        if (l == tl && tr == r) 
+            return tree[v];
+        push(v);
+        int tm = (tl + tr) / 2;
+        return max(queryMax(l, min(r, tm), v*2, tl, tm), queryMax(max(l, tm+1), r, v*2+1, tm+1, tr));
+    }
+};
+
+// ------------------------------ MINN ------------------------- //
+namespace minn {
+
+    int *arr, *tree, *lazy;
+    int n;
+
+    void build(int nn) {
+        n = nn + 1;
+        arr = new int[n];
+        tree = new int[4 * n];
+        lazy = new int[4 * n];
+        for (int i = 0; i < n; i++) arr[i] = 0;
+        for (int i = 0; i < 4 * n; i++) tree[i] = 0;
+        for (int i = 0; i < 4 * n; i++) lazy[i] = 0;
+    }
+
+    void push(int v) {
+        tree[v*2] += lazy[v];
+        lazy[v*2] += lazy[v];
+        tree[v*2+1] += lazy[v];
+        lazy[v*2+1] += lazy[v];
+        lazy[v] = 0;
+    }
+
+    void updateRange(int l, int r, int addend, int v = 1, int tl = 0, int tr = n - 1) {
+        if (l > r) 
+            return;
+        if (l == tl && tr == r) {
+            tree[v] += addend;
+            lazy[v] += addend;
+        } else {
+            push(v);
+            int tm = (tl + tr) / 2;
+            updateRange(l, min(r, tm), addend, v*2, tl, tm);
+            updateRange(max(l, tm+1), r, addend, v*2+1, tm+1, tr);
+            tree[v] = min(tree[v*2], tree[v*2+1]);
+        }
+    }
+
+    int queryMin(int l, int r, int v = 1, int tl = 0, int tr = n - 1) {
+        if (l > r) 
+            return 1000000;
+        if (l == tl && tr == r) 
+            return tree[v];
+        push(v);
+        int tm = (tl + tr) / 2;
+        return min(queryMin(l, min(r, tm), v*2, tl, tm), queryMin(max(l, tm+1), r, v*2+1, tm+1, tr));
+    }
+};
