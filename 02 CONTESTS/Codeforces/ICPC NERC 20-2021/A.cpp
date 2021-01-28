@@ -27,6 +27,14 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		vector<int> arr(n);
+		for (auto &a : arr) {
+			cin >> a;
+		}
+		
+	}
 	return 0;
 }

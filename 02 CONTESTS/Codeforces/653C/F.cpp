@@ -26,51 +26,72 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-vector<vector<int>> adj;
-vector<int> res;
-vector<int> vis;
-
-void dfs(int u) {
-	if (vis[u] == 0) {
-		res.pb(u);
-		for (auto x : adj[u]) {
-			vis[x] = -1;
-		}
-	}
-	vis[u] = 1;
-	for (auto x : adj[u]) {
-		if (vis[x] != 1) {
-			dfs(x);
-		}
-	}
-}
-
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n, m; cin >> n >> m;
-		adj = vector<vector<int>>(n + 1);
-		res.clear();
-		vis = vector<int>(n + 1, 0);
-		int u, v;
-		for (int i = 0; i < m; i++) {
-			cin >> u >> v;
-			adj[u].pb(v);
-			adj[v].pb(u);
+		int n; cin >> n;
+		vector<int> arr(n);
+		vector<pii> pairs(n);
+		for (int i = 0; i < n; i++) {
+			cin >> arr[i];
+			pairs[i] = { arr[i], i };
 		}
-		dfs(1);
+		sort(_all(pairs));
+		for (int i = 0; i < n; i++) {
+			arr[pairs[i].sc] = i;
+		}
 		int count = 0;
-		for (int i = 1; i <= n; i++) {
-			if (vis[i] == 1) count++;
+		for (int i = 0; i < n; i++) {
+			for (int j = i + 1; j < n; j++) {
+				if (arr[j] < arr[i]) count++;
+			}
 		}
-		if (count == n) {
-			cout << "YES" << endl;
+		if (count & 1) {
+			for (int i = 0; i < (n - 1); i++) {
+				if (pairs[i].fs == pairs[i + 1].fs) {
+					swap(arr[pairs[i].sc], arr[pairs[i + 1].sc]);
+					break;
+				}
+			}
+		}
+
+		auto rotate = [&](int loc) {
+			swap(arr[loc], arr[loc - 2]);
+			swap(arr[loc - 1], arr[loc]);
+		};
+
+		vector<int> res;
+		for (int i = 0; i < n; i++) {
+			int ml = min_element(arr.begin() + i, arr.end()) - arr.begin();
+			while (ml > (i + 1)) {
+				rotate(ml);
+				res.pb(ml);
+				ml -= 2;
+			}
+			if ((ml == (i + 1)) and (ml != (n - 1))) {
+				res.pb(i + 2);
+				res.pb(i + 2);
+				rotate(i + 2);
+				rotate(i + 2);
+			}
+		}
+		if (arr[n - 3] <= arr[n - 2] and arr[n - 2] <= arr[n - 1]) {
+		} else {
+			rotate(n - 1);
+			res.pb(n - 1);
+		}
+		if (arr[n - 3] <= arr[n - 2] and arr[n - 2] <= arr[n - 1]) {
+		} else {
+			rotate(n - 1);
+			res.pb(n - 1);
+		}
+		if (arr[n - 3] <= arr[n - 2] and arr[n - 2] <= arr[n - 1]) {
 			cout << size(res) << endl;
 			for (auto r : res) {
-				cout << r << " ";
+				cout << r - 1 << " ";
 			} cout << endl;
 		} else {
-			cout << "NO" << endl;
+			cout << -1 << endl;
 		}
 	}
 	return 0;

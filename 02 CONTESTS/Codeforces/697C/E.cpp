@@ -26,52 +26,38 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-vector<vector<int>> adj;
-vector<int> res;
-vector<int> vis;
-
-void dfs(int u) {
-	if (vis[u] == 0) {
-		res.pb(u);
-		for (auto x : adj[u]) {
-			vis[x] = -1;
-		}
-	}
-	vis[u] = 1;
-	for (auto x : adj[u]) {
-		if (vis[x] != 1) {
-			dfs(x);
-		}
-	}
+const int maxN = (int) 2e5 + 5;
+vector<int> invN(maxN), fact(maxN), invFact(maxN);
+void precomp() {
+    fact[0] = fact[1] = invFact[0] = invFact[1] = invN[0] = invN[1] = 1;
+    for (int i = 2; i < maxN; i++) {
+        invN[i] = mul(HELL - (HELL / i), invN[HELL % i] % HELL);
+        fact[i] = mul(fact[i - 1], i);
+        invFact[i] = mul(invN[i], invFact[i - 1]);
+    }
+}
+int nck(int n, int k) {
+    return mul(invFact[n - k], mul(fact[n], invFact[k]));
 }
 
 signed main() { fastio;
+	precomp();
 	int t; cin >> t;
 	while (t--) {
-		int n, m; cin >> n >> m;
-		adj = vector<vector<int>>(n + 1);
-		res.clear();
-		vis = vector<int>(n + 1, 0);
-		int u, v;
-		for (int i = 0; i < m; i++) {
-			cin >> u >> v;
-			adj[u].pb(v);
-			adj[v].pb(u);
+		int n, k;
+		cin >> n >> k;
+		vector<int> arr(n);
+		vector<int> freq(n + 5);
+		for (auto &a : arr) {
+			cin >> a;
+			freq[a]++;
 		}
-		dfs(1);
+		sort(_all(arr), greater<int>());
 		int count = 0;
-		for (int i = 1; i <= n; i++) {
-			if (vis[i] == 1) count++;
+		for (int i = k; i < n; i++) {
+			if (arr[i] == arr[k - 1]) count++;
 		}
-		if (count == n) {
-			cout << "YES" << endl;
-			cout << size(res) << endl;
-			for (auto r : res) {
-				cout << r << " ";
-			} cout << endl;
-		} else {
-			cout << "NO" << endl;
-		}
+		cout << nck(freq[arr[k - 1]], count) << endl;
 	}
 	return 0;
 }

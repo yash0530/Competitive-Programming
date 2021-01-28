@@ -26,52 +26,46 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-vector<vector<int>> adj;
-vector<int> res;
-vector<int> vis;
-
-void dfs(int u) {
-	if (vis[u] == 0) {
-		res.pb(u);
-		for (auto x : adj[u]) {
-			vis[x] = -1;
-		}
-	}
-	vis[u] = 1;
-	for (auto x : adj[u]) {
-		if (vis[x] != 1) {
-			dfs(x);
-		}
-	}
-}
-
 signed main() { fastio;
-	int t; cin >> t;
-	while (t--) {
-		int n, m; cin >> n >> m;
-		adj = vector<vector<int>>(n + 1);
-		res.clear();
-		vis = vector<int>(n + 1, 0);
-		int u, v;
-		for (int i = 0; i < m; i++) {
-			cin >> u >> v;
-			adj[u].pb(v);
-			adj[v].pb(u);
+	int n, k;
+	cin >> n >> k;
+	priority_queue<int, vector<int>, greater<int>> pqA, pqB, pqAB;
+	int a, b, c;
+	for (int i = 0; i < n; i++) {
+		cin >> a >> b >> c;
+		if (b and c) {
+			pqAB.push(a);
+		} else if (b) {
+			pqA.push(a);
+		} else if (c) {
+			pqB.push(a);
 		}
-		dfs(1);
-		int count = 0;
-		for (int i = 1; i <= n; i++) {
-			if (vis[i] == 1) count++;
-		}
-		if (count == n) {
-			cout << "YES" << endl;
-			cout << size(res) << endl;
-			for (auto r : res) {
-				cout << r << " ";
-			} cout << endl;
+	}
+	int count = 0, ans = 0;
+	while ((count < k) and (!pqAB.empty() or (!pqA.empty() and !pqB.empty()))) {
+		if (!pqAB.empty() and (!pqA.empty() and !pqB.empty())) {
+			int t1 = pqAB.top();
+			int t2 = pqA.top() + pqB.top();
+			if (t1 > t2) {
+				ans += t2;
+				pqA.pop(); pqB.pop();
+			} else {
+				ans += t1;
+				pqAB.pop();
+			}
+		} else if (!pqAB.empty()) {
+			ans += pqAB.top();
+			pqAB.pop();
 		} else {
-			cout << "NO" << endl;
+			ans += pqA.top() + pqB.top();
+			pqA.pop(); pqB.pop();
 		}
+		count++;
+	}
+	if (count == k) {
+		cout << ans << endl;
+	} else {
+		cout << -1 << endl;
 	}
 	return 0;
 }

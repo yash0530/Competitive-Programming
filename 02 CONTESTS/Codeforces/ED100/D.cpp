@@ -40,15 +40,10 @@ signed main() { fastio;
 		sort(_all(a));
 		vector<int> b(_all(ss));
 		int low = 1, high = n;
-		int res = 0;
-		auto poss = [&](int val) {
+		int r1 = 0;
+		auto poss1 = [&](int val) {
 			for (int i = 0; i < val; i++) {
 				if (b[n - val + i] < a[i]) {
-					return false;
-				}
-			}
-			for (int i = val; i < n; i++) {
-				if (b[i - val] > a[i]) {
 					return false;
 				}
 			}
@@ -56,21 +51,44 @@ signed main() { fastio;
 		};
 		while (low <= high) {
 			int mid = (low + high) / 2;
-			if (poss(mid)) {
-				res = mid;
+			if (poss1(mid)) {
+				r1 = mid;
 				low = mid + 1;
 			} else {
 				high = mid - 1;
 			}
 		}
-		res++;
-		for (int i = 0; i < n; i++) {
-			if (b[i] > a[i]) {
-				res--;
-				break;
+		int r2 = 0;
+		low = 1, high = n;
+		auto poss2 = [&](int val) {
+			for (int i = n - val, j = 0; i < n; i++, j++) {
+				if (a[i] < b[j]) {
+					return false;
+				}
+			}
+			return true;
+		};
+		while (low <= high) {
+			int mid = (low + high) / 2;
+			if (poss2(mid)) {
+				r2 = mid;
+				low = mid + 1;
+			} else {
+				high = mid - 1;
 			}
 		}
-		cout << max(1LL, res) << endl;
+		vector<int> res(n + 1);
+		for (int i = n, j = 0; i >= 0 and j <= r1; i--, j++) {
+			res[i] = 1;
+		}
+		for (int i = 0; i <= r2; i++) {
+			res[i] += 1;
+		}
+		int ans = 0;
+		for (auto r : res) {
+			if (r == 2) ans++;
+		}
+		cout << ans << endl;
 	}
 	return 0;
 }

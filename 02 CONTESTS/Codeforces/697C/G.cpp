@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+ 
 #define endl "\n"
 #define INF (int) 9e18
 #define HELL (int) (1e9 + 7)
@@ -25,53 +25,38 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define inv(a) fastpow(a, HELL - 2)
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
-
-vector<vector<int>> adj;
-vector<int> res;
-vector<int> vis;
-
-void dfs(int u) {
-	if (vis[u] == 0) {
-		res.pb(u);
-		for (auto x : adj[u]) {
-			vis[x] = -1;
-		}
-	}
-	vis[u] = 1;
-	for (auto x : adj[u]) {
-		if (vis[x] != 1) {
-			dfs(x);
-		}
-	}
-}
-
+ 
 signed main() { fastio;
+
+	vector<vector<int>> divs(2e5 + 5);
+	for (int i = 1; i <= 2e5; i++) {
+		for (int j = i; j <= 2e5; j += i) {
+			divs[j].pb(i);
+		}
+	}
 	int t; cin >> t;
 	while (t--) {
-		int n, m; cin >> n >> m;
-		adj = vector<vector<int>>(n + 1);
-		res.clear();
-		vis = vector<int>(n + 1, 0);
-		int u, v;
-		for (int i = 0; i < m; i++) {
-			cin >> u >> v;
-			adj[u].pb(v);
-			adj[v].pb(u);
+		int n; cin >> n;
+		vector<int> arr(n);
+		vector<int> freq(2e5 + 5);
+		int ans = n;
+		for (auto &a : arr) {
+			cin >> a;
 		}
-		dfs(1);
-		int count = 0;
-		for (int i = 1; i <= n; i++) {
-			if (vis[i] == 1) count++;
+		sort(_all(arr));
+		for (auto a : arr) {
+			vector<int> fcts = divs[a];
+			int count = 1;
+			for (auto x : fcts) {
+				count = max(count, freq[x] + 1);
+			}
+			freq[a] = count;
 		}
-		if (count == n) {
-			cout << "YES" << endl;
-			cout << size(res) << endl;
-			for (auto r : res) {
-				cout << r << " ";
-			} cout << endl;
-		} else {
-			cout << "NO" << endl;
+		ans = 0;
+		for (auto &m : freq) {
+			ans = max(ans, m);
 		}
+		cout << n - ans << endl;
 	}
 	return 0;
 }

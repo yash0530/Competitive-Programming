@@ -26,49 +26,50 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-vector<vector<int>> adj;
-vector<int> res;
-vector<int> vis;
-
-void dfs(int u) {
-	if (vis[u] == 0) {
-		res.pb(u);
-		for (auto x : adj[u]) {
-			vis[x] = -1;
-		}
-	}
-	vis[u] = 1;
-	for (auto x : adj[u]) {
-		if (vis[x] != 1) {
-			dfs(x);
-		}
-	}
-}
-
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n, m; cin >> n >> m;
-		adj = vector<vector<int>>(n + 1);
-		res.clear();
-		vis = vector<int>(n + 1, 0);
-		int u, v;
-		for (int i = 0; i < m; i++) {
-			cin >> u >> v;
-			adj[u].pb(v);
-			adj[v].pb(u);
+		int n; cin >> n;
+		int N = 2 * n;
+		vector<int> arr(N);
+		for (auto &a : arr) cin >> a;
+		sort(_all(arr));
+		bool poss = false;
+		vector<array<int, 2>> res;
+		int final_x;
+		for (int o = 0; o < (N - 1); o++) {
+			int x = arr.back() + arr[o];
+			multiset<int> ss;
+			int now = arr.back();
+			vector<array<int, 2>> curr_res;
+			curr_res.pb({ arr.back(), arr[o] });
+			for (int i = 0; i < (N - 1); i++) {
+				if (i != o) ss.insert(arr[i]);
+			}
+			for (int i = 0; i < (n - 1); i++) {
+				int a = *ss.rbegin();
+				ss.erase(ss.find(a));
+				if (ss.find(now - a) == ss.end()) break;
+				int b = *ss.find(now - a);
+				ss.erase(ss.find(b));
+				curr_res.pb({ a, b });
+				now = a;
+			}
+
+			if (ss.empty()) {
+				poss = true;
+				final_x = x;
+				res = curr_res;
+			}
 		}
-		dfs(1);
-		int count = 0;
-		for (int i = 1; i <= n; i++) {
-			if (vis[i] == 1) count++;
-		}
-		if (count == n) {
+		if (poss) {
 			cout << "YES" << endl;
-			cout << size(res) << endl;
-			for (auto r : res) {
-				cout << r << " ";
-			} cout << endl;
+			cout << final_x << endl;
+			for (auto x : res) {
+				for (auto y : x) {
+					cout << y << " ";
+				} cout << endl;
+			}
 		} else {
 			cout << "NO" << endl;
 		}

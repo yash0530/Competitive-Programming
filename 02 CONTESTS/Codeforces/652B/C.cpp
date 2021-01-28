@@ -26,52 +26,34 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-vector<vector<int>> adj;
-vector<int> res;
-vector<int> vis;
-
-void dfs(int u) {
-	if (vis[u] == 0) {
-		res.pb(u);
-		for (auto x : adj[u]) {
-			vis[x] = -1;
-		}
-	}
-	vis[u] = 1;
-	for (auto x : adj[u]) {
-		if (vis[x] != 1) {
-			dfs(x);
-		}
-	}
-}
-
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n, m; cin >> n >> m;
-		adj = vector<vector<int>>(n + 1);
-		res.clear();
-		vis = vector<int>(n + 1, 0);
-		int u, v;
-		for (int i = 0; i < m; i++) {
-			cin >> u >> v;
-			adj[u].pb(v);
-			adj[v].pb(u);
+		int n, k; cin >> n >> k;
+		vector<int> arr(n), brr(k);
+		for (auto &a : arr) {
+			cin >> a;
 		}
-		dfs(1);
-		int count = 0;
-		for (int i = 1; i <= n; i++) {
-			if (vis[i] == 1) count++;
+		for (auto &a : brr) {
+			cin >> a;
 		}
-		if (count == n) {
-			cout << "YES" << endl;
-			cout << size(res) << endl;
-			for (auto r : res) {
-				cout << r << " ";
-			} cout << endl;
-		} else {
-			cout << "NO" << endl;
+		sort(_all(arr));
+		sort(_all(brr), greater<int>());
+		vector<vector<int>> okay(k);
+		for (int i = n - 1, j = k - 1; j >= 0; i--, j--) {
+			okay[j].pb(arr[i]);
 		}
+		int loc = 0;
+		for (int i = 0; i < k; i++) {
+			for (int j = 0; j < (brr[i] - 1); j++) {
+				okay[i].pb(arr[loc++]);
+			}
+		}
+		int res = 0;
+		for (auto ok : okay) {
+			res += (*max_element(_all(ok)));
+			res += (*min_element(_all(ok)));
+		}
+		cout << res << endl;
 	}
-	return 0;
 }

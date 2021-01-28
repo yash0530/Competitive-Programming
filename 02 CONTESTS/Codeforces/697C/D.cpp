@@ -26,51 +26,74 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-vector<vector<int>> adj;
-vector<int> res;
-vector<int> vis;
-
-void dfs(int u) {
-	if (vis[u] == 0) {
-		res.pb(u);
-		for (auto x : adj[u]) {
-			vis[x] = -1;
-		}
-	}
-	vis[u] = 1;
-	for (auto x : adj[u]) {
-		if (vis[x] != 1) {
-			dfs(x);
-		}
-	}
-}
-
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n, m; cin >> n >> m;
-		adj = vector<vector<int>>(n + 1);
-		res.clear();
-		vis = vector<int>(n + 1, 0);
-		int u, v;
-		for (int i = 0; i < m; i++) {
-			cin >> u >> v;
-			adj[u].pb(v);
-			adj[v].pb(u);
+		int n, k; cin >> n >> k;
+		vector<int> arr(n), brr(n);
+		for (auto &a : arr) {
+			cin >> a;
 		}
-		dfs(1);
-		int count = 0;
-		for (int i = 1; i <= n; i++) {
-			if (vis[i] == 1) count++;
+		for (auto &b : brr) {
+			cin >> b;
 		}
-		if (count == n) {
-			cout << "YES" << endl;
-			cout << size(res) << endl;
-			for (auto r : res) {
-				cout << r << " ";
-			} cout << endl;
+		priority_queue<int> pqA, pqB;
+		for (int i = 0; i < n; i++) {
+			if (brr[i] == 1) {
+				pqA.push(arr[i]);
+			} else {
+				pqB.push(arr[i]);
+			}
+		}
+		int ans = 0;
+		int xx = INF;
+		while (!pqA.empty() or !pqB.empty()) {
+			if (!pqA.empty()) {
+				int x = pqA.top();
+				if (x >= k) {
+					ans++;
+					k -= x;
+					xx = x;
+					break;
+				}
+			}
+			if (!pqB.empty()) {
+				int x = pqB.top();
+				if (x >= k) {
+					ans += 2;
+					k -= x;
+					break;
+				}
+			}
+			if (!pqA.empty() and !pqB.empty()) {
+				if ((pqA.top() * 2) <= pqB.top()) {
+					k -= pqB.top();
+					ans += 2;
+					pqB.pop();
+				} else {
+					k -= pqA.top();
+					xx = pqA.top();
+					ans++;
+					pqA.pop();
+				}
+			} else if (!pqA.empty()) {
+				k -= pqA.top();
+				xx = pqA.top();
+				ans++;
+				pqA.pop();
+			} else {
+				k -= pqB.top();
+				ans += 2;
+				pqB.pop();
+			}
+		}
+		if (k <= 0) {
+			if (abs(k) >= xx) {
+				ans--;
+			}
+			cout << ans << endl;
 		} else {
-			cout << "NO" << endl;
+			cout << -1 << endl;
 		}
 	}
 	return 0;

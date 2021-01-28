@@ -26,49 +26,60 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-vector<vector<int>> adj;
-vector<int> res;
-vector<int> vis;
-
-void dfs(int u) {
-	if (vis[u] == 0) {
-		res.pb(u);
-		for (auto x : adj[u]) {
-			vis[x] = -1;
+bool isPoss(vector<vector<int>> &mat, int n) {
+	for (int col = 0; col < n; col++) {
+		if (mat[0][col] == 1) {
+			for (int row = 0; row < n; row++) {
+				mat[row][col] = 1 - mat[row][col];
+			}
 		}
 	}
-	vis[u] = 1;
-	for (auto x : adj[u]) {
-		if (vis[x] != 1) {
-			dfs(x);
+	for (int i = 1; i < n; i++) {
+		if (mat[i][0] == 1) {
+			for (int j = 0; j < n; j++) {
+				mat[i][j] = 1 - mat[i][j];
+			}
 		}
 	}
+	int sum = 0;
+	for (auto x : mat) {
+		for (auto y : x) {
+			sum += y;
+		}
+	}
+	return sum == 0;
 }
 
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n, m; cin >> n >> m;
-		adj = vector<vector<int>>(n + 1);
-		res.clear();
-		vis = vector<int>(n + 1, 0);
-		int u, v;
-		for (int i = 0; i < m; i++) {
-			cin >> u >> v;
-			adj[u].pb(v);
-			adj[v].pb(u);
+		int n; cin >> n;
+		getMat(arr, n, n, 0);
+		getMat(brr, n, n, 0);
+		for (int i = 0; i < n; i++) {
+			string s; cin >> s;
+			for (int j = 0; j < n; j++) {
+				arr[i][j] = s[j] - '0';
+			}
 		}
-		dfs(1);
-		int count = 0;
-		for (int i = 1; i <= n; i++) {
-			if (vis[i] == 1) count++;
+		for (int i = 0; i < n; i++) {
+			string s; cin >> s;
+			for (int j = 0; j < n; j++) {
+				brr[i][j] = s[j] - '0';
+				if (brr[i][j] == arr[i][j]) {
+					brr[i][j] = 0;
+				} else {
+					brr[i][j] = 1;
+				}
+			}
 		}
-		if (count == n) {
+		bool check = isPoss(brr, n);
+		for (int i = 0; i < n; i++) {
+			brr[0][i] = 1 - brr[0][i];
+		}
+		check = check or isPoss(brr, n);
+		if (check) {
 			cout << "YES" << endl;
-			cout << size(res) << endl;
-			for (auto r : res) {
-				cout << r << " ";
-			} cout << endl;
 		} else {
 			cout << "NO" << endl;
 		}

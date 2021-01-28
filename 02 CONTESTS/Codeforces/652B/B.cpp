@@ -26,52 +26,35 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-vector<vector<int>> adj;
-vector<int> res;
-vector<int> vis;
-
-void dfs(int u) {
-	if (vis[u] == 0) {
-		res.pb(u);
-		for (auto x : adj[u]) {
-			vis[x] = -1;
-		}
-	}
-	vis[u] = 1;
-	for (auto x : adj[u]) {
-		if (vis[x] != 1) {
-			dfs(x);
-		}
-	}
-}
-
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n, m; cin >> n >> m;
-		adj = vector<vector<int>>(n + 1);
-		res.clear();
-		vis = vector<int>(n + 1, 0);
-		int u, v;
-		for (int i = 0; i < m; i++) {
-			cin >> u >> v;
-			adj[u].pb(v);
-			adj[v].pb(u);
+		int n; cin >> n;
+		string s; cin >> s;
+		string res;
+		int loc = n;
+		for (int i = n - 1; i >= 0; i--) {
+			if (s[i] == '1') {
+				loc--;
+				res.pb('1');
+			} else {
+				break;
+			}
 		}
-		dfs(1);
-		int count = 0;
-		for (int i = 1; i <= n; i++) {
-			if (vis[i] == 1) count++;
+		int loc2 = -1;
+		for (int i = 0; i < n; i++) {
+			if (s[i] == '0') {
+				loc2++;
+				res.pb('0');
+			} else {
+				break;
+			}
 		}
-		if (count == n) {
-			cout << "YES" << endl;
-			cout << size(res) << endl;
-			for (auto r : res) {
-				cout << r << " ";
-			} cout << endl;
-		} else {
-			cout << "NO" << endl;
+		if ((loc2 + 1) != loc) {
+			res.pb('0');
 		}
+		reverse(_all(res));
+		cout << res << endl;
 	}
 	return 0;
 }

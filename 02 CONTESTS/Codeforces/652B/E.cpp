@@ -26,52 +26,52 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-vector<vector<int>> adj;
-vector<int> res;
-vector<int> vis;
-
-void dfs(int u) {
-	if (vis[u] == 0) {
-		res.pb(u);
-		for (auto x : adj[u]) {
-			vis[x] = -1;
-		}
-	}
-	vis[u] = 1;
-	for (auto x : adj[u]) {
-		if (vis[x] != 1) {
-			dfs(x);
-		}
-	}
-}
-
 signed main() { fastio;
-	int t; cin >> t;
-	while (t--) {
-		int n, m; cin >> n >> m;
-		adj = vector<vector<int>>(n + 1);
-		res.clear();
-		vis = vector<int>(n + 1, 0);
-		int u, v;
-		for (int i = 0; i < m; i++) {
-			cin >> u >> v;
-			adj[u].pb(v);
-			adj[v].pb(u);
+	int n, m, a, b; cin >> n >> m;
+	int w[n + 1];
+	for (int i = 1; i <= n; i++) {
+		cin >> w[i];
+	}
+	multiset<int> okay[n + 1];
+	pii guests[m + 1];
+	for (int j = 1; j <= m; j++) {
+		cin >> a >> b;
+		okay[a].insert(j);
+		okay[b].insert(j);
+		guests[j] = { a, b };
+	}
+	set<pii> qu;
+	for (int i = 1; i <= n; i++) {
+		qu.insert({ size(okay[i]) - w[i], i });
+	}
+	vector<int> res;
+	while (!qu.empty() and (size(res) < m)) {
+		pii tp = *qu.begin(); qu.erase(qu.begin());
+		if (tp.fs > 0) break;
+		int food = tp.sc;
+		for (auto x : okay[food]) {
+			res.pb(x);
+			int curr;
+			if (guests[x].fs == food) {
+				curr = guests[x].sc;
+			} else {
+				curr = guests[x].fs;
+			}
+			pii ee = *qu.find({ size(okay[curr]) - w[curr], curr });
+			qu.erase(ee);
+			ee.fs--;
+			okay[curr].erase(okay[curr].find(x));
+			qu.insert(ee);
 		}
-		dfs(1);
-		int count = 0;
-		for (int i = 1; i <= n; i++) {
-			if (vis[i] == 1) count++;
-		}
-		if (count == n) {
-			cout << "YES" << endl;
-			cout << size(res) << endl;
-			for (auto r : res) {
-				cout << r << " ";
-			} cout << endl;
-		} else {
-			cout << "NO" << endl;
-		}
+	}
+	reverse(_all(res));
+	if (size(res) == m) {
+		cout << "ALIVE" << endl;
+		for (auto r : res) {
+			cout << r << " ";
+		} cout << endl;
+	} else {
+		cout << "DEAD" << endl;
 	}
 	return 0;
 }
