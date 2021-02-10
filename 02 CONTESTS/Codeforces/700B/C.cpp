@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define endl "\n"
+// #define endl "\n"
 #define INF (int) 9e18
 #define HELL (int) (1e9 + 7)
 #define int long long
@@ -26,21 +26,53 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
+int n;
+
+int getNum(int i) {
+	cout << "? " << i << endl;
+	int x; cin >> x;
+	return x;
+}
+
+void printRes(int low, int high) {
+	vector<int> res;
+	if (low == 1) {
+		res.pb(INF);
+	} else {
+		res.pb(getNum(low - 1));
+	}
+	for (int i = low; i <= high; i++) {
+		res.pb(getNum(i));
+	}
+	if (high == n) {
+		res.pb(INF);
+	} else {
+		res.pb(getNum(high + 1));
+	}
+	for (int i = 1; i <= (high - low + 1); i++) {
+		if (res[i] < min(res[i - 1], res[i + 1])) {
+			cout << "! " << low + i - 1 << endl;
+			return;
+		}
+	}
+}
+
 signed main() { fastio;
-	int t; cin >> t;
-	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(105);
-		int a;
-		for (int i = 0; i < n; i++) {
-			cin >> a;
-			freq[a]++;
+	cin >> n;
+	int low = 1, high = n;
+	while (low <= high) {
+		if ((high - low) <= 20) {
+			printRes(low, high);
+			break;
 		}
-		int mn = 0;
-		for (auto f : freq) {
-			mn = max(mn, f);
+		int mid = (low + high) / 2;
+		int v1 = getNum(mid - 1);
+		int v2 = getNum(mid);
+		if (v1 > v2) {
+			low = mid;
+		} else {
+			high = mid;
 		}
-		cout << mn << endl;
 	}
 	return 0;
 }

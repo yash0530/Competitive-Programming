@@ -30,17 +30,30 @@ signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
 		int n; cin >> n;
-		vector<int> freq(105);
-		int a;
-		for (int i = 0; i < n; i++) {
+		vector<int> arr(n), top(n), bot(n);
+		for (auto &a : arr) {
 			cin >> a;
-			freq[a]++;
 		}
-		int mn = 0;
-		for (auto f : freq) {
-			mn = max(mn, f);
+		for (auto &a : top) {
+			cin >> a;
 		}
-		cout << mn << endl;
+		for (auto &a : bot) {
+			cin >> a;
+		}
+		int ans = 0;
+		int pref = arr[1] + (max(bot[1], top[1]) - min(bot[1], top[1]) + 1);
+		ans = pref;
+		for (int i = 2; i < n; i++) {
+			if (bot[i] == top[i]) {
+				pref = arr[i] + 1;
+			} else {
+				int a = pref - (max(bot[i], top[i]) - min(bot[i], top[i]) - 1) + arr[i];
+				int b = arr[i] + (max(bot[i], top[i]) - min(bot[i], top[i]) + 1);
+				pref = max(a, b);
+			}
+			ans = max(ans, pref);
+		}
+		cout << ans << endl;
 	}
 	return 0;
 }

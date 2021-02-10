@@ -27,20 +27,37 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-	int t; cin >> t;
-	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(105);
-		int a;
-		for (int i = 0; i < n; i++) {
-			cin >> a;
-			freq[a]++;
-		}
-		int mn = 0;
-		for (auto f : freq) {
-			mn = max(mn, f);
-		}
-		cout << mn << endl;
+	int n; cin >> n;
+	vector<int> arr(n);
+	vector<vector<int>> locs(n + 5);
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+		locs[arr[i]].pb(i);
 	}
+	for (auto &l : locs) {
+		l.pb(INF);
+		reverse(_all(l));
+	}
+	int count = 0;
+	vector<int> r1, r2;
+	for (auto x : arr) {
+		locs[x].pop_back();
+		if ((size(r1) and r1.back() != x) and (size(r2) and r2.back() != x)) {
+			if (locs[r1.back()].back() < locs[r2.back()].back()) {
+				r1.pb(x);
+			} else {
+				r2.pb(x);
+			}
+		} else if (r1.empty()) {
+			r1.pb(x);
+		} else if (r1.back() != x) {
+			r1.pb(x);
+		} else if (r2.empty()) {
+			r2.pb(x);
+		}  else if (r2.back() != x) {
+			r2.pb(x);
+		}
+	}
+	cout << size(r1) + size(r2) << endl;
 	return 0;
 }

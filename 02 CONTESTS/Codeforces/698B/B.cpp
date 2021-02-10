@@ -2,9 +2,9 @@
 using namespace std;
 
 #define endl "\n"
-#define INF (int) 9e18
+// #define INF (int) 9e18
 #define HELL (int) (1e9 + 7)
-#define int long long
+// #define int long long
 #define double long double
 #define uint unsigned long long
 #define pii pair<int, int>
@@ -27,6 +27,45 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-	
+	vector<set<int>> digs(10);
+	for (int i = 1; i <= 2000; i++) {
+		int num = i;
+		while (num) {
+			int dig = (num % 10);
+			if (dig) {
+				digs[dig].insert(i);
+			}
+			num /= 10;
+		}
+	}
+	getMat(poss, 10, 2005, 0);
+	for (int i = 1; i < 10; i++) {
+		poss[i][0] = 1;
+		for (int loc = 1; loc <= 2000; loc++) {
+			for (auto x : digs[i]) {
+				if ((loc - x) >= 0) {
+					poss[i][loc] = poss[i][loc - x] or poss[i][loc - x];
+					if (poss[i][loc]) break;
+				}
+			}
+		}
+	}
+	int t; cin >> t;
+	while (t--) {
+		int q, d;
+		cin >> q >> d;
+		while (q--) {
+			int n; cin >> n;
+			if (n > 2000) {
+				cout << "YES" << endl;
+			} else {
+				if (poss[d][n]) {
+					cout << "YES" << endl;
+				} else {
+					cout << "NO" << endl;
+				}
+			}
+		}
+	}
 	return 0;
 }

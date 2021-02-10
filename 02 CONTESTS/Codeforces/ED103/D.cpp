@@ -30,17 +30,36 @@ signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
 		int n; cin >> n;
-		vector<int> freq(105);
-		int a;
+		string s; cin >> s;
+		vector<int> pref(n, 1), suf(n, 1);
 		for (int i = 0; i < n; i++) {
-			cin >> a;
-			freq[a]++;
+			if (i) {
+				if (s[i] != s[i - 1]) {
+					pref[i] += pref[i - 1];
+				}
+			}
 		}
-		int mn = 0;
-		for (auto f : freq) {
-			mn = max(mn, f);
+		for (int i = n - 1; i >= 0; i--) {
+			if (i != (n - 1)) {
+				if (s[i] != s[i + 1]) {
+					suf[i] += suf[i + 1];
+				}
+			}
 		}
-		cout << mn << endl;
+		for (int i = 0; i <= n; i++) {
+			int ans = 1;
+			if (i) {
+				if (s[i - 1] == 'L') {
+					ans += pref[i - 1];
+				}
+			}
+			if (i != n) {
+				if (s[i] == 'R') {
+					ans += suf[i];
+				}
+			}
+			cout << ans << " ";
+		} cout << endl;
 	}
 	return 0;
 }

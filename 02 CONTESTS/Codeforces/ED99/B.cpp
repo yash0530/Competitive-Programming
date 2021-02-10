@@ -29,18 +29,18 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(105);
-		int a;
-		for (int i = 0; i < n; i++) {
-			cin >> a;
-			freq[a]++;
+		int x; cin >> x;
+		set<int> ans;
+		int curr = 0, val = 1;
+		while (curr < x) {
+			curr += val;
+			val++;
 		}
-		int mn = 0;
-		for (auto f : freq) {
-			mn = max(mn, f);
+		if ((curr - 1) == x) {
+			cout << val << endl;
+		} else {
+			cout << val - 1 << endl;
 		}
-		cout << mn << endl;
 	}
 	return 0;
 }

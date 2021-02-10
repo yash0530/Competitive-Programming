@@ -27,6 +27,44 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		int N = 2 * n;
+		map<int, int> mp;
+		int x;
+		for (int i = 0; i < N; i++) {
+			cin >> x;
+			mp[x]++;
+		}
+		vector<pii> okays(_all(mp));
+		bool poss = true;
+		int sub = 0;
+		int eff_N = N;
+		for (int i = size(okays) - 1; i >= 0; i--) {
+			int count = okays[i].sc;
+			if (count != 2) {
+				poss = false;
+				break;
+			}
+			int val = okays[i].fs - sub;
+			if (val <= 0) {
+				poss = false;
+				break;
+			}
+			if (val % eff_N) {
+				poss = false;
+				break;
+			}
+			int new_elem = val / eff_N;
+			sub += (new_elem * count);
+			eff_N -= count;
+		}
+		if (poss) {
+			cout << "YES" << endl;
+		} else {
+			cout << "NO" << endl;
+		}
+	}
 	return 0;
 }

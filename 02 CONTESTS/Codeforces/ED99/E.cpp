@@ -4,7 +4,7 @@ using namespace std;
 #define endl "\n"
 #define INF (int) 9e18
 #define HELL (int) (1e9 + 7)
-#define int long long
+// #define int long long
 #define double long double
 #define uint unsigned long long
 #define pii pair<int, int>
@@ -29,18 +29,50 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(105);
-		int a;
-		for (int i = 0; i < n; i++) {
-			cin >> a;
-			freq[a]++;
+		array<pii, 4> points;
+		for (int i = 0; i < 4; i++) {
+			cin >> points[i].fs >> points[i].sc;
 		}
-		int mn = 0;
-		for (auto f : freq) {
-			mn = max(mn, f);
-		}
-		cout << mn << endl;
+		auto eval = [&](int mid) {
+			array<int, 4> x, y;
+			x[0] = points[0].fs;
+			x[1] = points[1].fs - mid;
+			x[2] = points[2].fs;
+			x[3] = points[3].fs - mid;
+
+			y[0] = points[0].sc;
+			y[1] = points[1].sc;
+			y[2] = points[2].sc - mid;
+			y[3] = points[3].sc - mid;
+
+			sort(_all(x));
+			sort(_all(y));
+
+			int64_t val = 0;
+			for (int i = 0; i < 4; i++) {
+				val += abs(x[i] - x[1]) + abs(y[i] - y[1]);
+			}
+			return val;
+		};
+		int64_t ans = INT_MAX;
+		array<pii, 4> org_points = points;
+		array<int, 4> perm = { 0, 1, 2, 3 };
+		do {
+			for (int i = 0; i < 4; i++) {
+				points[i] = org_points[perm[i]];
+			}
+			int low = 0, high = 2e9 + 10;
+			while (low < high) {
+				int64_t mid = (low + high) / 2;
+				if (eval(mid) < eval(mid + 1)) {
+					high = mid;
+				} else {
+					low = mid + 1;
+				}
+			}
+			ans = min(ans, eval(low));
+		} while (next_permutation(_all(perm)));
+		cout << ans << endl;
 	}
 	return 0;
 }

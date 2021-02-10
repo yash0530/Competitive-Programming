@@ -27,6 +27,29 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-	
+	int t; cin >> t;
+	while (t--) {
+		int n, k; cin >> n >> k;
+		vector<int> arr(n);
+		for (auto &a : arr) {
+			cin >> a;
+		}
+		sort(_all(arr));
+		int gcd = 0;
+		for (int i = 1; i < n; i++) {
+			gcd = __gcd(gcd, arr[i] - arr[i - 1]);
+		}
+		bool poss = false;
+		for (int i = 0; i < n; i++) {
+			if (abs(arr[i] - k) % gcd == 0) {
+				poss = true;
+			}
+		}
+		if (poss) {
+			cout << "YES" << endl;
+		} else {
+			cout << "NO" << endl;
+		}
+	}
 	return 0;
 }

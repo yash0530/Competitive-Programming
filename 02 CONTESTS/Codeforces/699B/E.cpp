@@ -27,20 +27,24 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-	int t; cin >> t;
-	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(105);
-		int a;
-		for (int i = 0; i < n; i++) {
-			cin >> a;
-			freq[a]++;
-		}
-		int mn = 0;
-		for (auto f : freq) {
-			mn = max(mn, f);
-		}
-		cout << mn << endl;
+	int n; cin >> n;
+	vector<int> arr(n);
+	vector<int> l(n + 5, -1), r(n + 5, -1);
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+		if (l[arr[i]] == -1) l[arr[i]] = i;
+		r[arr[i]] = i;
 	}
+	vector<int> dp(n + 5), count(n + 5);
+	for (int i = n - 1; i >= 0; i--) {
+		count[arr[i]]++;
+		dp[i] = dp[i + 1];
+		if (l[arr[i]] == i) {
+			dp[i] = max(dp[i], dp[r[arr[i]] + 1] + count[arr[i]]);
+		} else {
+			dp[i] = max(dp[i], count[arr[i]]);
+		}
+	}
+	cout << n - dp[0] << endl;
 	return 0;
 }

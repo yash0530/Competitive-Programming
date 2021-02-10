@@ -26,23 +26,29 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
+// SOLUTION IDEA GEOTHERMAL
+
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n, k; cin >> n >> k;
-		vector<pii> arr(k);
-		for (auto &a : arr) {
-			cin >> a.sc >> a.fs;
+		int n, m;
+		cin >> n >> m;
+		deb(m);deb(n);
+		vector<pii> cc(m);
+		for (auto &c : cc) {
+			cin >> c.sc >> c.fs;
 		}
-		sort(_all(arr));
+		sort(_all(cc));
 		bool poss = true;
-		for (int i = 0; i < k; i++) {
-			if ((i != (k - 1)) and arr[i].sc == arr[i + 1].sc) {
-				i++;
-			} else if (i == (k - 1)) {
-
-			} else {
-				
+		if (m & 1) {
+			poss = false;
+		} else {
+			for (int i = 0; i < m; i += 2) {
+				if (((cc[i].fs + cc[i].sc) & 1) == ((cc[i + 1].fs + cc[i + 1].sc) & 1)) {
+					poss = false; break;
+				} else if (i and (cc[i].fs == cc[i - 1].fs)) {
+					poss = false; break;
+				}
 			}
 		}
 		if (poss) {

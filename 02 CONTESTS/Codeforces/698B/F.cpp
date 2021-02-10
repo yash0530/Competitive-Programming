@@ -26,7 +26,37 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
+bool lessThan90(pii a, pii b, pii c) {
+	int ux = a.fs - b.fs;
+	int vx = c.fs - b.fs;
+	int uy = a.sc - b.sc;
+	int vy = c.sc - b.sc;
+	return ((ux * vx) + (uy * vy)) > 0;
+}
+
 signed main() { fastio;
-	
+	int n; cin >> n;
+	vector<pii> pp(n);
+	vector<int> res;
+	for (int i = 1; i <= n; i++) res.pb(i);
+	for (auto &p : pp) {
+		cin >> p.fs >> p.sc;
+	}
+	for (int i = 0; i < n; i++) {
+		int count = 0;
+		for (int i = 2; i < n; i++) {
+			if (!lessThan90(pp[i - 2], pp[i - 1], pp[i])) {
+				count++;
+				swap(pp[i - 1], pp[i]);
+				swap(res[i - 1], res[i]);
+			}
+		}
+		if (count == 0) {
+			break;
+		}
+	}
+	for (auto r : res) {
+		cout << r << " ";
+	} cout << endl;
 	return 0;
 }

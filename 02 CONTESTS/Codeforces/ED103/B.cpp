@@ -29,18 +29,36 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
-		int n; cin >> n;
-		vector<int> freq(105);
-		int a;
-		for (int i = 0; i < n; i++) {
+		int n, k; cin >> n >> k;
+		vector<int> arr(n);
+		for (auto &a : arr) {
 			cin >> a;
-			freq[a]++;
 		}
-		int mn = 0;
-		for (auto f : freq) {
-			mn = max(mn, f);
+		auto poss = [&](int mid) {
+			double temp = arr[0] + mid;
+			for (int i = 1; i < n; i++) {
+				if (temp > 1e14) {
+					return true;
+				}
+				if ((arr[i] * 100) > (temp * k)) {
+					return false;
+				}
+				temp += arr[i];
+			}
+			return true;
+		};
+		int res = 0;
+		int low = 0, high = 1e13;
+		while (low <= high) {
+			int mid = (low + high) / 2;
+			if (poss(mid)) {
+				res = mid;
+				high = mid - 1;
+			} else {
+				low = mid + 1;
+			}
 		}
-		cout << mn << endl;
+		cout << res << endl;
 	}
 	return 0;
 }
