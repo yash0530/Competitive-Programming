@@ -26,27 +26,62 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
+void cocomp(vector<int> &arr) {
+    vector<int> compress;
+    int nn = size(arr);
+    for (int i = 0; i < nn; i++) {
+        compress.pb(arr[i]);
+    }
+    sort(compress.begin(), compress.end());
+    compress.resize(unique(compress.begin(), compress.end()) - compress.begin());
+    for (int i = 0; i < nn; i++) arr[i] = lower_bound(compress.begin(), compress.end(), arr[i]) - compress.begin();
+}
+
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
 		int n; cin >> n;
 		vector<int> arr(n);
-		int ca = 0, cb = 0;
+		for (auto &a : arr) {
+			cin >> a;
+		}
+		cocomp(arr);
+		vector<int> first(n + 1, -1), last(n + 1), freq(n + 1);
+		vector<int> pos[n + 1];
 		for (int i = 0; i < n; i++) {
-			cin >> arr[i];
-			if ((i & 1) != (arr[i] & 1)) {
-				if (i & 1) {
-					ca++;
-				} else {
-					cb++;
+			if (first[arr[i]] == -1) {
+				first[arr[i]] = i;
+			}
+			last[arr[i]] = i;
+			freq[arr[i]]++;
+			pos[arr[i]].pb(i);
+		}
+		auto count = [&](int val, int left, int right) {
+			return (int) (lower_bound(_all(pos[val]), right) - lower_bound(_all(pos[val]), left));
+		};
+		int ans = 0;
+		for (auto f : freq) ans = max(ans, f);
+		vector<int> dp(n + 1);
+		for (int i = n - 1; i >= 0; i--) {
+			if (freq[i]) {
+				dp[i] += freq[i];
+				if (freq[i + 1]) {
+					if (last[i] < first[i + 1]) {
+						dp[i] += dp[i + 1];
+					} else {
+						dp[i] += count(i + 1, last[i] + 1, n);
+					}
 				}
 			}
 		}
-		if (ca == cb) {
-			cout << ca << endl;
-		} else {
-			cout << -1 << endl;
+		for (int i = 0; i < n; i++) {
+			int pref = i == 0 ? 0 : count(i - 1, 0, first[i]);
+			ans = max(ans, pref + dp[i]);
 		}
+		for (int i = 0; i < n; i++) {
+			ans = max(ans, count(arr[i], 0, i + 1) + count(arr[i] + 1, i + 1, n));
+		}
+		cout << n - ans << endl;
 	}
 	return 0;
 }

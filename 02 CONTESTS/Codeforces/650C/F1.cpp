@@ -26,27 +26,39 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define mul(a, b) ((a % HELL) * (b % HELL)) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
+void cocomp(vector<int> &arr) {
+    vector<int> compress;
+    int nn = size(arr);
+    for (int i = 0; i < nn; i++) {
+        compress.pb(arr[i]);
+    }
+    sort(compress.begin(), compress.end());
+    compress.resize(unique(compress.begin(), compress.end()) - compress.begin());
+    for (int i = 0; i < nn; i++) arr[i] = lower_bound(compress.begin(), compress.end(), arr[i]) - compress.begin();
+}
+
 signed main() { fastio;
 	int t; cin >> t;
 	while (t--) {
 		int n; cin >> n;
 		vector<int> arr(n);
-		int ca = 0, cb = 0;
-		for (int i = 0; i < n; i++) {
-			cin >> arr[i];
-			if ((i & 1) != (arr[i] & 1)) {
-				if (i & 1) {
-					ca++;
-				} else {
-					cb++;
-				}
+		for (auto &a : arr) {
+			cin >> a;
+		}
+		cocomp(arr);
+		map<int, int> okay;
+		for (auto x : arr) {
+			if (okay.find(x - 1) != okay.end()) {
+				okay[x] = okay[x - 1] + 1;
+			} else {
+				okay[x] = 1;
 			}
 		}
-		if (ca == cb) {
-			cout << ca << endl;
-		} else {
-			cout << -1 << endl;
+		int mx = 0;
+		for (auto m : okay) {
+			mx = max(m.sc, mx);
 		}
+		cout << n - mx << endl;
 	}
 	return 0;
 }
