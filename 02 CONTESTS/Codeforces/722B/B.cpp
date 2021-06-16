@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -14,13 +5,13 @@ using namespace std;
 #define INF (int) 9e18
 #define HELL (int) (1e9 + 7)
 #define int long long
-#define double long double
+// #define double long double
 #define uint unsigned long long
 #define pii pair<int, int>
 #define pb push_back
 #define fs first
 #define sc second
-#define size(aa) (int) aa.size()
+// #define size(aa) (int) aa.size()
 #define deb(xx) cerr << #xx << " => " << xx << "\n"
 #define debp(aa) cerr << #aa << " => " <<"("<<aa.fs<<", "<<aa.sc<<") " << "\n";
 #define deba(xx) cerr<<#xx<<"\n";for (auto z : xx) cerr << z << " "; cerr << "\n";
@@ -39,7 +30,34 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		vector<int> arr(n);
+		for (auto &a : arr) {
+			cin >> a;
+		}
+		sort(_all(arr));
+		int ans = 0;
+		set<int> ss;
+		ss.insert(INT_MAX);
+		for (int i = 0; i < n; i++) {
+			if (arr[i] <= 0) {
+				ans++;
+				if (i > 0) {
+					ss.insert(arr[i] - arr[i - 1]);
+				}
+			}
+		}
+		for (auto a : arr) {
+			if (a > 0) {
+				if (a <= (*ss.begin())) {
+					ans++;
+					break;
+				}
+			}
+		}
+		cout << ans << endl;
+	}
 	return 0;
 }
-```

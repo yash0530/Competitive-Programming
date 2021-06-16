@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -39,7 +30,26 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _all(aa) aa.begin(), aa.end()
 
 signed main() { fastio;
-
+	int t; cin >> t;
+	while (t--) {
+		int n, l, r; cin >> n >> l >> r;
+		vector<int> arr(n);
+		for (auto &x : arr) {
+			cin >> x;
+		}
+		sort(_all(arr));
+		int ans = 0;
+		for (auto x : arr) {
+			int v1 = l - x;
+			int v2 = r - x;
+			int up = upper_bound(_all(arr), v2) - arr.begin() - 1;
+			int lb = lower_bound(_all(arr), v1) - arr.begin() - 1;
+			ans += (up - lb);
+			if (x >= v1 and x <= v2) {
+				ans--;
+			}
+		}
+		cout << ans / 2 << endl;
+	}
 	return 0;
 }
-```

@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -38,8 +29,75 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _sub(a, b) (((a % HELL) - (b % HELL)) % HELL + HELL) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-signed main() { fastio;
+vector<pii> primeFactors(int n) {
+    vector<pii> factorization;
+    int count = 0;
+    while (n % 2 == 0) {
+        n /= 2;
+        count++;
+    }
+    if (count) factorization.pb({ 2, count });
+    for (int d = 3; d * d <= n; d += 2) {
+    	count = 0;
+        while (n % d == 0) {
+            n /= d;
+            count++;
+        }
+        if (count) factorization.push_back({ d, count });
 
+    }
+    if (n > 1)
+        factorization.push_back({ n, 1 });
+    return factorization;
+}
+
+
+signed main() { fastio;
+	int t; cin >> t;
+	while (t--) {
+		int n, m, k;
+		cin >> n >> m >> k;
+		int gg = __gcd(n, m);
+
+		vector<pii> nff = primeFactors(n / gg);
+		vector<pii> mff = primeFactors(m / gg);
+		vector<pii> gff = primeFactors(gg);
+
+		int count = (size(nff) > 0) + (size(mff) > 0);
+
+		if (k < count) {
+			cout << "NO" << endl;
+		}
+		else if (k == count) {
+			cout << "YES" << endl;
+		}
+		else {
+			int v1 = 0, v2 = 0, v3 = 0;
+			for (auto x : nff) {
+				v1 += x.sc;
+			}
+			for (auto x : mff) {
+				v2 += x.sc;
+			}
+			for (auto x : gff) {
+				v3 += x.sc;
+			}
+
+			count = v1 + v2 + 2 * v3;
+			if (k <= (v1 + v2)) {
+				cout << "YES" << endl;
+			}
+			else if (k > count) {
+				cout << "NO" << endl;
+			}
+			else {
+				if (((count == 2) and (n == m)) and k == 1) {
+					cout << "NO" << endl;
+				} else {
+					cout << "YES" << endl;
+				}
+			}
+		}
+	}
 	return 0;
 }
-```

@@ -1,12 +1,3 @@
-# Competitive Programming
-
-## My Handles
-* [Codeforces](https://codeforces.com/profile/ScaryTerry)
-* [Codechef](https://www.codechef.com/users/yash530)
-* [AtCoder](https://atcoder.jp/users/ScaryTerry)
-
-## CPP Template
-```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -38,8 +29,52 @@ while (b > 0) { if (b & 1) res = (res * a) % m; a = (a * a) % m; b >>= 1; } retu
 #define _sub(a, b) (((a % HELL) - (b % HELL)) % HELL + HELL) % HELL
 #define _all(aa) aa.begin(), aa.end()
 
-signed main() { fastio;
+const int maxN = 2e5 + 5;
+int32_t LR[maxN][2];
+vector<int32_t> adj[maxN];
+int dp[maxN][2];
 
+void dfs(int curr, int par, int stat) {
+	int &ans = dp[curr][stat];
+	if (ans == -1) {
+		int ans0 = 0, ans1 = 0;
+		if (par != -1) {
+			ans0 += abs(LR[par][stat] - LR[curr][0]);
+			ans1 += abs(LR[par][stat] - LR[curr][1]);
+		}
+		for (auto x : adj[curr]) {
+			if (x != par) {
+				dfs(x, curr, 0);
+				dfs(x, curr, 1);
+				ans0 += dp[x][0];
+				ans1 += dp[x][1];
+			}
+		}
+		ans = max(ans0, ans1);
+	}
+}
+
+signed main() { fastio;
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+		int a, b;
+		for (int i = 1; i <= n; i++) cin >> LR[i][0] >> LR[i][1];
+		for (int i = 1; i < n; i++) {
+			cin >> a >> b;
+			adj[a].pb(b);
+			adj[b].pb(a);
+		}
+		for (int i = 1; i <= n; i++) {
+			for (int j = 0; j < 2; j++) {
+				dp[i][j] = -1;
+			}
+		}
+		dfs(1, -1, 0);
+		cout << dp[1][0] << endl;
+		for (int i = 1; i <= n; i++) {
+			adj[i].clear();
+		}
+	}
 	return 0;
 }
-```

@@ -349,3 +349,30 @@ vector<int> findKthPermutation(int n, int k) {
     }
     return ans;
 }
+
+// ---------------------- Finding a Centroid ---------------------- //
+int n;
+const int maxN = 2e5 + 5;
+vector<int> adj[maxN];
+int sizes[maxN];
+
+void dfs(int curr, int par) {
+    sizes[curr] = 1;
+    for (int x : adj[curr]) {
+        if (x != par) {
+            dfs(x, curr);
+            sizes[curr] += sizes[x];
+        }
+    }
+}
+
+int get_centroid(int curr, int par) {
+    for (int x : adj[curr]) {
+        if (x != par) {
+            if ((sizes[x] * 2) > n) {
+                return get_centroid(x, curr);
+            }
+        }
+    }
+    return curr;
+}
