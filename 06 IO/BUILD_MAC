@@ -1,0 +1,5 @@
+{
+	"shell_cmd": "g++ -std=c++17 '${file}' && ./a.out < '/Users/yash/Desktop/Programming/CP/06 IO/input.txt' > '/Users/yash/Desktop/Programming/CP/06 IO/output.txt'",
+	"working_dir": "${file_path}",
+	"selector":"source.cpp"
+}

@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+ 
 #define endl "\n"
 #define int long long
 #define uint unsigned long long
@@ -12,19 +12,43 @@ using namespace std;
 #define cina(x, n) vector<int> x(n); for (int i = 0; i < n; i++) cin >> x[i];
 #define srt(x) sort(x.begin(), x.end())
 #define rev(x) reverse(x.begin(), x.end())
-
+ 
 int32_t main() {
     fastio;
-
+ 
     int t; cin >> t;
     while (t--) {
-        int a, b, c, d, k;
-        cin >> a >> b >> c >> d >> k;
-        if (((int) ceil(a / double(c)) + (int) ceil(b / double(d))) <= k) {
-            cout << (int) ceil(a / double(c)) << " " << (int) ceil(b / double(d)) << endl;
-        } else {
-            cout << -1 << endl;
+        int n, k, q; cin >> n >> k >> q;
+        vector<int> arr(n);
+        for (auto &a : arr) cin >> a;
+        for (auto &a : arr) {
+            if (a > q) {
+                a = 0;
+            } else {
+                a = 1;
+            }
         }
+ 
+        vector<int> pb;
+        pb.push_back(0);
+        int sum = 0;
+        for (auto a : arr) {
+            if (a == 0 && pb.back() != 0) {
+                if (pb.back() >= k) {
+                    sum += (pb.back() - k + 1) * (pb.back() - k + 2) / 2;
+                }
+                pb.push_back(0);
+            } else if (a == 0) {
+            } else {
+                pb[size(pb) - 1]++;
+            }
+        }
+        if (pb.back() != 0) {
+            if (pb.back() >= k) {
+                sum += (pb.back() - k + 1) * (pb.back() - k + 2) / 2;
+            }
+        } 
+        cout << sum << endl;
     }
     
     return 0;

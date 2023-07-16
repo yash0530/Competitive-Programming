@@ -1,56 +1,45 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 
-// template <typename T>
-// class Stack {
-// private:
-// 	vector<T> st;
+const int maxN = 2e5 + 5;
+vector<int>	adj[maxN];
+vector<int> deg(maxN);
 
-// public:
-// 	void push(T val) {
-// 		st.push_back(val);
-// 	}
+vector<int> curr_comp;
+vector<int> visited(maxN);
 
-// 	void pop() {
-// 		if (!isEmpty()) {
-// 			st.pop_back();
-// 		}
-// 	}
-
-// 	T top() {
-// 		return st[ st.size() - 1 ];
-// 	}
-
-// 	bool isEmpty() {
-// 		return (st.size() == 0);
-// 	}
-// };
+void dfs(int p) {
+	curr_comp.push_back(p);
+	visited[p] = true;
+	for (auto x : adj[p]) {
+		if (!visited[x]) {
+			dfs(x);
+		}
+	}
+}
 
 int main() {
-
-	// Stack<char> st;
-
-	// for (char c = 'A'; c <= 'F'; c++) {
-	// 	st.push(c);
-	// }
-	// // A B C D E F
-
-	// while (!st.isEmpty()) {
-	// 	cout << st.top() << endl;
-	// 	st.pop();
-	// }
-
-	stack<int> st;
-
-	for (int i = 1; i <= 5; i++) {
-		st.push(i * i);
-	}
-	// 1 4 9 16 25
-
-	while (!st.empty()) {
-		cout << st.top() << endl;
-		st.pop();
+	int n, m; cin >> n >> m;
+	for (int i = 0; i < m; i++) {
+		int a, b; cin >> a >> b;
+		adj[a].push_back(b);
+		adj[b].push_back(a);
+		deg[a]++; deg[b]++;
 	}
 
-	return 0;
+	int ans = 0;
+	for (int i = 1; i <= n; i++) {
+		if (!visited[i]) {
+			curr_comp.clear();
+			dfs(i);
+			bool poss = true;
+			for (auto x : curr_comp) {
+				if (deg[x] != 2) {
+					poss = false;
+				}
+			}
+			ans += poss;
+		}
+	}
+	cout << ans << endl;
 }
