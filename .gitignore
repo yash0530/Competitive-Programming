@@ -54,3 +54,5 @@ todo.txt
 .history
 
 # End of https://www.gitignore.io/api/c++,visualstudiocode
+
+**/.DS_Store
